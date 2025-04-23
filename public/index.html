@@ -1,12 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Express</title>
+    <title>Drinkly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <body>
-    <h1>Express</h1>
-    <p>Welcome to Express</p>
+    <div class="top-bar">
+        <div class="nav-bar">
+            <a class="menu-toggle" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i
+                    class="fa fa-bars"></i></a>
+            <a href="#" class="nav-item active">HOME</a>
+            <a href="#" class="nav-item">CREATE</a>
+            <a href="#" class="nav-item">RECIPES</a>
+            <a href="#" class="nav-item">REVIEWS</a>
+            <a href="#" class="nav-item">ABOUT US</a>
+            <a href="#" class="nav-item">LOGIN</a>
+            <a href="#" class="nav-item">REGISTER</a>
+            <button class="dark-toggle" type="button" onclick="darkMode()">TOGGLE DARK MODE</button>
+            <script>
+                function darkMode() {
+                    var element = document.body;
+                    element.classList.toggle("dark-mode");
+                }
+            </script>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="main-title center">DRINKLY</h1>
+        <p class="center">Track drinks you've had. <br>
+            Review the drinks you love (or hate).<br>
+            Let your friends know which drinks you rate.
+        </p>
+        <p class="gray-text center">The social network for drink lovers.</p>
+    </header>
+
+    <!-- First Grid -->
+    <div class="content-section">
+        <div class="content">
+            <div class="main-content">
+                <h1>Lorem Ipsum</h1>
+                <h5 class="spaced-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.</h5>
+                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+            </div>
+
+            <div class="side-content right-align">
+                <!-- picture here?-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Grid -->
+    <div class="content-section light-background right-align-grid">
+        <div class="content">
+            <div class="side-content left-align">
+                <!-- picture here? -->
+            </div>
+
+            <div class="main-content">
+                <h1>Lorem Ipsum</h1>
+                <h5 class="spaced-paragraph">Lorem ipsum dolor sit amet...</h5>
+                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer center opacity">
+        <p>Developed by Aidan, Branson, Ethan, and Phuc</p>
+    </footer>
+
 </body>
+
 </html>

@@ -1,8 +1,67 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 25px, 25px, 25px, 25px;
+  background-color: white;
+  color: black;
+  font-size: 25px;
 }
 
-a {
-  color: #00B7FF;
+.center {
+  text-align: center;
+}
+
+.content-section {
+  display: flex;
+}
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: lightgray;
+  z-index: 1;
+}
+
+.nav-bar .nav-item {
+  color: black;
+  text-decoration: underline black;
+}
+
+.dark-toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.dark-mode {
+  background-color: #333;
+  color: white;
+}
+
+.dark-mode .top-bar {
+  background-color: #222;
+  color: white;
+}
+
+.dark-mode .nav-bar .nav-item {
+  color: white;
+  text-decoration: underline overline white;
+}
+
+.dark-mode .dark-toggle-btn {
+  color: white;
+}
+
+.opacity {
+  background-color: lightgray;
+  color: black;
+}
+
+.dark-mode .opacity {
+  background-color: #222;
+  color: white;
+}
+
+.gray-text {
+  color:gray;
 }
