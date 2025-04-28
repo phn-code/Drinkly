@@ -9,11 +9,31 @@
 <body>
 
 
-    <form>
+    <form id="login">
+        <h1>Login Form</h1>
         <p>Please input your username:</p>
         <input type="text" id="username">
+        <p>Please input your password:</p>
+        <input type="text" id="password">
         <button type="button" id="submit">Login</button>
+        <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p><br>
+        <button type="button" id="gotosignup"> Go to Sign Up </button>
     </form>
+
+    <form id="signup" style="display: none;">
+        <h1>Signup Form</h1>
+        <p>Please input your username:</p>
+        <input type="text" id="usernameS">
+        <p>Please input your email:</p>
+        <input type="text" id="email">
+        <p>Please input your password:</p>
+        <input type="text" id="passwordS">
+        <button type="button" id="submitS">Login</button>
+        <p id="alert-txtS" style="color: red; display: none;">Username in use!</p><br>
+        <button type="button" id="gotologin"> Go to Log In </button>
+    </form>
+
+
 
 </body>
 </html>
