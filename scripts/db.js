@@ -7,6 +7,8 @@ var db = mysql.createConnection({
   database: "TestDrinklyDb"
 });
 
+
+
 db.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
