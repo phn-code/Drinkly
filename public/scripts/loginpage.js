@@ -11,6 +11,7 @@ function Login() {
 
     fetch('/loginUser', {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -20,26 +21,23 @@ function Login() {
             alertText.style.display = 'block';
             usernameIn.value = "";
             passwordIn.value = "";
-            // throw new Error(`HTTP error! Status: ${response.status}`);
-        } else {
-            document.location.href='/';
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        // else {
+        //     document.location.href='/';
+        // }
 
         // alertText.style.display = 'none';
 
         return response.text();
     })
-    .then((data) => {
-        if(!data) {
-            console.log("Not a user!");
-        } else {
-            console.log('Works + ' + data);
-
-        }
-
-        // alert("Logged In: " + data);
-    }).catch((error) => {
-        // console.error('Error: ', error);
+    .then(() => {
+        setTimeout(() => {
+            document.location.href='/';
+        },50);
+    })
+    .catch((error) => {
+        console.error('Error: ', error);
     });
 
 }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Friends</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="scripts/friends.js" defer></script>
+
+</head>
+
+<body id="body-cont">
+    <h1>DRINKLY</h1>
+    <p id="welcome-txt">Friends</p>
+    <p>{{test}}</p>
+
+
+    <div id="main-cont">
+        <div id="friends-cont">
+            <section class="friends-grid">
+                <article class="friend-card">
+                  <h3 class="username">Michael F.</h3>
+                  <button type="button" class="btn-unfollow">Unfollow</button>
+                </article>
+
+                <article class="friend-card">
+
+                  <h3 class="username">Sarah S.</h3>
+                  <button type="button" class="btn-unfollow">Unfollow</button>
+                </article>
+
+              </section>
+        </div>
+        <div id="follow-cont">
+
+                <h2>Find People</h2>
+                <input type="text" placeholder="Search users…" class="search-box">
+
+                <div class="filter-row">
+                    <button type="button" class="filter-pill active">All</button>
+                    <button type="button" class="filter-pill">Popular</button>
+                    <!-- <button type="button" class="filter-pill">Near you</button> -->
+                  </div>
+
+
+                  <ul class="suggested-users">
+                    <li class="suggested-user" :key="user.id" v-for="user in suggestedPeople">
+                      <span>{{user.name}}</span>
+                      <button type="button" class="btn-add">Add</button>
+                    </li>
+
+                  </ul>
+
+        </div>
+
+
+    </div>
+
+    <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
+
+
+
+
+    <!-- <button type="button" id="friends" onclick="location.href='/friends'">Log out</button> -->
+
+
+</body>
+</html>
