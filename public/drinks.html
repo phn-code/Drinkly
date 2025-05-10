@@ -58,13 +58,12 @@
       padding: 8px 0;
     }
     </style>
-
 </head>
 <body>
   <div id="app" v-if="drink">
     <div class="card">
       <div class="card-header">
-        <img src="drink.strDrinkThumb" alt="drink.strDrink" />
+        <img :src="drink.strDrinkThumb" :alt="drink.strDrink" />
         <div class="drink-info">
           <h1>{{ drink.strDrink }}</h1>
           <p>by DRINKLY ENTERPRISE LOL</p>
@@ -74,11 +73,11 @@
 
       <!-- switch btween ingredient and instruction tabs -->
       <div class="tabs">
-        <button type="button" activeTab = 'ingredients' :class="{active: activeTab === 'ingredients'}">Ingredients</button>
+        <button type="button" @click="activeTab = 'ingredients'" :class="{active: activeTab === 'ingredients'}">Ingredients</button>
         <button type="button" @click="activeTab = 'preparation'" :class="{active: activeTab === 'preparation'}">Preparation</button>
       </div>
 
-      <!-- Tab content -->
+      <!-- Tab stuff -->
       <div class="tab-content">
         <ul v-if="activeTab === 'ingredients'">
           <li v-for="ingredient in ingredients" :key="ingredient">{{ ingredient }}</li>
