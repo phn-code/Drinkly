@@ -2,93 +2,77 @@
 <html lang="en">
 
 <head>
-    <title>Drinkly</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <script src="scripts/index.js"></script>
+  <title>Drinkly Home Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="scripts/darkmode.js" defer></script>
+  <script src="scripts/index.js"></script>
 </head>
 
 <body>
+  <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <!-- Left side of the navigation: links -->
+      <div class="nav-links">
+        <a href="#" class="nav-item">Home</a>
+        <a href="#" class="nav-item">Create</a>
+        <a href="#" class="nav-item">Recipes</a>
+        <a href="#" class="nav-item">Reviews</a>
+        <a href="#" class="nav-item">About</a>
+      </div>
+
+      <!-- Right side of the navigation: buttons -->
+      <div class="nav-links">
+        <a href="login.html" class="nav-item">Login</a>
+        <button type="button" class="button-primary" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Welcome Section -->
+  <div class="container text-center margin-from-top">
     <h1>DRINKLY</h1>
-    <p id="welcome-txt">Welcome to Drinkly,</p>
-    <div class="top-bar">
-        <div class="nav-bar">
-            <a class="menu-toggle" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i
-                    class="fa fa-bars"></i></a>
-            <a href="#" class="nav-item active">HOME</a>
-            <a href="#" class="nav-item">CREATE</a>
-            <a href="#" class="nav-item">RECIPES</a>
-            <a href="#" class="nav-item">REVIEWS</a>
-            <a href="#" class="nav-item">ABOUT US</a>
-            <a href="#" class="nav-item">LOGIN</a>
-            <a href="#" class="nav-item">REGISTER</a>
-            <button class="dark-toggle" type="button" onclick="darkMode()">TOGGLE DARK MODE</button>
-            <script>
-                function darkMode() {
-                    var element = document.body;
-                    element.classList.toggle("dark-mode");
-                }
-            </script>
+    <h2 id="welcome-txt">Welcome</h2>
+    <p class="drink-meta">The social network for drink lovers.</p>
+  </div>
+
+  <!-- Sample Grid of Drink Cards (to be modified)-->
+  <div class="container grid">
+    <div class="drink-card">
+      <img src="https://via.placeholder.com/300x400.png?text=Spritz" alt="Aperol Spritz">
+      <div class="drink-info">
+        <div class="drink-title">Aperol Spritz</div>
+        <div class="drink-meta">by @branson</div>
+        <div>
+          <span class="tag">Citrus</span>
+          <span class="tag">Bubbly</span>
         </div>
+      </div>
     </div>
 
-    <!-- Header -->
-    <header class="header">
-        <h1 class="main-title center">DRINKLY</h1>
-        <p class="center">Track recipes you've written. <br>
-            Review the drinks you love (or hate).<br>
-            Let your friends know which drinks you rate.
-        </p>
-        <p class="gray-text center">The social network for drink lovers.</p>
-    </header>
-
-    <!-- First Grid -->
-    <div class="content-section">
-        <div class="content">
-            <div class="main-content">
-                <h1>Lorem Ipsum</h1>
-                <h5 class="spaced-paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.</h5>
-                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-            </div>
-
-            <div class="side-content right-align">
-                <!-- picture here?-->
-            </div>
+    <div class="drink-card">
+      <img src="https://via.placeholder.com/300x400.png?text=Mojito" alt="Mojito">
+      <div class="drink-info">
+        <div class="drink-title">Mojito</div>
+        <div class="drink-meta">by @ethan</div>
+        <div>
+          <span class="tag">Mint</span>
+          <span class="tag">Refreshing</span>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Second Grid -->
-    <div class="content-section light-background right-align-grid">
-        <div class="content">
-            <div class="side-content left-align">
-                <!-- picture here? -->
-            </div>
-
-            <div class="main-content">
-                <h1>Lorem Ipsum</h1>
-                <h5 class="spaced-paragraph">Lorem ipsum dolor sit amet...</h5>
-                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                <p class="gray-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-
-            </div>
-        </div>
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 Drinkly. Developed by Aidan, Branson, Ethan, and Phuc</p>
+      <!-- The logout button functionality would be dynamic based on user session? -->
+      <button type="button" id="logout" class="button-primary mt-1">Log out</button>
+      <!-- maybe add functionality to show this button via JS if a user is logged in or not -->
     </div>
-
-    <!-- Footer -->
-    <footer class="footer center opacity">
-        <p>Developed by Aidan, Branson, Ethan, and Phuc</p>
-    </footer>
-
-
-    <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
-
-    <button type="button" id="logout">Log out</button>
-
-
+  </footer>
 </body>
 
 </html>

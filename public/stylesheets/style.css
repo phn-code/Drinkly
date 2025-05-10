@@ -1,67 +1,204 @@
-body {
-  padding: 25px, 25px, 25px, 25px;
-  background-color: white;
-  color: black;
-  font-size: 25px;
+/* CSS THEME VARIABLES AND BASE STYLES */
+
+/* Light mode (default) */
+:root {
+  --bg: #FAF9F6;
+  --accent-primary: #D95F39;
+  --accent-secondary: #60B99A;
+  --text-main: #1C1C1C;
+  --text-muted: #707070;
+  --border-color: #E1E1E1;
+  --link-color: #3A8DFF;
 }
 
-.center {
+/* Dark mode (when .dark class is on <body>) */
+.dark {
+  --bg: #121212;
+  --accent-primary: #FF7847;
+  --accent-secondary: #81D3B3;
+  --text-main: #F5F5F5;
+  --text-muted: #A0A0A0;
+  --border-color: #2A2A2A;
+  --link-color: #5BA6FF;
+}
+
+/* GLOBAL STYLES */
+
+body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 0;
+  padding: 0;
+}
+
+/* LINK STYLING */
+
+a {
+  color: var(--link-color);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* DRINK CARD */
+
+.drink-card {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .drink-card {
+  background-color: #1A1A1A;
+}
+
+.drink-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.drink-card img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+.drink-info {
+  padding: 1rem;
+}
+
+.drink-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.drink-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* TAGS */
+
+.tag {
+  background-color: var(--accent-secondary);
+  color: white;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  margin-right: 0.4rem;
+}
+
+/*  BUTTONS  */
+
+.button-primary {
+  background-color: var(--accent-primary);
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button-primary:hover {
+  background-color: #c54c2e;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-buttons button, .nav-buttons a {
+  background-color: var(--accent-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-buttons button:hover,
+.nav-buttons a:hover {
+  background-color: #c54c2e;
+}
+
+/* SPACING FOR LINKS */
+nav a {
+  margin-right: 1.5rem;
+}
+
+/* GRID LAYOUT */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* CONTAINER WRAPPER  */
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/*  HEADER & FOOTER  */
+
+.header {
+  text-align: center;
+  padding: 0.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* NAVIGATION BAR STYLES */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+nav .nav-item:hover {
+  color: var(--accent-primary);
+}
+
+
+/*  UTILITY CLASSES  */
+
+.text-center {
   text-align: center;
 }
 
-.content-section {
-  display: flex;
-}
-
-.top-bar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: lightgray;
-  z-index: 1;
-}
-
-.nav-bar .nav-item {
-  color: black;
-  text-decoration: underline black;
-}
-
-.dark-toggle {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: inherit;
-}
-
-.dark-mode {
-  background-color: #333;
-  color: white;
-}
-
-.dark-mode .top-bar {
-  background-color: #222;
-  color: white;
-}
-
-.dark-mode .nav-bar .nav-item {
-  color: white;
-  text-decoration: underline overline white;
-}
-
-.dark-mode .dark-toggle-btn {
-  color: white;
-}
-
-.opacity {
-  background-color: lightgray;
-  color: black;
-}
-
-.dark-mode .opacity {
-  background-color: #222;
-  color: white;
-}
-
-.gray-text {
-  color:gray;
+.margin-from-top {
+  margin-top: 2rem;
 }

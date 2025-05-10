@@ -21,18 +21,18 @@ router.post('/', (req,res) => {
         }
 
         if(results.length === 0) {
-            return res.status(401).send('Put in the wrong username/password ');
+            return res.status(401).send('Put in the wrong username/password');
         }
 
         // SOMEONE IMPLEMENT CHEKC PASSWORD
 
 
-        bcrypt.compare(password, results[0].password_hash).then((matchesPassword) => {
+        bcrypt.compare(password, results[0].password).then((matchesPassword) => {
 
             if(!matchesPassword) {
                 return res.status(401).send('Put in the wrong username/password ');
             }
-            req.session.userId = results[0].user_id;
+            req.session.userId = results[0].id;
             req.session.username = results[0].username;
 
             res.send("Logged In");
@@ -66,13 +66,13 @@ router.post('/new', (req, res) => {
 
         if(results.length !== 0) {
             // not allowed, already a user in there
-            return res.status(401).send('Put in the wrong username/password ');
+            return res.status(401).send('Put in the wrong username/password');
         }
 
         // else allowed
         // generate the password hash
         bcrypt.hash(password, 10).then((hashP) => {
-            db.query('INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)', [username, email, hashP], (err2, newRes) => {
+            db.query('INSERT INTO Users (username, email, password) VALUES (?, ?, ?)', [username, email, hashP], (err2, newRes) => {
                 if(err2) {
                     console.log("EREROR WITH SQL QUERY");
                     console.log(err2);
@@ -80,7 +80,7 @@ router.post('/new', (req, res) => {
 
                 }
 
-                // req.session.userId = newRes.user_id;
+                // req.session.userId = newRes.id;
                 req.session.userId = newRes.insertId;
                 req.session.username = username;
 
@@ -106,8 +106,6 @@ router.post('/logout', (req, res) => {
     });
 
 });
-
-
 
 
 

@@ -3,21 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="scripts/loginpage.js"></script>
+    <title>Drinkly Login Page</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="scripts/loginpage.js" defer></script>
+    <script src="scripts/darkmode.js" defer></script>
 </head>
 <body>
+ <!-- Top Navigation Bar -->
+ <div class="header">
+    <nav class="text-center margin-from-top">
+      <!-- Left side of the navigation: links -->
+      <div class="nav-links">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="#" class="nav-item">Create</a>
+        <a href="#" class="nav-item">Recipes</a>
+        <a href="#" class="nav-item">Reviews</a>
+        <a href="#" class="nav-item">About</a>
+      </div>
 
+      <!-- Right side of the navigation: buttons -->
+      <div class="nav-buttons">
+        <button type="button" class="button-primary" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+      </div>
+    </nav>
+  </div>
 
+  <main class="main-content">
+    <div class="container margin-from-top text-center">
     <form id="login">
         <h1>Login Form</h1>
         <p>Please input your username:</p>
         <input type="text" id="username">
         <p>Please input your password:</p>
         <input type="text" id="password">
-        <button type="button" id="submit">Login</button>
-        <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p><br>
-        <button type="button" id="gotosignup"> Go to Sign Up </button>
+        <br>
+        <br>
+        <button type="button" id="submit" class="button-primary">Login</button>
+        <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p>
+        <br>
+        <hr>
+        <p>Don't have an account?</p>
+        <button type="button" id="gotosignup" class="button-primary">Sign Up</button>
     </form>
 
     <form id="signup" style="display: none;">
@@ -28,12 +55,17 @@
         <input type="text" id="email">
         <p>Please input your password:</p>
         <input type="text" id="passwordS">
-        <button type="button" id="submitS">Login</button>
-        <p id="alert-txtS" style="color: red; display: none;">Username in use!</p><br>
-        <button type="button" id="gotologin"> Go to Log In </button>
+        <br>
+        <br>
+        <button type="button" id="submitS" class="button-primary">Sign up</button>
+        <p id="alert-txtS" style="color: red; display: none;">Username in use!</p>
+        <br>
+        <hr>
+        <p>Already have an account?</p>
+        <button type="button" id="gotologin" class="button-primary">Log In</button>
     </form>
-
-
+    </div>
+   </main>
 
 </body>
 </html>
