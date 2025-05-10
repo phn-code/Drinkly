@@ -1,9 +1,35 @@
 var express = require('express');
 var router = express.Router();
+const path = require('path');
+
+
+function checkLogin(req, res, next) {
+  if (!req || !req.session.userId) {
+    return res.redirect('/login');
+  }
+  // console.log("Logged in");
+  next();
+}
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', checkLogin, function(req, res, next) {
+  console.log("Working");
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
+
+router.get('/checkLogin', (req, res) => {
+  if (req.session.userId) {
+    res.json({ username: req.session.username });
+  } else {
+    res.status(401).json({ error: 'Not logged in' });
+  }
+});
+
+
+
+router.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
 });
 
 router.get('/search', async(req, res) => {
@@ -21,24 +47,26 @@ router.get('/search', async(req, res) => {
 
 });
 
-router.get('/drink/:id', async(req, res) => {
-const { id } = req.params;
+router.get('/drink/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const data = await response.json();
 
-try{
-  const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
-  const data = await response.json();
+    if (!data.drinks) {
+      return res.status(404).json({ error: 'Not found' });
+    }
 
-  if(!data.drinks){
-    return res.status(404).send('Sorry, not found');
+    res.json({ drink: data.drinks[0] });
+  } catch (err) {
+    console.error('Error fetching drink:', err);
+    res.status(500).json({ error: 'Server error' });
   }
-
-  res.render('drinkTemp', { drink: data.drinks[0] });
-
-} catch (err){
-  console.error('Cant getting data:', err);
-  return res.status(500).json({ error: 'server error' });
-}
-
 });
+
+
+
+
+
 
 module.exports = router;

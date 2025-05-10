@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     data.drinks.forEach((drink) => {
       const drinkDiv = document.createElement('div');
       drinkDiv.innerHTML = `
-        <h2><a href="/drink/${drink.idDrink}">${drink.strDrink}</a></h2>
+        <h2><a href="/drinks.html?id=${drink.idDrink}">${drink.strDrink}</a></h2>
         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" width="200">
         <hr>
       `;
