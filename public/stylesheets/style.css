@@ -202,3 +202,7 @@ nav .nav-item:hover {
 .margin-from-top {
   margin-top: 2rem;
 }
+
+.rounded-edge {
+  border-radius: 8px;
+}
