@@ -33,11 +33,15 @@
         <div id="follow-cont">
 
                 <h2>Find People</h2>
-                <input type="text" placeholder="Search users…" class="search-box">
+                <div style="display: flex; flex-direction: row;">
+                  <input type="text" placeholder="Search users…" class="search-box" v-model="searchVal">
+                  <button type="button" class="btn-unfollow" @click="searchUsers">Search</button>
+                </div>
+
 
                 <div class="filter-row">
                     <button type="button" class="filter-pill active">All</button>
-                    <button type="button" class="filter-pill">Popular</button>
+                    <!-- <button type="button" class="filter-pill">Popular</button> -->
                     <!-- <button type="button" class="filter-pill">Near you</button> -->
                   </div>
 
@@ -45,7 +49,9 @@
                   <ul class="suggested-users">
                     <li class="suggested-user" :key="user.id" v-for="user in suggestedPeople">
                       <span>{{user.name}}</span>
-                      <button type="button" class="btn-add">Add</button>
+                      <button type="button" class="" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
+                        {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+                      </button>
                     </li>
 
                   </ul>

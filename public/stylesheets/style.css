@@ -89,11 +89,26 @@ a {
   transition: background 0.15s;
 }
 
+
+
+.btn-rm {
+  display: inline-block;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 999px;
+  background: #a7a7a7;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+}
+
 .btn-unfollow:hover {
   background: #4ea885;
 }
 
-/* search box */
+
 .search-box {
   width: 100%;
   padding: 10px 14px;
@@ -102,7 +117,7 @@ a {
   margin-bottom: 16px;
 }
 
-/* filter pills */
+
 .filter-row {
   display: flex;
   gap: 8px;
