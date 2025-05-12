@@ -6,30 +6,41 @@ const db = require('../scripts/db');
 
 
 router.get('/searchUsers', function(req, res) {
-    let curUser;
+    // let curUser;
     if(!req.session.userId) {
         console.error('Not logged in :');
         return res.status(500).json({ error: 'not logged in' });
     }
 
-    curUser = req.session.userId;
+    let curUser = req.session.userId;
 
     const searchVal = req.query.search;
+
 
     console.log("SEARCHED VALUE: ", searchVal);
 
     let dbSearch = `
+        WITH RankedUsers AS (
+            SELECT following_id, COUNT(follower_id) AS follower_count,
+                DENSE_RANK() OVER (ORDER BY COUNT(follower_id) DESC) AS ranking
+            FROM Follows
+            GROUP BY following_id
+        )
         SELECT Users.id, Users.username,
-        CASE
-            WHEN Follows.following_id IS NOT NULL THEN TRUE
-            ELSE FALSE
-        END AS isFriend
+            CASE
+                WHEN Follows.following_id IS NOT NULL THEN TRUE
+                ELSE FALSE
+            END AS isFriend,
+            COALESCE(RankedUsers.ranking, NULL) AS popularity_rank
         FROM Users
         LEFT JOIN Follows ON Users.id = Follows.following_id AND Follows.follower_id = ?
-        WHERE Users.username LIKE ? AND Users.username != ?
+        LEFT JOIN RankedUsers ON Users.id = RankedUsers.following_id
+        WHERE Users.username LIKE ? AND Users.username <> ?
         ORDER BY RAND()
-        LIMIT 10
+        LIMIT 10;
     `;
+
+
 
 
     db.query(dbSearch, [curUser, `%${searchVal}%`, curUser], (err, results) => {
@@ -42,7 +53,8 @@ router.get('/searchUsers', function(req, res) {
         const users = results.map((user) => ({
             id: user.id,
             name: user.username,
-            isFriend: user.isFriend
+            isFriend: Boolean(user.isFriend),
+            ranking: user.ranking
         }));
 
         console.log(users);
@@ -51,6 +63,37 @@ router.get('/searchUsers', function(req, res) {
     });
 
 });
+
+
+router.get('/getFriends', function(req, res) {
+
+
+    let curUser = req.session.userId;
+
+
+    const statement = `SELECT Follows.following_id, Users.username FROM Follows INNER JOIN Users On Follows.following_id = Users.id WHERE Follows.follower_id = ?;`;
+
+    db.query(statement, [curUser], (err, results) => {
+        // res.json()
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        const users = results.map((user) => ({
+            id: user.following_id,
+            name: user.username,
+            isFriend: true
+        }));
+
+        console.log("Friends: ", users);
+
+        res.json({ users });
+    });
+
+});
+
+
 
 
 router.post('/toggleFriend', function(req, res) {

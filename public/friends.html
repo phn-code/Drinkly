@@ -17,16 +17,19 @@
     <div id="main-cont">
         <div id="friends-cont">
             <section class="friends-grid">
-                <article class="friend-card">
-                  <h3 class="username">Michael F.</h3>
-                  <button type="button" class="btn-unfollow">Unfollow</button>
+                <article class="friend-card" v-for="user in friends">
+                  <h3 class="username">{{user.name}}</h3>
+                  <!-- <button type="button" class="btn-unfollow">Unfollow</button> -->
+                  <!-- <span>{{user.name}}</span> -->
+                  <button type="button" class="" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
+                    {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+                  </button>
                 </article>
 
-                <article class="friend-card">
-
+                <!-- <article class="friend-card">
                   <h3 class="username">Sarah S.</h3>
                   <button type="button" class="btn-unfollow">Unfollow</button>
-                </article>
+                </article> -->
 
               </section>
         </div>
@@ -39,10 +42,14 @@
                 </div>
 
 
-                <div class="filter-row">
+                <!-- <div class="filter-row">
                     <button type="button" class="filter-pill active">All</button>
-                    <!-- <button type="button" class="filter-pill">Popular</button> -->
-                    <!-- <button type="button" class="filter-pill">Near you</button> -->
+
+                  </div> -->
+
+                  <div class="filter-row">
+                    <button type="button" class="filter-pill" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All</button>
+                    <button type="button" class="filter-pill" :class="{ active: activeTab === 'popular' }" @click="activeTab = 'popular'">Popular</button>
                   </div>
 
 

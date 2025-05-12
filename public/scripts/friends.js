@@ -6,6 +6,7 @@ const app = Vue.createApp({
         return {
             test: 'WORKS',
             suggestedPeople: [],
+            friends: [],
             searchVal: "",
         };
     },
@@ -14,11 +15,23 @@ const app = Vue.createApp({
         //     this.suggestedPeople = results.users;
         //     console.log(this.suggestedPeople);
         // });
-
+        this.getFriends();
         this.searchUsers();
     },
 
     methods: {
+
+        getFriends() {
+            fetch(`friends/getFriends`, { method: 'GET' }).then((result) => result.json()).then((results) => {
+                this.friends = results.users;
+                // console.log(this.suggestedPeople);
+                this.friends = results.users.map((user) => ({
+                    ...user,
+                    isProcessing: false
+                }));
+            });
+        },
+
         searchUsers() {
             fetch(`friends/searchUsers?search=${encodeURIComponent(this.searchVal)}`, { method: 'GET' }).then((result) => result.json()).then((results) => {
                 this.suggestedPeople = results.users;
@@ -48,6 +61,8 @@ const app = Vue.createApp({
             }).catch((error) => console.error("Error: ", error)).finally(() => {
                 clickedUser.isProcessing = false;
             });
+
+            this.getFriends();
         }
     }
 
