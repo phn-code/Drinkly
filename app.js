@@ -39,6 +39,9 @@ app.use('/drinks', drinksRouter);
 
 
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/loginUser', loginRouter);
