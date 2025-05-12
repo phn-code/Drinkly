@@ -4,7 +4,8 @@ const path = require('path');
 
 
 function checkLogin(req, res, next) {
-  if (!req || !req.session.userId) {
+  if (!req.session.userId) {
+    console.log("No req session");
     return res.redirect('/login');
   }
   // console.log("Logged in");
@@ -64,6 +65,10 @@ router.get('/drink/:id', async (req, res) => {
   }
 });
 
+
+router.get('/friends', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'friends.html'));
+});
 
 
 
