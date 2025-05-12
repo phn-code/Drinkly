@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 const session = require('express-session');
 
 
@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Phucs's different APIs
-app.listen(PORT, () => { console.log(`Server is running at http://localhost:${PORT}`); });
+// app.listen(PORT, () => { console.log(`Server is running at http://localhost:${PORT}`); });
 
 var drinksRouter = require('./routes/drinks');
 app.use('/drinks', drinksRouter);
