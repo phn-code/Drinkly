@@ -33,6 +33,39 @@ router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
 });
 
+router.get('/search', async(req, res) => {
+  const { name } = req.query;
+  if (!name) return res.status(400).json({ error: 'Wrong name for da drink' });
+
+  try {
+    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(name)}`);
+    const data = await response.json();
+    return res.json(data);
+
+  }catch (err) {
+    return res.status(500).json({ error: 'something wrong' });
+  }
+
+});
+
+router.get('/drink/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const data = await response.json();
+
+    if (!data.drinks) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    res.json({ drink: data.drinks[0] });
+  } catch (err) {
+    console.error('Error fetching drink:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 router.get('/friends', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'friends.html'));
 });

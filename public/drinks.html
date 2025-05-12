@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drink Details</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    .card {
+      max-width: 500px;
+      margin: auto;
+      font-family: sans-serif;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      display: flex;
+      gap: 16px;
+    }
+    .card-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+    }
+    .tabs {
+      margin-top: 16px;
+    }
+    .tabs button {
+      padding: 8px 12px;
+      border: none;
+      background: #eee;
+      cursor: pointer;
+    }
+    .tabs .active {
+      background: #59caa0;
+      color: white;
+    }
+    .tab-content ul, .tab-content ol {
+      margin: 12px 0;
+    }
+    .review-btn {
+      background: #59caa0;
+      color: white;
+      padding: 10px;
+      border: none;
+      margin-top: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .reviews {
+      margin-top: 16px;
+    }
+    .review {
+      border-top: 1px solid #eee;
+      padding: 8px 0;
+    }
+    </style>
+</head>
+<body>
+  <div id="app" v-if="drink">
+    <div class="card">
+      <div class="card-header">
+        <img src="drink.strDrinkThumb" alt="drink.strDrink" />
+        <div class="drink-info">
+          <h1>{{ drink.strDrink }}</h1>
+          <p>by DRINKLY ENTERPRISE LOL</p>
+          <p>⭐ 4.5 <a href="#">Add to Favourites</a></p>
+        </div>
+      </div>
+
+      <!-- switch btween ingredient and instruction tabs -->
+      <div class="tabs">
+        <button type="button" @click="activeTab = 'ingredients'" :class="{active: activeTab === 'ingredients'}">Ingredients</button>
+        <button type="button" @click="activeTab = 'preparation'" :class="{active: activeTab === 'preparation'}">Preparation</button>
+      </div>
+
+      <!-- Tab stuff -->
+      <div class="tab-content">
+        <ul v-if="activeTab === 'ingredients'">
+          <li v-for="ingredient in ingredients" :key="ingredient">{{ ingredient }}</li>
+        </ul>
+        <ol v-if="activeTab === 'preparation'">
+          <li>{{ drink.strInstructions }}</li>
+        </ol>
+      </div>
+
+      <!-- Temporary Reviews for now since we don't hve it sorted out -->
+      <button type="button" class="review-btn">Write a Review</button>
+      <div class="reviews">
+        <div class="review" v-for="review in reviews">
+          <p><strong>{{ review.name }}</strong></p>
+          <p>{{ review.comment }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          drink: null,
+          activeTab: 'ingredients',
+          reviews: [
+        { name: "Alice", comment: "Tast like Ass" },
+        { name: "Bob", comment: "Bob." }
+      ]
+        };
+      },
+      computed: {
+        ingredients() {
+          if (!this.drink) return [];
+          const list = [];
+          for (let i = 1; i <= 15; i++) {
+            const item = this.drink[`strIngredient${i}`];
+            if (item) list.push(item);
+          }
+          return list;
+        }
+      },
+      async created() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if (!id) return;
+
+        const response = await fetch(`/drink/${id}`);
+        const data = await response.json();
+        this.drink = data.drink;
+      }
+    });
+
+    app.mount('#app');
+  </script>
+
+</body>
+</html>
