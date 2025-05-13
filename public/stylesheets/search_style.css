@@ -70,10 +70,11 @@ header {
 
 #searchBox {
     padding: 12px 15px;
-    font-size: 1em;
+    font-size: 1.5em;
     border: 1px solid #ccc;
     border-radius: 8px;
-    min-width: 300px; /* Give it some decent width */
+    min-width: 400px;
+    /* Give it some decent width */
     /* width: 50%; Alternatively use percentage */
 }
 
@@ -120,16 +121,16 @@ header {
     transition: background-color 0.3s ease, border-left-color 0.3s ease;
     border-left: 5px solid transparent;
   }
-  
+
   .drink-item:hover {
     background-color: #f8f8f8;
   }
-  
+
   .drink-item.selected {
     background-color: #e6f7ff; /* Highlight on selection */
     border-left-color: #007bff; /* Blue highlight on left */
   }
-  
+
 
 #results h2 {
     font-size: 1.8em;

@@ -3,6 +3,7 @@
 <head>
     <title>Express</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/search_style.css">
     <script src="scripts/index.js"></script>
     <script src="search.js"></script>
 </head>
@@ -10,9 +11,13 @@
 <body>
     <h1>DRINKLY</h1>
     <p id="welcome-txt">Welcome to Drinkly,</p>
-    <input type="text" id="searchBox" size="50" placeholder="Enter drink name...">
+
+    <div class="search-controls">
+    <input type="text" id="searchBox" placeholder="Enter drink name...">
     <button type="button" id="searchBtn">Search</button>
+    </div>
     <div id="results"></div>
+
 
     <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
 
