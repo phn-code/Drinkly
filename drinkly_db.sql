@@ -58,3 +58,27 @@ CREATE TABLE IF NOT EXISTS DrinkIngredients (
     FOREIGN KEY (drink_api_id) REFERENCES Drinks(api_id) ON DELETE CASCADE,
     FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS UserLists (
+    list_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    list_name VARCHAR(100) NOT NULL,
+    description TEXT NULL,
+    list_icon_url VARCHAR(255) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    UNIQUE KEY (user_id, list_name)
+);
+
+CREATE TABLE IF NOT EXISTS UserListDrinks (
+    list_id INT NOT NULL,
+    drink_api_id VARCHAR(50) NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (list_id, drink_api_id),
+    FOREIGN KEY (list_id) REFERENCES UserLists(list_id) ON DELETE CASCADE,
+    FOREIGN KEY (drink_api_id) REFERENCES Drinks(api_id) ON DELETE CASCADE
+);
+
