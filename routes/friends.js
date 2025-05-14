@@ -54,7 +54,7 @@ router.get('/searchUsers', function(req, res) {
             id: user.id,
             name: user.username,
             isFriend: Boolean(user.isFriend),
-            ranking: user.ranking
+            ranking: user.popularity_rank
         }));
 
         console.log(users);

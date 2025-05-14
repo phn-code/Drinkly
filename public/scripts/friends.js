@@ -8,7 +8,16 @@ const app = Vue.createApp({
             suggestedPeople: [],
             friends: [],
             searchVal: "",
+            timeout: null
         };
+    },
+    watch: {
+        searchVal(newVal) {
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.searchUsers();
+            }, 300);
+        }
     },
     created() {
         // fetch('/friends/getRandomUsers', { method: 'GET' }).then((result) => result.json()).then((results) => {
@@ -29,6 +38,7 @@ const app = Vue.createApp({
                     ...user,
                     isProcessing: false
                 }));
+                this.searchUsers();
             });
         },
 
@@ -41,6 +51,7 @@ const app = Vue.createApp({
                     isProcessing: false
                 }));
             });
+
         },
 
 
