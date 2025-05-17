@@ -32,6 +32,7 @@ router.post('/', (req,res) => {
             if(!matchesPassword) {
                 return res.status(401).send('Put in the wrong username/password ');
             }
+            console.log("verified password");
             req.session.userId = results[0].id;
             req.session.username = results[0].username;
 

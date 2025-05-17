@@ -1,23 +1,70 @@
 <!DOCTYPE html>
-<html lang="eng">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Imma search</title>
-    </head>
-    <body>
-        <h1>Searching feature</h1>
-        <input type="text" id="searchBox" size="50" placeholder="Enter drink name...">
-        <button type="button" id="searchBtn">Search</button>
-        <div id="results"></div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Imma search</title>
+  <link rel="stylesheet" href="stylesheets/search_style.css" />
+</head>
+<body>
+  <button id="closeBtn" class="close-button">×</button>
+  <button id="doneBtn" class="done-button">Done</button>
 
-        <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('searchBtn');
-        const box = document.getElementById('searchBox');
-        const results = document.getElementById('results');
+  <h1>Searching feature</h1>
+  <input type="text" id="searchBox" size="50" placeholder="Enter drink name..." />
+  <button type="button" id="searchBtn">Search</button>
 
-        btn.addEventListener('click', async () => {
+  <div id="results"></div>
+
+  <div id="selectionStatus" style="margin-top: 15px; font-weight: bold;">
+    Selected Drinks: <span id="selectedCount">0</span>
+    <ul id="selectedNames" style="margin-top: 10px; font-weight: normal;"></ul>
+  </div>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('searchBtn');
+      const box = document.getElementById('searchBox');
+      const results = document.getElementById('results');
+      const closeBtn = document.getElementById('closeBtn');
+      const doneBtn = document.getElementById('doneBtn');
+      const selectedDrinkIds = new Set();
+      const selectedCountSpan = document.getElementById('selectedCount');
+      const selectedDrinkNames = new Map(); // id => name
+      const selectedNamesList = document.getElementById('selectedNames');
+
+      function updateSelectedCountDisplay() {
+        selectedCountSpan.textContent = selectedDrinkIds.size;
+
+        selectedNamesList.innerHTML = '';
+        selectedDrinkIds.forEach(id => {
+          const name = selectedDrinkNames.get(id);
+          if (name) {
+            const li = document.createElement('li');
+            li.textContent = name;
+            selectedNamesList.appendChild(li);
+          }
+        });
+      }
+
+      closeBtn.addEventListener('click', () => {
+        console.log("Navigating away (Close). Selected drinks:", Array.from(selectedDrinkIds));
+        window.location.href = 'drink_page.html';
+      });
+
+      doneBtn.addEventListener('click', () => {
+        if (selectedDrinkIds.size > 0) {
+          console.log("Done clicked! Selected drink IDs:", Array.from(selectedDrinkIds));
+          console.log("Selected drink names:", Array.from(selectedDrinkNames.values()));
+          alert(`You have selected ${selectedDrinkIds.size} drink(s). Check the console.`);
+        } else {
+          alert("No drinks have been selected.");
+        }
+        window.location.href = 'drink_page.html';
+      });
+
+      btn.addEventListener('click', async () => {
         const name = box.value.trim();
         if (!name) return;
         results.innerHTML = 'Searching at da mommnent...';
@@ -33,16 +80,57 @@
         results.innerHTML = '';
         data.drinks.forEach(drink => {
           const drinkDiv = document.createElement('div');
+          drinkDiv.classList.add('drink-item');
+          drinkDiv.dataset.drinkId = drink.idDrink;
+
+          const ingredients = [];
+          for (let i = 1; i <= 15; i++) {
+            const ingredient = drink[`strIngredient${i}`];
+            const measurement = drink[`strMeasure${i}`];
+            if (ingredient) {
+              ingredients.push(`${ingredient} - ${measurement || 'to taste'}`);
+            }
+          }
+
           drinkDiv.innerHTML = `
             <h2>${drink.strDrink}</h2>
             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" width="200">
-            <p>${drink.strInstructions}</p>
+            <p><strong>Category:</strong> ${drink.strCategory}</p>
+            <p><strong>Alcohol:</strong> ${drink.strAlcoholic}</p>
+            <p><strong>Glass Type:</strong> ${drink.strGlass}</p>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              ${ingredients.map(ing => `<li>${ing}</li>`).join('')}
+            </ul>
+            <p><strong>Instructions:</strong> ${drink.strInstructions}</p>
             <hr>
           `;
+
+          drinkDiv.addEventListener('click', () => {
+            const drinkId = drink.idDrink;
+            const drinkName = drink.strDrink;
+
+            if (selectedDrinkIds.has(drinkId)) {
+              selectedDrinkIds.delete(drinkId);
+              selectedDrinkNames.delete(drinkId);
+              drinkDiv.classList.remove('selected');
+            } else {
+              selectedDrinkIds.add(drinkId);
+              selectedDrinkNames.set(drinkId, drinkName);
+              drinkDiv.classList.add('selected');
+            }
+
+            updateSelectedCountDisplay();
+            console.log("Selected Drink IDs:", Array.from(selectedDrinkIds));
+          });
+
           results.appendChild(drinkDiv);
         });
       });
+
+      updateSelectedCountDisplay();
     });
-        </script>
-    </body>
+  </script>
+
+</body>
 </html>

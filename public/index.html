@@ -5,9 +5,11 @@
   <title>Drinkly Home Page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/search_style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="scripts/darkmode.js" defer></script>
   <script src="scripts/index.js"></script>
+    <script src="search.js"></script>
 </head>
 
 <body>
@@ -34,45 +36,23 @@
   <!-- Welcome Section -->
   <div class="container text-center margin-from-top">
     <h1>DRINKLY</h1>
-    <h2 id="welcome-txt">Welcome</h2>
-    <p class="drink-meta">The social network for drink lovers.</p>
-  </div>
+    <p id="welcome-txt">Welcome to Drinkly,</p>
 
-  <!-- Sample Grid of Drink Cards (to be modified)-->
-  <div class="container grid">
-    <div class="drink-card">
-      <img src="https://via.placeholder.com/300x400.png?text=Spritz" alt="Aperol Spritz">
-      <div class="drink-info">
-        <div class="drink-title">Aperol Spritz</div>
-        <div class="drink-meta">by @branson</div>
-        <div>
-          <span class="tag">Citrus</span>
-          <span class="tag">Bubbly</span>
-        </div>
-      </div>
+    <div class="search-controls">
+    <input type="text" id="searchBox" placeholder="Enter drink name...">
+    <button type="button" id="searchBtn">Search</button>
     </div>
+    <div id="results"></div>
 
-    <div class="drink-card">
-      <img src="https://via.placeholder.com/300x400.png?text=Mojito" alt="Mojito">
-      <div class="drink-info">
-        <div class="drink-title">Mojito</div>
-        <div class="drink-meta">by @ethan</div>
-        <div>
-          <span class="tag">Mint</span>
-          <span class="tag">Refreshing</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <footer class="footer">
-    <div class="container">
-      <p>© 2024 Drinkly. Developed by Aidan, Branson, Ethan, and Phuc</p>
-      <!-- The logout button functionality would be dynamic based on user session? -->
-      <button type="button" id="logout" class="button-primary mt-1">Log out</button>
-      <!-- maybe add functionality to show this button via JS if a user is logged in or not -->
-    </div>
-  </footer>
+    <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
+
+    <button type="button" id="logout">Log out</button>
+
+
+    <button type="button" id="friends" onclick="location.href='/friends'">Friends</button>
+
+
 </body>
 
 </html>
