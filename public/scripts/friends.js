@@ -25,7 +25,7 @@ const app = Vue.createApp({
         //     console.log(this.suggestedPeople);
         // });
         this.getFriends();
-        this.searchUsers();
+        // this.searchUsers();
     },
 
     methods: {

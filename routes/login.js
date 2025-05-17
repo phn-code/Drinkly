@@ -17,14 +17,13 @@ router.post('/', (req,res) => {
         if(err) {
             console.log("EREROR WITH SQL QUERY");
             console.log(err);
-            return res.status(500).send('SERVER ERORR');
+            return res.status(500).send('SERVER ERROR');
         }
 
         if(results.length === 0) {
             return res.status(401).send('Put in the wrong username/password ');
         }
 
-        // SOMEONE IMPLEMENT CHEKC PASSWORD
 
 
         bcrypt.compare(password, results[0].password).then((matchesPassword) => {
