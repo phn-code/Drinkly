@@ -1,80 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Friends</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="scripts/friends.js" defer></script>
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Friends - Drinkly</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/friends.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="scripts/darkmode.js" defer></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="scripts/friends.js" defer></script>
+  <script src="scripts/index.js" defer></script>
 </head>
 
 <body id="body-cont">
-    <h1>DRINKLY</h1>
-    <p id="welcome-txt">Friends</p>
-    <p>{{test}}</p>
+ <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass fa-bounce"></i>
+        <p>Drinkly</p>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-item" title="Home"><i class="fa-solid fa-house fa-2x"></i></a>
+        <a href="/lists.html" class="nav-item" title="Lists"><i class="fa-solid fa-list fa-2x"></i></a>
+        <a href="#" class="nav-item" title="Reviews"><i class="fa-solid fa-pen-to-square fa-2x"></i></a>
+        <a href="/friends.html" class="nav-item" title="Friends"><i class="fa-solid fa-users fa-beat fa-2x"></i></a>
+        <a href="/about.html" class="nav-item" title="About"><i class="fa-solid fa-circle-info fa-2x"></i></a>
+      </div>
 
+      <div class="nav-buttons">
+        <button type="button" id="logout" class="button-primary" title="Log Out">
+          <i class="fa-solid fa-door-open fa-2x"></i>
+        </button>
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-spin fa-2x"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+  <!-- Main Container -->
+  <main class="container margin-from-top main-content">
+    <h1 class="centered">Friends</h1>
 
-    <div id="main-cont">
-        <div id="friends-cont">
-            <section class="friends-grid">
-                <article class="friend-card" v-for="user in friends">
-                  <h3 class="username">{{user.name}}</h3>
-                  <!-- <button type="button" class="btn-unfollow">Unfollow</button> -->
-                  <!-- <span>{{user.name}}</span> -->
-                  <button type="button" class="" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
-                    {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
-                  </button>
-                </article>
+    <div id="main-cont" class="flex-row">
+      <!-- Friends List -->
+      <section id="friends-cont" class="friends-grid">
 
-                <!-- <article class="friend-card">
-                  <h3 class="username">Sarah S.</h3>
-                  <button type="button" class="btn-unfollow">Unfollow</button>
-                </article> -->
+        <!-- Show message when no friends -->
+        <p v-if="friends.length === 0" class="no-friends-message">It's kinda lonely here...</p>
 
-              </section>
+        <article class="friend-card" v-for="user in friends" :key="user.id">
+          <h3 class="username">{{ user.name }}</h3>
+          <button type="button" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing"
+            :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
+            {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+          </button>
+        </article>
+      </section>
+
+      <!-- Find People / Follow -->
+      <aside id="follow-cont">
+        <h2>Find People</h2>
+
+        <input type="text" placeholder="Search users…" class="search-box" v-model="searchVal"
+          aria-label="Search users" />
+
+        <div class="filter-row">
+          <button type="button" class="filter-pill" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">
+            All
+          </button>
+          <button type="button" class="filter-pill" :class="{ active: activeTab === 'popular' }"
+            @click="activeTab = 'popular'">
+            Popular
+          </button>
         </div>
-        <div id="follow-cont">
 
-                <h2>Find People</h2>
-                <div style="display: flex; flex-direction: row;">
-                  <input type="text" placeholder="Search users…" class="search-box" v-model="searchVal">
-                  <!-- <button type="button" class="btn-unfollow" @click="searchUsers">Search</button> -->
-                </div>
-
-
-                <!-- <div class="filter-row">
-                    <button type="button" class="filter-pill active">All</button>
-
-                  </div> -->
-
-                  <div class="filter-row">
-                    <button type="button" class="filter-pill" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All</button>
-                    <button type="button" class="filter-pill" :class="{ active: activeTab === 'popular' }" @click="activeTab = 'popular'">Popular</button>
-                  </div>
-
-
-                  <ul class="suggested-users">
-                    <li class="suggested-user" :key="user.id" v-for="user in suggestedPeople">
-                      <span>{{user.name}}</span>
-                      <button type="button" class="" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
-                        {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
-                      </button>
-                    </li>
-
-                  </ul>
-
-        </div>
-
-
+        <ul class="suggested-users">
+          <li class="suggested-user" v-for="user in suggestedPeople" :key="user.id">
+            <span>{{ user.name }}</span>
+            <button type="button" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing"
+              :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
+              {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+            </button>
+          </li>
+        </ul>
+      </aside>
     </div>
+  </main>
 
-    <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
-
-
-
-
-    <!-- <button type="button" id="friends" onclick="location.href='/friends'">Log out</button> -->
+  <div class="footer">
+    <p>&copy; 2025 Drinkly</p>
+  </div>
 
 
 </body>
+
 </html>

@@ -2,57 +2,68 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Drinkly Home Page</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="stylesheet" href="/stylesheets/search_style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!--icon for drinkly-->
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/search.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <script src="scripts/darkmode.js" defer></script>
-  <script src="scripts/index.js"></script>
-    <script src="search.js"></script>
+  <script src="scripts/index.js" defer></script>
+  <script src="scripts/search.js" defer></script>
 </head>
 
-<body>
+<body id="body-cont">
   <!-- Top Navigation Bar -->
   <div class="header">
     <nav class="text-center margin-from-top">
-      <!-- Left side of the navigation: links -->
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass fa-bounce"></i>
+        <p>Drinkly</p>
+      </div>
       <div class="nav-links">
-        <a href="#" class="nav-item">Home</a>
-        <a href="#" class="nav-item">Create</a>
-        <a href="#" class="nav-item">Recipes</a>
-        <a href="#" class="nav-item">Reviews</a>
-        <a href="#" class="nav-item">About</a>
+        <a href="/index.html" class="nav-item" title="Home"><i class="fa-solid fa-house fa-beat fa-2x"></i></a>
+        <a href="/lists.html" class="nav-item" title="Lists"><i class="fa-solid fa-list fa-2x"></i></a>
+        <a href="#" class="nav-item" title="Reviews"><i class="fa-solid fa-pen-to-square fa-2x"></i></a>
+        <a href="/friends.html" class="nav-item" title="Friends"><i class="fa-solid fa-users fa-2x"></i></a>
+        <a href="/about.html" class="nav-item" title="About"><i class="fa-solid fa-circle-info fa-2x"></i></a>
       </div>
 
-      <!-- Right side of the navigation: buttons -->
-      <div class="nav-links">
-        <a href="login.html" class="nav-item">Login</a>
-        <button type="button" class="button-primary" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+      <div class="nav-buttons">
+        <button type="button" id="logout" class="button-primary" title="Log Out">
+          <i class="fa-solid fa-door-open fa-2x"></i>
+        </button>
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-spin fa-2x"></i>
+        </button>
       </div>
     </nav>
   </div>
 
-  <!-- Welcome Section -->
-  <div class="container text-center margin-from-top">
-    <h1>DRINKLY</h1>
+  <!-- Main Container -->
+  <main class="container text-center margin-from-top main-content">
+     <div class="overlay-content">
+    <h1>Home</h1>
     <p id="welcome-txt">Welcome to Drinkly,</p>
 
     <div class="search-controls">
-    <input type="text" id="searchBox" placeholder="Enter drink name...">
-    <button type="button" id="searchBtn">Search</button>
+      <input type="text" id="searchBox" class="search-box" placeholder="Enter drink name..." />
+      <button type="button" id="searchBtn" class="button-primary-search">
+        <i class="fa-solid fa-magnifying-glass fa-2x"></i>
+      </button>
     </div>
+    <hr>
+
     <div id="results"></div>
+     </div>
 
+  </main>
 
-    <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
-
-    <button type="button" id="logout">Log out</button>
-
-
-    <button type="button" id="friends" onclick="location.href='/friends'">Friends</button>
-
-
+  <div class="footer">
+    <p>&copy; 2025 Drinkly</p>
+  </div>
 </body>
 
 </html>

@@ -1,0 +1,139 @@
+
+/* search_style.css */
+.search-page body {
+  background-color: #fdfbf8;
+  color: #333;
+}
+
+/* Container for the main content of the search page */
+.search-page-container {
+    max-width: 800px; /* Wider for search results */
+    margin: 0 auto;
+    text-align: center; /* Center the h1 and form controls */
+}
+
+.search-page-container h1 {
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 30px;
+}
+
+/* Styling for the search input and button area */
+.search-controls {
+    margin-bottom: 30px;
+    display: flex; /* Align input and button nicely */
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Space between input and button */
+}
+
+
+#searchBox {
+    padding: 12px 15px;
+    font-size: 1em;
+    border: 1px solid var(--border-color);
+    background: var(--bg);
+    color: var(--text-main);
+    border-radius: 8px;
+    max-width: 20%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+#searchBox:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 6px var(--accent-primary);
+  background-color: var(--bg);
+  color: var(--text-main);
+}
+
+
+.dark #searchBox {
+    padding: 12px 15px;
+    font-size: 1em;
+    border: 1px solid var(--border-color);
+    background: var(--bg2);
+    color: var(--text-main);
+    border-radius: 8px;
+    max-width: 20%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.dark #searchBox:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 6px var(--accent-primary);
+  background-color: var(--bg2);
+  color: var(--text-main);
+}
+
+
+/*alt button to search with tweaks to align with search box*/
+.button-primary-search {
+  background-color: transparent;
+  color: var(--text-main);
+  padding: 0.5rem 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-self: flex-start; /* aligns button to the top of the container */
+}
+
+.button-primary-search:hover {
+  background-color: var(--accent-secondary-hover);
+}
+
+#results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* spacing between grid items */
+  margin-top: 1rem;
+}
+
+.search-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: var(--box-color);
+  color: var(--text-main);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.search-result:hover {
+  background-color: var(--accent-secondary-hover);
+}
+
+.search-result:hover .drink-name {
+  color: var(--accent-primary-hover);
+  text-decoration: underline;
+}
+
+
+.drink-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: left;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+
+
+.drink-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-left: 1rem;
+}

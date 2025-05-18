@@ -1,71 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drinkly Login Page</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="scripts/loginpage.js" defer></script>
-    <script src="scripts/darkmode.js" defer></script>
-</head>
-<body>
- <!-- Top Navigation Bar -->
- <div class="header">
-    <nav class="text-center margin-from-top">
-      <!-- Left side of the navigation: links -->
-      <div class="nav-links">
-        <a href="index.html" class="nav-item">Home</a>
-        <a href="#" class="nav-item">Create</a>
-        <a href="#" class="nav-item">Recipes</a>
-        <a href="#" class="nav-item">Reviews</a>
-        <a href="#" class="nav-item">About</a>
-      </div>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drinkly Login Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!--icon for drinkly-->
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="stylesheets/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="scripts/loginpage.js" defer></script>
+  <script src="scripts/darkmode.js" defer></script>
+</head>
+
+<body>
+  <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass fa-bounce"></i>
+        <p>Drinkly</p>
+      </div>
       <!-- Right side of the navigation: buttons -->
       <div class="nav-buttons">
-        <button type="button" class="button-primary" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode"><i class="fa-solid fa-circle-half-stroke fa-spin fa-2x"></i></button>
       </div>
     </nav>
   </div>
 
   <main class="main-content">
-    <div class="container margin-from-top text-center">
-    <form id="login">
-        <h1>Login Form</h1>
-        <p>Please input your username:</p>
-        <input type="text" id="username" class="rounded-edge">
-        <p>Please input your password:</p>
-        <input type="text" id="password" class="rounded-edge">
+      <div class="overlay-content">
+      <div class="container margin-from-top text-center">
+      <form id="login">
+        <h1>Log In To Your Account</h1>
+        <input type="text" id="username" class="login-input" placeholder="Enter username...">
+        <input type="text" id="password" class="login-input" placeholder="Enter password...">
         <br>
         <br>
-        <button type="button" id="submit" class="button-primary">Login</button>
+        <button type="button" id="submit" class="button-primary" title="Log In"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
         <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p>
         <br>
         <hr>
-        <p>Don't have an account?</p>
-        <button type="button" id="gotosignup" class="button-primary">Sign Up</button>
-    </form>
+        <p>Don't Have An Account?</p>
+        <button type="button" id="gotosignup" class="button-primary" title="Sign Up"><i class="fa-solid fa-user-plus fa-2x"></i> </button>
+      </form>
 
-    <form id="signup" style="display: none;">
-        <h1>Signup Form</h1>
-        <p>Please input your username:</p>
-        <input type="text" id="usernameS" class="rounded-edge">
-        <p>Please input your email:</p>
-        <input type="text" id="email" class="rounded-edge">
-        <p>Please input your password:</p>
-        <input type="text" id="passwordS" class="rounded-edge">
+      <form id="signup" style="display: none;">
+        <h1>Sign Up For An Account</h1>
+        <input type="text" id="usernameS" class="login-input" placeholder="Enter username...">
+        <input type="text" id="email" class="login-input" placeholder="Enter email...">
+        <input type="text" id="passwordS" class="login-input" placeholder="Enter password...">
         <br>
         <br>
-        <button type="button" id="submitS" class="button-primary">Sign up</button>
-        <p id="alert-txtS" style="color: red; display: none;">Username in use!</p>
+        <button type="button" id="submitS" class="button-primary" title="Sign Up"><i class="fa-solid fa-user-plus fa-2x"></i></button>
+        <p id="alert-txtS" style="color: red; display: none;">Invalid! Username in use.</p>
         <br>
         <hr>
-        <p>Already have an account?</p>
-        <button type="button" id="gotologin" class="button-primary">Log In</button>
-    </form>
+        <p>Already Have An Account?</p>
+        <button type="button" id="gotologin" class="button-primary" title="Log In"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
+      </form>
     </div>
-   </main>
+      </div>
+    </main>
+
+  <div class="footer">
+    <p>&copy; 2025 Drinkly</p>
+  </div>
 
 </body>
+
 </html>
