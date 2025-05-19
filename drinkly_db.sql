@@ -77,8 +77,5 @@ CREATE TABLE IF NOT EXISTS UserListDrinks (
     drink_api_id VARCHAR(50) NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    PRIMARY KEY (list_id, drink_api_id),
-    FOREIGN KEY (list_id) REFERENCES UserLists(list_id) ON DELETE CASCADE,
-    FOREIGN KEY (drink_api_id) REFERENCES Drinks(api_id) ON DELETE CASCADE
+    PRIMARY KEY (list_id, drink_api_id)
 );
-
