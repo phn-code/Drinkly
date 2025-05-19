@@ -24,6 +24,27 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      (async () => {
+        try {
+          const response = await fetch('http://localhost:3000/loginUser/getListDetails', {
+            credentials: 'include'
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Session List Data:', data);
+    
+            const header = document.createElement('h2');
+            header.textContent = `Creating list: ${data.listName}`;
+            document.body.insertBefore(header, document.body.firstChild);
+          } else {
+            console.warn('No session data found');
+          }
+        } catch (err) {
+          console.error('Failed to fetch session data', err);
+        }
+      })();
+
       const btn = document.getElementById('searchBtn');
       const box = document.getElementById('searchBox');
       const results = document.getElementById('results');
@@ -33,6 +54,20 @@
       const selectedCountSpan = document.getElementById('selectedCount');
       const selectedDrinkNames = new Map(); // id => name
       const selectedNamesList = document.getElementById('selectedNames');
+
+      //testing:
+      fetch('/loginUser/profile', {
+        method: 'GET',
+        credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Session userId:', data.userId); 
+      })
+      .catch(error => {
+          console.error('Error fetching profile:', error);
+      });
+
 
       function updateSelectedCountDisplay() {
         selectedCountSpan.textContent = selectedDrinkIds.size;
@@ -53,16 +88,45 @@
         window.location.href = 'drink_page.html';
       });
 
-      doneBtn.addEventListener('click', () => {
-        if (selectedDrinkIds.size > 0) {
-          console.log("Done clicked! Selected drink IDs:", Array.from(selectedDrinkIds));
-          console.log("Selected drink names:", Array.from(selectedDrinkNames.values()));
-          alert(`You have selected ${selectedDrinkIds.size} drink(s). Check the console.`);
-        } else {
+      doneBtn.addEventListener('click', async () => {
+        if (selectedDrinkIds.size === 0) {
           alert("No drinks have been selected.");
+          return;
         }
+
+        const selectedDrinks = Array.from(selectedDrinkIds).map(id => ({ id }));
+
+        try {
+          const response = await fetch('http://localhost:3000/lists/saveFullList', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include', // Important: includes session cookies
+            body: JSON.stringify({ selectedDrinks })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert('List saved successfully!');
+          } else {
+            alert('Error saving list: ' + data.error);
+          }
+        } catch (err) {
+          console.error('Network or server error:', err);
+          alert('Something went wrong while saving the list.');
+        }
+
+        // Clear selections after saving
+        selectedDrinkIds.clear();
+        selectedDrinkNames.clear();
+        updateSelectedCountDisplay();
+
+        // Redirect or reset UI
         window.location.href = 'drink_page.html';
       });
+
 
       btn.addEventListener('click', async () => {
         const name = box.value.trim();
@@ -130,6 +194,8 @@
 
       updateSelectedCountDisplay();
     });
+
+    
   </script>
 
 </body>

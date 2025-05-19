@@ -25,6 +25,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    fetch('/lists/getUserLists')
+    .then(res => res.json())
+    .then(lists => {
+        const container = document.getElementById('existingLists');
+        if (lists.length === 0) {
+            container.innerHTML = '<p>You have no drink lists yet.</p>';
+            return;
+        }
+
+        lists.forEach(list => {
+            const card = document.createElement('div');
+            card.className = 'list-card';
+            card.innerHTML = `
+                <img src="${list.list_icon_url}" alt="${list.list_name}" class="list-icon">
+                <div class="list-info">
+                    <h3>${list.list_name}</h3>
+                    <p>${list.drink_count} drinks</p>
+                </div>
+            `;
+            card.addEventListener('click', () => {
+                // Placeholder for future implementation
+                alert(`List "${list.list_name}" clicked. Open detail view here.`);
+            });
+            container.appendChild(card);
+        });
+    })
+    .catch(err => {
+        console.error('Failed to fetch lists:', err);
+    });
+
 
     function openModal() {
         modalOverlay.style.display = 'flex';
@@ -65,23 +95,41 @@ document.addEventListener('DOMContentLoaded', () => {
         createListForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(createListForm);
+    
             const listName = formData.get('listName').trim();
+            const listDescription = formData.get('listDescription').trim();
+            const selectedListIcon = formData.get('selectedListIcon');
     
-            console.log('Form submitted!');
-            console.log('List Name:', listName);
-            console.log('Description:', formData.get('listDescription'));
-            console.log('Icon File:', formData.get('listIcon'));
-    
-            if (listName) {
-                window.location.href = 'searchDemo.html';
-            } else {
+            if (!listName) {
                 alert('Please enter a List Name.');
+                return;
+            }
+    
+            try {
+                const response = await fetch('http://localhost:3000/loginUser/storeListDetails', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include', 
+                    body: JSON.stringify({ listName, listDescription, selectedListIcon })
+                });
+    
+                if (response.ok) {
+                    window.location.href = 'searchDemo.html';
+                } else {
+                    const error = await response.json();
+                    alert('Failed to save session data: ' + error.error);
+                }
+            } catch (err) {
+                console.error('Error saving list details:', err);
+                alert('Network or server error occurred.');
             }
     
             closeModal();
             createListForm.reset();
         });
-    }  
+    }
 
     
 });
