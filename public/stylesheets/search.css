@@ -86,7 +86,7 @@
 }
 
 .button-primary-search:hover {
-  background-color: var(--accent-secondary-hover);
+  background-color: transparent;
 }
 
 #results {

@@ -5,8 +5,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Drinkly Home Page</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!--icon for drinkly-->
+   <script>
+    (function() {
+      const darkModePref = localStorage.getItem('darkMode');
+      const htmlElement = document.documentElement;
+
+      if (darkModePref === 'true') {
+        htmlElement.classList.add('dark');
+      } else if (darkModePref === 'false') {
+        htmlElement.classList.remove('dark');
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark');
+          localStorage.setItem('darkMode', 'true');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
   <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="stylesheet" href="/stylesheets/search.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -20,23 +34,23 @@
   <div class="header">
     <nav class="text-center margin-from-top">
       <div class="logo">
-        <i class="fa-solid fa-martini-glass fa-bounce"></i>
+        <i class="fa-solid fa-martini-glass pulse-hover"></i>
         <p>Drinkly</p>
       </div>
       <div class="nav-links">
-        <a href="/index.html" class="nav-item" title="Home"><i class="fa-solid fa-house fa-beat fa-2x"></i></a>
-        <a href="/lists.html" class="nav-item" title="Lists"><i class="fa-solid fa-list fa-2x"></i></a>
-        <a href="#" class="nav-item" title="Reviews"><i class="fa-solid fa-pen-to-square fa-2x"></i></a>
-        <a href="/friends.html" class="nav-item" title="Friends"><i class="fa-solid fa-users fa-2x"></i></a>
-        <a href="/about.html" class="nav-item" title="About"><i class="fa-solid fa-circle-info fa-2x"></i></a>
+        <a href="/index.html" class="nav-item pulse-hover" title="Home">Home</a>
+        <a href="/lists.html" class="nav-item pulse-hover" title="Lists">Lists</a>
+        <a href="#" class="nav-item pulse-hover" title="Reviews">Reviews</a>
+        <a href="/friends.html" class="nav-item pulse-hover" title="Friends">Friends</a>
+        <a href="/about.html" class="nav-item pulse-hover" title="About">About</a>
       </div>
 
       <div class="nav-buttons">
         <button type="button" id="logout" class="button-primary" title="Log Out">
-          <i class="fa-solid fa-door-open fa-2x"></i>
+          <i class="fa-solid fa-door-open fa-2x pulse-hover"></i>
         </button>
         <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
-          <i class="fa-solid fa-circle-half-stroke fa-spin fa-2x"></i>
+          <i class="fa-solid fa-circle-half-stroke fa-2x pulse-hover"></i>
         </button>
       </div>
     </nav>
@@ -49,9 +63,9 @@
     <p id="welcome-txt">Welcome to Drinkly,</p>
 
     <div class="search-controls">
-      <input type="text" id="searchBox" class="search-box" placeholder="Enter drink name..." />
+      <input type="text" id="searchBox" class="search-box pulse-hover" placeholder="Enter drink name..." />
       <button type="button" id="searchBtn" class="button-primary-search">
-        <i class="fa-solid fa-magnifying-glass fa-2x"></i>
+        <i class="fa-solid fa-magnifying-glass fa-2x pulse-hover"></i>
       </button>
     </div>
     <hr>

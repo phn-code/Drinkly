@@ -100,7 +100,7 @@ a:hover {
 
 .nav-buttons button:hover,
 .nav-buttons a:hover {
-  background-color: var(--accent-secondary-hover);
+  background-color: transparent;
 }
 
 .nav-links {
@@ -138,9 +138,11 @@ nav a {
 .header {
   text-align: center;
   padding: 0.5rem 2rem;
-  border-bottom: 1px solid var(--border-color);
+  /* border: 1px solid var(--border-color); */
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  /* background-color: var(--bg2); */
+  /* border-radius: 10px; */
 }
 
 .footer {
@@ -179,6 +181,14 @@ nav .nav-item:hover {
   color: var(--accent-primary);
 }
 
+.pulse-hover {
+  transition: transform 0.2s ease-in-out, font-weight 0.2s ease-in-out;
+}
+
+.pulse-hover:hover {
+  transform: scale(1.5);
+  font-weight: bold;
+}
 
 /* styling for any text in paragraphs */
 .info-box {
@@ -211,11 +221,12 @@ nav .nav-item:hover {
 
 
 .overlay-content {
-  background-color: var(--bg2); /* Semi-transparent black */
+  background-color: var(--bg2);
   padding: 1rem;
   border-radius: 10px;
   color: var();
-  text-align: center;a
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Logo for Drinkly on top nav bar left side*/
