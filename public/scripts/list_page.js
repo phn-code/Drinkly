@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //image logic
     const imageOptions = document.querySelectorAll('.default-image-option');
-    const selectedListIconInput = document.getElementById('selectedListIcon');  //records which image chosen
-    // const selectedImagePreview = document.getElementById('selectedImagePreview'); 
-    imageOptions.forEach(image => {
+    const selectedListIconInput = document.getElementById('selectedListIcon');
+    // const selectedImagePreview = document.getElementById('selectedImagePreview');
+    imageOptions.forEach((image) => {
         image.addEventListener('click', () => {
-            imageOptions.forEach(img => img.classList.remove('selected'));
+            imageOptions.forEach((img) => img.classList.remove('selected'));
             image.classList.add('selected');
             const iconPath = image.dataset.iconPath;
             selectedListIconInput.value = iconPath;
@@ -95,26 +95,36 @@ document.addEventListener('DOMContentLoaded', () => {
         createListForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(createListForm);
-    
+
             const listName = formData.get('listName').trim();
+
+            console.log('Form submitted!');
+            console.log('List Name:', listName);
+            console.log('Description:', formData.get('listDescription'));
+            console.log('Icon File:', formData.get('listIcon'));
+
+            if (listName) {
+                window.location.href = 'searchDemo.html';
+            } else {
+                alert('Please enter a List Name.');
             const listDescription = formData.get('listDescription').trim();
             const selectedListIcon = formData.get('selectedListIcon');
-    
+
             if (!listName) {
                 alert('Please enter a List Name.');
                 return;
             }
-    
+
             try {
                 const response = await fetch('http://localhost:3000/loginUser/storeListDetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    credentials: 'include', 
+                    credentials: 'include',
                     body: JSON.stringify({ listName, listDescription, selectedListIcon })
                 });
-    
+
                 if (response.ok) {
                     window.location.href = 'searchDemo.html';
                 } else {
@@ -125,11 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error saving list details:', err);
                 alert('Network or server error occurred.');
             }
-    
+
             closeModal();
             createListForm.reset();
         });
     }
+    }
 
-    
+
 });
