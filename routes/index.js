@@ -65,6 +65,28 @@ router.get('/drink/:id', async (req, res) => {
   }
 });
 
+const db = require('../db');
+
+router.post('/api/review', async (req, res) => {
+  const { drink_api_id, review_score, review_text } = req.body;
+  const user_id = req.session.userId;
+
+  if (!user_id) return res.status(401).json({ error: 'Not logged in' });
+
+  try {
+    await db.query(
+      `INSERT INTO DrinkReview (user_id, drink_api_id, review_score, review_text)
+       VALUES (?, ?, ?, ?)`,
+      [user_id, drink_api_id, review_score, review_text]
+    );
+
+    res.status(201).json({ success: true });
+  } catch (err) {
+    console.error('Error review:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
 
 router.get('/friends', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'friends.html'));
