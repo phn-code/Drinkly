@@ -104,10 +104,15 @@
         return {
           drink: null,
           activeTab: 'ingredients',
+          showForm: false,
           reviews: [
-        { name: "Alice", comment: "Tast like Ass" },
-        { name: "Bob", comment: "Bob." }
-      ]
+            { name: "Alice", comment: "I love this drink!!" },
+            { name: "Bob", comment: "Taste fantastic and wonderful and spectacular." }
+          ],
+          newReview: {
+            name: '',
+            comment: ''
+          }
         };
       },
       computed: {
@@ -115,10 +120,32 @@
           if (!this.drink) return [];
           const list = [];
           for (let i = 1; i <= 15; i++) {
-            const item = this.drink[`strIngredient${i}`];
-            if (item) list.push(item);
+            const ingredient = this.drink[`strIngredient${i}`];
+            const measure = this.drink[`strMeasure${i}`];
+            if (ingredient) {
+              list.push(`${measure ? measure : ''} ${ingredient}`.trim());
+            }
           }
           return list;
+        }
+      },
+      methods: {
+        submitReview() {
+          if (!this.newReview.name || !this.newReview.comment) {
+            alert("Please fill out both name and comment.");
+            return;
+          }
+
+          // Add new review to the array
+          this.reviews.push({
+            name: this.newReview.name,
+            comment: this.newReview.comment
+          });
+
+          // Reset form and hide it
+          this.newReview.name = '';
+          this.newReview.comment = '';
+          this.showForm = false;
         }
       },
       async created() {
@@ -134,6 +161,7 @@
 
     app.mount('#app');
   </script>
+
 
 </body>
 </html>
