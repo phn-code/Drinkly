@@ -65,8 +65,6 @@ router.get('/drink/:id', async (req, res) => {
   }
 });
 
-const db = require('../db');
-
 router.post('/api/review', async (req, res) => {
   const { drink_api_id, review_score, review_text } = req.body;
   const user_id = req.session.userId;

@@ -136,26 +136,23 @@ router.post('/logout', (req, res) => {
     });
 
 });
+//Phuc's new part:
+//Grabs the userID from ethan's cookie
+router.get('/profile', (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: 'Not logged in' });
+    }
 
+    res.json({ userId: req.session.userId });
+});
+//Mock Login:
+//http://localhost:3000/loginUser/mock-login
 
-
-
-// router.get('/profile', (req, res) => {
-//     if (!req.session.userId) {
-//         return res.status(401).json({ error: 'Not logged in' });
-//     }
-
-//     res.json({ userId: req.session.userId });
-// });
-// //Mock Login:
-// //http://localhost:3000/loginUser/mock-login
-
-
-// router.get('/mock-login', (req, res) => {
-//     req.session.userId = 123; // or any test ID
-//     req.session.username = 'testuser'; // optional, for debugging
-//     res.send('Mock login successful. Session userId set to 123.');
-// });
+router.get('/mock-login', (req, res) => {
+    req.session.userId = 123; // or any test ID
+    req.session.username = 'testuser'; // optional, for debugging
+    res.send('Mock login successful. Session userId set to 123.');
+});
 
 //storing user selection for list
 router.post('/storeListDetails', (req, res) => {

@@ -136,14 +136,28 @@
         </ol>
       </div>
 
-      <!-- Temporary Reviews for now since we don't hve it sorted out -->
-      <button type="button" class="review-btn">Write a Review</button>
-      <div class="reviews">
-        <div class="review" v-for="review in reviews">
-          <p><strong>{{ review.name }}</strong></p>
-          <p>{{ review.comment }}</p>
-        </div>
-      </div>
+  <!-- REviews -->
+  <button type="button" @click="showForm = !showForm" class="review-btn">
+    {{ showForm ? "Cancel" : "Write a Review" }}
+  </button>
+
+  <div v-if="showForm" class="review-form">
+    <label>
+      Name:
+      <input type="text" v-model="newReview.name" placeholder="Your name" />
+    </label>
+    <label>
+      Comment:
+      <textarea v-model="newReview.comment" placeholder="Your review..."></textarea>
+    </label>
+    <button type="button" @click="submitReview" class="submit-review-btn">Submit Review</button>
+  </div>
+  <div class="reviews">
+    <div class="review" v-for="review in reviews" :key="review.name + review.comment">
+      <p><strong>{{ review.name }}</strong></p>
+      <p>{{ review.comment }}</p>
+    </div>
+  </div>
     </div>
   </div>
 
@@ -185,7 +199,7 @@
             return;
           }
 
-          // Add new review to the array
+          // Add new review 
           this.reviews.push({
             name: this.newReview.name,
             comment: this.newReview.comment
