@@ -17,14 +17,13 @@ router.post('/', (req,res) => {
         if(err) {
             console.log("EREROR WITH SQL QUERY");
             console.log(err);
-            return res.status(500).send('SERVER ERORR');
+            return res.status(500).send('SERVER ERROR');
         }
 
         if(results.length === 0) {
             return res.status(401).send('Put in the wrong username/password ');
         }
 
-        // SOMEONE IMPLEMENT CHEKC PASSWORD
 
 
         bcrypt.compare(password, results[0].password).then((matchesPassword) => {
@@ -107,9 +106,46 @@ router.post('/logout', (req, res) => {
     });
 
 });
+//Phuc's new part: 
+//Grabs the userID from ethan's cookie
+router.get('/profile', (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: 'Not logged in' });
+    }
 
+    res.json({ userId: req.session.userId });
+});
+//Mock Login:
+//http://localhost:3000/loginUser/mock-login
+router.get('/mock-login', (req, res) => {
+    req.session.userId = 123; // or any test ID
+    req.session.username = 'testuser'; // optional, for debugging
+    res.send('Mock login successful. Session userId set to 123.');
+});
 
+//storing user selection for list
+router.post('/storeListDetails', (req, res) => {
+    const { listName, listDescription, selectedListIcon } = req.body;
 
+    if (!listName) {
+        return res.status(400).json({ error: 'List name is required' });
+    }
+
+    // Save to session
+    req.session.listDetails = {
+        listName,
+        listDescription,
+        selectedListIcon
+    };
+    res.status(200).json({ message: 'List details saved to session' });
+});
+
+router.get('/getListDetails', (req, res) => {
+    if (!req.session.listDetails) {
+        return res.status(404).json({ error: 'No list details in session' });
+    }
+    res.json(req.session.listDetails);
+});
 
 
 module.exports = router;

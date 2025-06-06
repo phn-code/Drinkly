@@ -273,4 +273,42 @@ header {
     border-radius: 4px;
 }
 
+.existing-lists-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.list-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 180px;
+    padding: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.list-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.list-icon {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.list-info h3 {
+    font-size: 1.1em;
+    margin: 10px 0 5px;
+}
+
+.list-info p {
+    color: #555;
+    font-size: 0.9em;
+}
+
 

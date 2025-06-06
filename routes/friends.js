@@ -35,7 +35,7 @@ router.get('/searchUsers', function(req, res) {
         FROM Users
         LEFT JOIN Follows ON Users.id = Follows.following_id AND Follows.follower_id = ?
         LEFT JOIN RankedUsers ON Users.id = RankedUsers.following_id
-        WHERE Users.username LIKE ? AND Users.username <> ?
+        WHERE Users.username LIKE ? AND Users.id <> ?
         ORDER BY RAND()
         LIMIT 10;
     `;
@@ -54,7 +54,7 @@ router.get('/searchUsers', function(req, res) {
             id: user.id,
             name: user.username,
             isFriend: Boolean(user.isFriend),
-            ranking: user.ranking
+            ranking: user.popularity_rank
         }));
 
         console.log(users);
