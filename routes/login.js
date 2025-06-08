@@ -7,48 +7,33 @@ const bcrypt = require('bcryptjs');
 const db = require('../scripts/db');
 // const req = require('express/lib/request');
 
-router.post('/', (req,res) => {
-
-
+router.post('/', async (req, res) => {
     const { username, password } = req.body;
 
+    try {
+        const [results] = await db.query('SELECT * FROM Users WHERE username = ?', [username]);
 
-    db.query('SELECT * FROM Users WHERE username = ?', [username], (err, results) => {
-        if(err) {
-            console.log("EREROR WITH SQL QUERY");
-            console.log(err);
-            return res.status(500).send('SERVER ERROR');
-        }
-
-        if(results.length === 0) {
+        if (results.length === 0) {
             return res.status(401).send('Put in the wrong username/password ');
         }
 
+        const matchesPassword = await bcrypt.compare(password, results[0].password);
+        if (!matchesPassword) {
+            return res.status(401).send('Put in the wrong username/password ');
+        }
 
+        console.log("verified password");
+        req.session.userId = results[0].id;
+        req.session.username = results[0].username;
 
-        bcrypt.compare(password, results[0].password).then((matchesPassword) => {
-
-            if(!matchesPassword) {
-                return res.status(401).send('Put in the wrong username/password ');
-            }
-            console.log("verified password");
-            req.session.userId = results[0].id;
-            req.session.username = results[0].username;
-
-            res.send("Logged In");
-
-        });
-
-
-        // console.log("Matches? " + (matchesPassword ? "Y" : "N"));
-        // console.log("Matches: " + matchesPassword);
-
-        // console.log(results);
-
-
-        // return;
-    });
+        res.send("Logged In");
+    } catch (err) {
+        console.log("ERROR WITH SQL QUERY");
+        console.error(err);
+        return res.status(500).send('SERVER ERROR');
+    }
 });
+
 
 router.post('/new', (req, res) => {
 
@@ -106,7 +91,7 @@ router.post('/logout', (req, res) => {
     });
 
 });
-//Phuc's new part: 
+//Phuc's new part:
 //Grabs the userID from ethan's cookie
 router.get('/profile', (req, res) => {
     if (!req.session.userId) {

@@ -111,7 +111,7 @@
   <div id="app" v-if="drink">
     <div class="card">
       <div class="card-header">
-        <img src="drink.strDrinkThumb" alt="drink.strDrink" />
+        <img :src="drink.strDrinkThumb" :alt="drink.strDrink" />
         <div class="drink-info">
           <h1>{{ drink.strDrink }}</h1>
           <p>by DRINKLY ENTERPRISE LOL</p>
@@ -193,22 +193,48 @@
       },
       methods: {
         submitReview() {
-          if (!this.newReview.name || !this.newReview.comment) {
-            alert("Please fill out both name and comment.");
-            return;
-          }
-
-          // Add new review to the array
-          this.reviews.push({
-            name: this.newReview.name,
-            comment: this.newReview.comment
-          });
-
-          // Reset form and hide it
-          this.newReview.name = '';
-          this.newReview.comment = '';
-          this.showForm = false;
+        if (!this.newReview.name || !this.newReview.comment) {
+          alert("Please fill out both name and comment.");
+          return;
         }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const drinkId = urlParams.get('id');
+
+        // Send the review to the backend
+        fetch('/addReview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+    credentials: 'include', // ⬅️ ensures the session cookie is sent
+    body: JSON.stringify({
+      drink_api_id: drinkId,
+      review_score: 5, // replace this with actual score input if you have one
+      review_text: this.newReview.comment,
+      times_drunk: 1 // you can make this dynamic too
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("✅ Saved to DB:", data);
+
+    // Optionally update local UI
+    this.reviews.push({
+      name: this.newReview.name,
+      comment: this.newReview.comment
+    });
+
+    // Reset form
+    this.newReview.name = '';
+    this.newReview.comment = '';
+    this.showForm = false;
+  })
+  .catch(error => {
+    console.error('❌ Error saving review:', error);
+    alert("Something went wrong while saving your review.");
+  });
+}
       },
       async created() {
         const urlParams = new URLSearchParams(window.location.search);
