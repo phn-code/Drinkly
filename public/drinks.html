@@ -244,6 +244,20 @@
         const response = await fetch(`/drink/${id}`);
         const data = await response.json();
         this.drink = data.drink;
+
+        try {
+    const reviewResponse = await fetch(`/getReviews/${id}`);
+    const reviewData = await reviewResponse.json();
+
+    // Map the backend reviews into your format
+    this.reviews = reviewData.map(r => ({
+      name: r.username,
+      comment: r.review_text,
+      score: r.review_score
+    }));
+  } catch (error) {
+    console.error("❌ Failed to load reviews", error);
+  }
       }
     });
 

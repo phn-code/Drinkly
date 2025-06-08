@@ -84,11 +84,10 @@ router.post('/addReview', async (req, res) => {
     // STEP 1: Check if the drink already exists
     const [existing] = await db.query('SELECT * FROM Drinks WHERE api_id = ?', [drink_api_id]);
 
-    // STEP 2: If it doesn’t, fetch from CocktailDB and insert
     if (existing.length === 0) {
       const drinkRes = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drink_api_id}`);
       const drinkData = await drinkRes.json();
-      const drink = drinkData.drinks?.[0];
+      const drink = (drinkData.drinks && drinkData.drinks[0]) || null;
 
       if (!drink) {
         return res.status(400).json({ error: 'Drink not found in external API' });
@@ -132,6 +131,26 @@ router.post('/addReview', async (req, res) => {
   }
 
 });
+
+router.get('/getReviews/:drinkId', async (req, res) => {
+  const drink_api_id = req.params.drinkId;
+
+  try {
+    const [rows] = await db.query(`
+      SELECT r.review_text, r.review_score, u.username
+      FROM DrinkReview r
+      JOIN Users u ON r.user_id = u.id
+      WHERE r.drink_api_id = ?
+      ORDER BY r.drink_review_time DESC
+    `, [drink_api_id]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Error fetching reviews:", err);
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+});
+
 
 
 
