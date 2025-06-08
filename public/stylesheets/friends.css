@@ -102,19 +102,6 @@ main {
   gap: 20px;
 }
 
-.friend-card {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px; /* Slightly more rounded */
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 170px; /* Ensured min height */
-}
 
 .friend-card:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -176,42 +163,81 @@ main {
   border-color: #36a28b;
 }
 
-/* Suggested Users List Styling */
-.suggested-users {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.profile-avatar {
+    display: block; /* Or inline-block if preferred for layout */
+    object-fit: cover; /* Ensures the image covers the area, cropping if necessary */
+    background-color: #e0e0e0; /* Fallback bg color if image is transparent or loading slow */
+    border: 2px solid #f0f0f0; /* Optional subtle border */
 }
 
+/* Avatar in Friend Cards */
+.friend-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  /* Removed justify-content: space-between; to allow natural flow with avatar */
+  align-items: center; /* Center items horizontally, including avatar */
+  min-height: 220px; /* Increased min-height to accommodate avatar */
+}
+
+.friend-card .card-avatar {
+    width: 80px;  /* Adjust size as needed */
+    height: 80px; /* Adjust size as needed */
+    border-radius: 50%; /* Circular avatar */
+    margin-bottom: 15px; /* Space below avatar */
+}
+
+.friend-card .username {
+  font-weight: 600;
+  font-size: 1.15em;
+  color: #2c2c2c;
+  margin-bottom: 15px; /* Space between username and button */
+  word-break: break-word;
+  flex-grow: 1; /* Allow username to take space if needed */
+}
+
+/* Ensure button in friend card is at the bottom */
+.friend-card button {
+    margin-top: auto; /* Pushes the button to the bottom if card has extra space */
+}
+
+
+/* Avatar in Suggested Users List */
 .suggested-user {
   display: flex;
   align-items: center;
   gap: 12px;
   justify-content: space-between;
-  padding: 12px 5px; /* Adjusted padding */
+  padding: 10px 5px; /* Slightly adjusted padding */
   border-bottom: 1px solid #f0f0f0;
 }
-.suggested-user:last-child {
-    border-bottom: none;
+
+.suggested-user .list-avatar {
+  width: 40px;    /* Same as your old avatar-sm */
+  height: 40px;   /* Same as your old avatar-sm */
+  border-radius: 50%; /* Circular avatar */
+  /* margin-right: 5px; /* Gap is handled by .suggested-user gap now */
 }
+
+
+.filter-pill.active {
+  background-color: #51be3b;
+  color: #fff;
+}
+
+
 
 .suggested-user span {
     font-weight: 500;
     color: #333;
-    flex-grow: 1; /* Allow name to take available space */
-    margin-right: 10px; /* Space before button */
-}
-
-.avatar-sm {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #e9e9e9; /* Placeholder if no image */
-  margin-right: 5px; /* Space after avatar */
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
 /* Button Styling (using .btn-rm and .btn-unfollow as per your Vue bindings) */

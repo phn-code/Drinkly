@@ -26,7 +26,7 @@ router.get('/searchUsers', function(req, res) {
             FROM Follows
             GROUP BY following_id
         )
-        SELECT Users.id, Users.username,
+        SELECT Users.id, Users.username, Users.p_image,
             CASE
                 WHEN Follows.following_id IS NOT NULL THEN TRUE
                 ELSE FALSE
@@ -53,6 +53,7 @@ router.get('/searchUsers', function(req, res) {
         const users = results.map((user) => ({
             id: user.id,
             name: user.username,
+            p_image: user.p_image ? user.p_image.toString('base64') : null,
             isFriend: Boolean(user.isFriend),
             ranking: user.popularity_rank
         }));
@@ -71,7 +72,7 @@ router.get('/getFriends', function(req, res) {
     let curUser = req.session.userId;
 
 
-    const statement = `SELECT Follows.following_id, Users.username FROM Follows INNER JOIN Users On Follows.following_id = Users.id WHERE Follows.follower_id = ?;`;
+    const statement = `SELECT Follows.following_id, Users.username, Users.p_image FROM Follows INNER JOIN Users On Follows.following_id = Users.id WHERE Follows.follower_id = ?;`;
 
     db.query(statement, [curUser], (err, results) => {
         // res.json()
@@ -83,6 +84,7 @@ router.get('/getFriends', function(req, res) {
         const users = results.map((user) => ({
             id: user.following_id,
             name: user.username,
+            p_image: user.p_image ? user.p_image.toString('base64') : null,
             isFriend: true
         }));
 
