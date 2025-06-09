@@ -73,7 +73,6 @@ router.get('/getFriends', function(req, res) {
 
 
     const statement = `SELECT Follows.following_id, Users.username, Users.p_image FROM Follows INNER JOIN Users On Follows.following_id = Users.id WHERE Follows.follower_id = ?;`;
-
     db.query(statement, [curUser], (err, results) => {
         // res.json()
         if (err) {

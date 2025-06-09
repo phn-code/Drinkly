@@ -26,15 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     fetch('/lists/getUserLists')
-    .then(res => res.json())
-    .then(lists => {
+    .then((res) => res.json())
+    .then((lists) => {
         const container = document.getElementById('existingLists');
         if (lists.length === 0) {
             container.innerHTML = '<p>You have no drink lists yet.</p>';
             return;
         }
 
-        lists.forEach(list => {
+        lists.forEach((list) => {
             const card = document.createElement('div');
             card.className = 'list-card';
             card.innerHTML = `
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(card);
         });
     })
-    .catch(err => {
+    .catch((err) => {
         console.error('Failed to fetch lists:', err);
     });
 
@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'searchDemo.html';
             } else {
                 alert('Please enter a List Name.');
+            }
             const listDescription = formData.get('listDescription').trim();
             const selectedListIcon = formData.get('selectedListIcon');
 
@@ -140,7 +141,5 @@ document.addEventListener('DOMContentLoaded', () => {
             createListForm.reset();
         });
     }
-    }
-
 
 });
