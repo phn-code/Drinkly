@@ -56,7 +56,6 @@ router.post('/', (req,res) => {
 
 
 
-
 const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
@@ -136,6 +135,7 @@ router.post('/logout', (req, res) => {
     });
 
 });
+//Phuc's new part:
 //Phuc's new part:
 //Grabs the userID from ethan's cookie
 router.get('/profile', (req, res) => {

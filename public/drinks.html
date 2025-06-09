@@ -106,13 +106,61 @@
   .submit-review-btn:hover {
     background: #47b48a;
   }
+    .review-form {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  }
+
+  .review-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .review-form input[type="text"],
+
+  .review-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: sans-serif;
+    font-size: 14px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+
+  .review-form textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .submit-review-btn {
+    background: #59caa0;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .submit-review-btn:hover {
+    background: #47b48a;
+  }
     </style>
 </head>
 <body>
   <div id="app" v-if="drink">
     <div class="card">
       <div class="card-header">
-        <img src="drink.strDrinkThumb" alt="drink.strDrink" />
+        <img :src="drink.strDrinkThumb" :alt="drink.strDrink" />
         <div class="drink-info">
           <h1>{{ drink.strDrink }}</h1>
           <p>by DRINKLY ENTERPRISE LOL</p>
@@ -136,7 +184,7 @@
         </ol>
       </div>
 
-  <!-- REviews -->
+  <!-- Temporary Reviews for now since we don't hve it sorted out -->
   <button type="button" @click="showForm = !showForm" class="review-btn">
     {{ showForm ? "Cancel" : "Write a Review" }}
   </button>
@@ -194,12 +242,102 @@
       },
       methods: {
         submitReview() {
+        if (!this.newReview.name || !this.newReview.comment) {
+          alert("Please fill out both name and comment.");
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const drinkId = urlParams.get('id');
+
+        // Send the review to the backend
+        fetch('/addReview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+    credentials: 'include', // ⬅️ ensures the session cookie is sent
+    body: JSON.stringify({
+      drink_api_id: drinkId,
+      review_score: 5, // replace this with actual score input if you have one
+      review_text: this.newReview.comment,
+      times_drunk: 1 // you can make this dynamic too
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("✅ Saved to DB:", data);
+
+    // Optionally update local UI
+    this.reviews.push({
+      name: this.newReview.name,
+      comment: this.newReview.comment
+    });
+
+    // Reset form
+    this.newReview.name = '';
+    this.newReview.comment = '';
+    this.showForm = false;
+  })
+  .catch(error => {
+    console.error('❌ Error saving review:', error);
+    alert("Something went wrong while saving your review.");
+  });
+}
+      },
+      methods: {
+        submitReview() {
+        if (!this.newReview.name || !this.newReview.comment) {
+          alert("Please fill out both name and comment.");
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const drinkId = urlParams.get('id');
+
+        // Send the review to the backend
+        fetch('/addReview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+    credentials: 'include', // ⬅️ ensures the session cookie is sent
+    body: JSON.stringify({
+      drink_api_id: drinkId,
+      review_score: 5, // replace this with actual score input if you have one
+      review_text: this.newReview.comment,
+      times_drunk: 1 // you can make this dynamic too
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("✅ Saved to DB:", data);
+
+    // Optionally update local UI
+    this.reviews.push({
+      name: this.newReview.name,
+      comment: this.newReview.comment
+    });
+
+    // Reset form
+    this.newReview.name = '';
+    this.newReview.comment = '';
+    this.showForm = false;
+  })
+  .catch(error => {
+    console.error('❌ Error saving review:', error);
+    alert("Something went wrong while saving your review.");
+  });
+}
+      },
+      methods: {
+        submitReview() {
           if (!this.newReview.name || !this.newReview.comment) {
             alert("Please fill out both name and comment.");
             return;
           }
 
-          // Add new review 
+          // Add new review
           this.reviews.push({
             name: this.newReview.name,
             comment: this.newReview.comment
@@ -219,6 +357,20 @@
         const response = await fetch(`/drink/${id}`);
         const data = await response.json();
         this.drink = data.drink;
+
+        try {
+    const reviewResponse = await fetch(`/getReviews/${id}`);
+    const reviewData = await reviewResponse.json();
+
+    // Map the backend reviews into your format
+    this.reviews = reviewData.map(r => ({
+      name: r.username,
+      comment: r.review_text,
+      score: r.review_score
+    }));
+  } catch (error) {
+    console.error("❌ Failed to load reviews", error);
+  }
       }
     });
 

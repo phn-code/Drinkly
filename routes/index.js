@@ -90,6 +90,86 @@ router.get('/friends', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'friends.html'));
 });
 
+const db = require('../scripts/db'); // assuming you use mysql2/promise
+
+router.post('/addReview', async (req, res) => {
+  const { drink_api_id, times_drunk, review_score, review_text } = req.body;
+  const { userId } = req.session; // assumes express-session middleware is in place
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+
+  try {
+    // STEP 1: Check if the drink already exists
+    const [existing] = await db.query('SELECT * FROM Drinks WHERE api_id = ?', [drink_api_id]);
+
+    if (existing.length === 0) {
+      const drinkRes = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drink_api_id}`);
+      const drinkData = await drinkRes.json();
+      const drink = (drinkData.drinks && drinkData.drinks[0]) || null;
+
+      if (!drink) {
+        return res.status(400).json({ error: 'Drink not found in external API' });
+      }
+
+      await db.query(`
+        INSERT INTO Drinks (
+          api_id, name, alternate_name, tags, category,
+          iba_category, alcoholic_status, glass_type,
+          instructions, thumbnail_url, image_source_url
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          drink.idDrink,
+          drink.strDrink,
+          drink.strDrinkAlternate,
+          drink.strTags,
+          drink.strCategory,
+          drink.strIBA,
+          drink.strAlcoholic,
+          drink.strGlass,
+          drink.strInstructions,
+          drink.strDrinkThumb,
+          drink.strImageSource
+        ]
+      );
+    }
+
+    // STEP 3: Insert review
+    await db.query(
+      `INSERT INTO DrinkReview (user_id, drink_api_id, times_drunk, review_score, review_text)
+       VALUES (?, ?, ?, ?, ?)`,
+      [userId, drink_api_id, times_drunk || 1, review_score, review_text]
+    );
+
+    res.status(200).json({ message: 'Review saved successfully' });
+
+  } catch (err) {
+    console.error('Error saving review:', err);
+    res.status(500).json({ error: 'Database error while saving review' });
+  }
+
+});
+
+router.get('/getReviews/:drinkId', async (req, res) => {
+  const drink_api_id = req.params.drinkId;
+
+  try {
+    const [rows] = await db.query(`
+      SELECT r.review_text, r.review_score, u.username
+      FROM DrinkReview r
+      JOIN Users u ON r.user_id = u.id
+      WHERE r.drink_api_id = ?
+      ORDER BY r.drink_review_time DESC
+    `, [drink_api_id]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Error fetching reviews:", err);
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+});
 
 
 
