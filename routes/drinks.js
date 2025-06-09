@@ -29,20 +29,20 @@ router.post('/',(req,res)=>{
     });
 });
 
-//code for retriveing cocktail based on 
+//code for retriveing cocktail based on
 router.get('/:id',(req,res) => {
     var api_id = req.params.id;
 
     db.query('SELECT * FROM Drinks WHERE api_id = ?', [api_id], (err,results) =>{
         if(err){
             console.error('Error retrieving drink from database: ',err);
-            return res.status(500).json({ error: 'Database fetch failed' }); 
+            return res.status(500).json({ error: 'Database fetch failed' });
         }
         if(results.length ===0){
-            return res.status(404).json({ message: 'Drink not found' }); 
+            return res.status(404).json({ message: 'Drink not found' });
         }
         res.json(results[0]);
     });
 });
 
-module.exports = router; 
+module.exports = router;

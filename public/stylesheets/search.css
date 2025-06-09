@@ -25,18 +25,23 @@
     display: flex; /* Align input and button nicely */
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Space between input and button */
 }
 
+.search-input-wrapper {
+    position: relative;
+    display: inline-block;
+
+}
 
 #searchBox {
-    padding: 12px 15px;
+    padding: 12px 40px 12px 15px;
     font-size: 1em;
     border: 1px solid var(--border-color);
     background: var(--bg);
     color: var(--text-main);
     border-radius: 8px;
-    max-width: 20%;
+    width: 250px;
+    box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -51,15 +56,17 @@
 
 
 .dark #searchBox {
-    padding: 12px 15px;
+   padding: 12px 40px 12px 15px;
     font-size: 1em;
     border: 1px solid var(--border-color);
     background: var(--bg2);
     color: var(--text-main);
     border-radius: 8px;
-    max-width: 20%;
+    width: 250px;
+    box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 
 .dark #searchBox:focus {
@@ -75,14 +82,18 @@
 .button-primary-search {
   background-color: transparent;
   color: var(--text-main);
-  padding: 0.5rem 0.5rem;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
   display: flex;
-  align-self: flex-start; /* aligns button to the top of the container */
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  right: 1px;
+  align-items: center;
+  justify-content: center;
 }
 
 .button-primary-search:hover {
