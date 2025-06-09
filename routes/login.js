@@ -150,35 +150,36 @@ router.post('/logout', (req, res) => {
 // //Mock Login:
 // //http://localhost:3000/loginUser/mock-login
 
+
 // router.get('/mock-login', (req, res) => {
 //     req.session.userId = 123; // or any test ID
 //     req.session.username = 'testuser'; // optional, for debugging
 //     res.send('Mock login successful. Session userId set to 123.');
 // });
 
-// //storing user selection for list
-// router.post('/storeListDetails', (req, res) => {
-//     const { listName, listDescription, selectedListIcon } = req.body;
+//storing user selection for list
+router.post('/storeListDetails', (req, res) => {
+    const { listName, listDescription, selectedListIcon } = req.body;
 
-//     if (!listName) {
-//         return res.status(400).json({ error: 'List name is required' });
-//     }
+    if (!listName) {
+        return res.status(400).json({ error: 'List name is required' });
+    }
 
-//     // Save to session
-//     req.session.listDetails = {
-//         listName,
-//         listDescription,
-//         selectedListIcon
-//     };
-//     res.status(200).json({ message: 'List details saved to session' });
-// });
+    // Save to session
+    req.session.listDetails = {
+        listName,
+        listDescription,
+        selectedListIcon
+    };
+    res.status(200).json({ message: 'List details saved to session' });
+});
 
-// router.get('/getListDetails', (req, res) => {
-//     if (!req.session.listDetails) {
-//         return res.status(404).json({ error: 'No list details in session' });
-//     }
-//     res.json(req.session.listDetails);
-// });
+router.get('/getListDetails', (req, res) => {
+    if (!req.session.listDetails) {
+        return res.status(404).json({ error: 'No list details in session' });
+    }
+    res.json(req.session.listDetails);
+});
 
 
 module.exports = router;
