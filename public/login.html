@@ -3,36 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="scripts/loginpage.js"></script>
+    <title>Login - Drinkly</title>
+    <link rel="stylesheet" href="/stylesheets/login.css">
 </head>
 <body>
+    <div class="page-wrapper">
+        <header>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="./index.html">Main Page</a></li>
+                    <li><a href="#">Members</a></li>
+                    <li><a href="./drink_page.html">Lists</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <form id="login">
-        <h1>Login Form</h1>
-        <p>Please input your username:</p>
-        <input type="text" id="username">
-        <p>Please input your password:</p>
-        <input type="text" id="password">
-        <button type="button" id="submit">Login</button>
-        <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p><br>
-        <button type="button" id="gotosignup"> Go to Sign Up </button>
-    </form>
+        <main>
+            <div class="auth-form-wrapper">
+                <div class="auth-form-container">
 
-    <form id="signup" style="display: none;">
-        <h1>Signup Form</h1>
-        <p>Please input your username:</p>
-        <input type="text" id="usernameS">
-        <p>Please input your email:</p>
-        <input type="text" id="email">
-        <p>Please input your password:</p>
-        <input type="text" id="passwordS">
-        <button type="button" id="submitS">Login</button>
-        <p id="alert-txtS" style="color: red; display: none;">Username in use!</p><br>
-        <button type="button" id="gotologin"> Go to Log In </button>
-    </form>
+                    <!-- normal login part -->
+                    <form id="login">
+                        <h1>Log In</h1>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <button type="button" id="submit" class="form-submit-btn">Log In</button>
+                        <p id="alert-txt" class="alert-message" style="display: none;">Username/Password is wrong!</p>
+                        <p class="form-toggle-link">Don't have an account? <button type="button" id="gotosignup" class="link-button">Sign Up</button></p>
+                    </form>
 
+                    <!-- sinup part of the form -->
+                    <form id="signup" style="display: none;">
+                        <h1>Sign Up</h1>
+                        <div class="form-group">
+                            <label for="usernameS">Username</label>
+                            <input type="text" id="usernameS" name="usernameS" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordS">Password</label>
+                            <input type="password" id="passwordS" name="passwordS" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileImage">Profile Image</label>
+                            <input type="file" id="profileImage" name="profileImage" accept="image/*">
+                        </div>
 
-
+                        <button type="button" id="submitS" class="form-submit-btn">Sign Up</button>
+                        <p id="alert-txtS" class="alert-message" style="display: none;">Username in use or invalid data!</p>
+                        <p class="form-toggle-link">Already have an account? <button type="button" id="gotologin" class="link-button">Log In</button></p>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="scripts/loginpage.js" defer></script>
 </body>
 </html>

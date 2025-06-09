@@ -31,12 +31,18 @@ app.use(session({
          sameSite: 'lax'
     }
 }));
+
+app.use(express.json());
+// app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Phucs's different APIs
 // app.listen(PORT, () => { console.log(`Server is running at http://localhost:${PORT}`); });
 
-var drinksRouter = require('./routes/drinks');
+// var drinksRouter = require('./routes/drinks');
 app.use('/drinks', drinksRouter);
 
 

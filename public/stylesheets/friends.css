@@ -1,0 +1,277 @@
+/* General Body and Font Styles (from list_page.css) */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #fdfbf8; /* A very light, slightly warm off-white */
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    margin-bottom: 40px; /* Space below the navigation */
+}
+
+.main-nav {
+    display: flex;
+    justify-content: center; /* Center nav items if no logo */
+    align-items: center;
+    padding: 10px 0;
+}
+
+.main-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.main-nav li {
+    margin-left: 30px;
+}
+
+.main-nav li:first-child {
+    margin-left: 0;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #5a5a5a; /* Dark grey for nav links */
+    font-weight: 500; /* Semi-bold */
+    font-size: 1.1em;
+}
+
+.main-nav a:hover {
+    color: #000; /* Darker on hover */
+}
+
+/* Main Content Area */
+main {
+    padding: 0 20px 40px 20px; /* Bottom padding added */
+}
+
+.friends-page-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.friends-page-container > h1 {
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Layout for Main Content Sections */
+#main-cont {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 30px; /* Adjusted gap */
+  align-items: flex-start;
+}
+
+#friends-cont {
+  flex: 2;
+  min-width: 300px; /* Minimum width before wrapping */
+}
+
+#follow-cont { /* Sidebar for finding people */
+  flex: 1;
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+  min-width: 280px; /* Minimum width before wrapping */
+  max-width: 380px; /* Max width for sidebar */
+  margin: 0 auto; /* Center if it wraps to its own line */
+}
+
+#follow-cont h2 {
+    font-size: 1.7em; /* Adjusted size */
+    color: #2c2c2c;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Friends Grid and Cards */
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+
+.friend-card:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+}
+
+.username {
+  font-weight: 600;
+  font-size: 1.15em;
+  color: #2c2c2c;
+  margin-bottom: 15px;
+  word-break: break-word;
+}
+
+/* Search Box Styling */
+.search-box {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1em;
+  margin-bottom: 20px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search-box:focus {
+    border-color: #36a28b;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(54, 162, 139, 0.15);
+}
+
+/* Filter Pills Styling */
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.filter-pill {
+  padding: 8px 18px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9em;
+  color: #5a5a5a;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.filter-pill:hover {
+  border-color: #a0d8c0;
+  color: #36a28b;
+}
+
+.filter-pill.active {
+  background: #36a28b;
+  color: white;
+  border-color: #36a28b;
+}
+
+.profile-avatar {
+    display: block; /* Or inline-block if preferred for layout */
+    object-fit: cover; /* Ensures the image covers the area, cropping if necessary */
+    background-color: #e0e0e0; /* Fallback bg color if image is transparent or loading slow */
+    border: 2px solid #f0f0f0; /* Optional subtle border */
+}
+
+/* Avatar in Friend Cards */
+.friend-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  /* Removed justify-content: space-between; to allow natural flow with avatar */
+  align-items: center; /* Center items horizontally, including avatar */
+  min-height: 220px; /* Increased min-height to accommodate avatar */
+}
+
+.friend-card .card-avatar {
+    width: 80px;  /* Adjust size as needed */
+    height: 80px; /* Adjust size as needed */
+    border-radius: 50%; /* Circular avatar */
+    margin-bottom: 15px; /* Space below avatar */
+}
+
+.friend-card .username {
+  font-weight: 600;
+  font-size: 1.15em;
+  color: #2c2c2c;
+  margin-bottom: 15px; /* Space between username and button */
+  word-break: break-word;
+  flex-grow: 1; /* Allow username to take space if needed */
+}
+
+/* Ensure button in friend card is at the bottom */
+.friend-card button {
+    margin-top: auto; /* Pushes the button to the bottom if card has extra space */
+}
+
+
+/* Avatar in Suggested Users List */
+.suggested-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 10px 5px; /* Slightly adjusted padding */
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.suggested-user .list-avatar {
+  width: 40px;    /* Same as your old avatar-sm */
+  height: 40px;   /* Same as your old avatar-sm */
+  border-radius: 50%; /* Circular avatar */
+  /* margin-right: 5px; /* Gap is handled by .suggested-user gap now */
+}
+
+
+.filter-pill.active {
+  background-color: #51be3b;
+  color: #fff;
+}
+
+
+
+.suggested-user span {
+    font-weight: 500;
+    color: #333;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+/* Button Styling (using .btn-rm and .btn-unfollow as per your Vue bindings) */
+.btn-rm, .btn-unfollow {
+    padding: 9px 16px; /* Slightly adjusted padding */
+    border: none;
+    border-radius: 6px;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.9em;
+    cursor: pointer;
+    min-width: 110px; /* Ensure buttons have a decent min-width */
+    text-align: center;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    line-height: 1.4; /* For better text alignment in button */
+}
+
+.btn-unfollow { /* This class is for "Add Friend" state */
+  background-color: #36a28b; /* Teal color */
+}
+.btn-unfollow:hover {
+  background-color: #2a806d; /* Darker teal on hover */
+}
+
+.btn-rm { /* This class is for "Remove Friend" state */
+  background-color: #b0b0b0; /* Softer grey color */
+}
+.btn-rm:hover {
+  background-color: #999999; /* Darker grey on hover */
+}
+
+/* Disabled state for buttons */
+.btn-rm:disabled, .btn-unfollow:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #cccccc; /* More distinct disabled color */
+}
