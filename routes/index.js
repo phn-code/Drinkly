@@ -91,7 +91,7 @@ router.get('/friends', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'friends.html'));
 });
 
-const db = require('../scripts/db'); // assuming you use mysql2/promise
+const db = require('../scripts/db');
 
 router.post('/addReview', (req, res) => {
   const { drink_api_id, times_drunk, review_score, review_text } = req.body;
@@ -101,12 +101,11 @@ router.post('/addReview', (req, res) => {
     return res.status(401).json({ error: 'Not logged in' });
   }
 
-  // Step 1: Check if drink exists
   db.query('SELECT * FROM Drinks WHERE api_id = ?', [drink_api_id], (err, results) => {
     if (err) return res.status(500).json({ error: 'DB error' });
 
     if (results.length === 0) {
-      // Fetch and insert the drink
+      // Fetch and insert drink
       fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drink_api_id}`)
         .then(r => r.json())
         .then(drinkData => {
@@ -174,6 +173,70 @@ router.get('/getReviews/:drinkId', (req, res) => {
     }
 
     res.json(rows);
+  });
+});
+
+router.post('/addReview', (req, res) => {
+  const { drink_api_id, times_drunk, review_score, review_text } = req.body;
+  const { userId } = req.session;
+
+  if (!userId) return res.status(401).json({ error: 'Not logged in' });
+
+  // Step 1: Check if drink exists
+  db.query('SELECT * FROM Drinks WHERE api_id = ?', [drink_api_id], (err, result) => {
+    if (err) return res.status(500).json({ error: 'DB error during drink check' });
+
+    if (result.length === 0) {
+      // Fetch drink info from external API
+      fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drink_api_id}`)
+        .then(res => res.json())
+        .then(drinkData => {
+          const drink = drinkData.drinks?.[0];
+          if (!drink) return res.status(400).json({ error: 'Drink not found in API' });
+
+          // Insert new drink into DB
+          const sql = `
+            INSERT INTO Drinks (
+              api_id, name, alternate_name, tags, category,
+              iba_category, alcoholic_status, glass_type,
+              instructions, thumbnail_url, image_source_url
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+          const values = [
+            drink.idDrink,
+            drink.strDrink,
+            drink.strDrinkAlternate,
+            drink.strTags,
+            drink.strCategory,
+            drink.strIBA,
+            drink.strAlcoholic,
+            drink.strGlass,
+            drink.strInstructions,
+            drink.strDrinkThumb,
+            drink.strImageSource
+          ];
+
+          db.query(sql, values, (err2) => {
+            if (err2) return res.status(500).json({ error: 'DB error saving drink' });
+
+            insertReview();
+          });
+        })
+        .catch(() => res.status(500).json({ error: 'Error fetching from external API' }));
+    } else {
+      insertReview();
+    }
+
+    function insertReview() {
+      const insertSql = `
+        INSERT INTO DrinkReview (user_id, drink_api_id, times_drunk, review_score, review_text)
+        VALUES (?, ?, ?, ?, ?)`;
+
+      db.query(insertSql, [userId, drink_api_id, times_drunk || 1, review_score, review_text], (err3) => {
+        if (err3) return res.status(500).json({ error: 'DB error saving review' });
+        res.json({ message: 'Review saved successfully' });
+      });
+    }
   });
 });
 
