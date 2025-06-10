@@ -6,7 +6,7 @@ var db = mysql.createConnection({
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'test',
   database: process.env.DB_NAME || 'Drinkly',
-  port: process.env.DB_PORT || 3306
+  // port: process.env.DB_PORT || 3306
 });
 
 

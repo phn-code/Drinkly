@@ -80,5 +80,6 @@ CREATE TABLE IF NOT EXISTS UserListDrinks (
     PRIMARY KEY (list_id, drink_api_id),
     FOREIGN KEY (list_id) REFERENCES UserLists(list_id) ON DELETE CASCADE,
     FOREIGN KEY (drink_api_id) REFERENCES Drinks(api_id) ON DELETE CASCADE
-);
 
+    PRIMARY KEY (list_id, drink_api_id)
+);

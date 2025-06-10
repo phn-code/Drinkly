@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="stylesheets/list_page.css"> 
 </head>
 <body>
+    <div id="listDrinksModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close-btn">&times;</button>
+        <h2 id="listDrinksTitle">Drinks in List</h2>
+        <div id="drinksInList"></div>
+    </div>
+    </div>
     <div class="page-wrapper">
         <header>
             <nav class="main-nav">
@@ -25,6 +32,7 @@
                     <span class="create-new-list-icon">+</span>
                     <span class="create-new-list-text">Create new list</span>
                 </a>
+                <div id="existingLists" class="existing-lists-grid"></div>
             </section>
         </main>
     </div>

@@ -2,8 +2,10 @@ function Login() {
     const usernameIn = document.getElementById('username');
     const passwordIn = document.getElementById('password');
 
+
     const username = usernameIn.value;
     const password = passwordIn.value;
+
 
     const alertText = document.getElementById('alert-txt');
 
@@ -50,9 +52,28 @@ function SignUp() {
     const passwordIn = document.getElementById('passwordS');
     const emailIn = document.getElementById('email');
 
+
+    const imageIn = document.getElementById('profileImage');
+
+
     const username = usernameIn.value;
     const password = passwordIn.value;
     const email = emailIn.value;
+
+
+    const formVals = new FormData();
+
+    formVals.append("username", username);
+    formVals.append("password", password);
+    formVals.append("email", email);
+
+    if(imageIn.files) {
+        formVals.append("p_image", imageIn.files[0]);
+    } else {
+        formVals.append("p_image", null);
+    }
+
+
 
     console.log(`INPUTS: Username: ${username}, password: ${password}, email: ${email}`);
 
@@ -63,9 +84,8 @@ function SignUp() {
     fetch('/loginUser/new', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password, email })
+        body: formVals
     }).then((response) => {
         if (!response.ok) {
             alertText.style.display = 'block';

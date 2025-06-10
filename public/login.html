@@ -2,86 +2,73 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drinkly Login Page</title>
-  <script>
-    (function() {
-      const darkModePref = localStorage.getItem('darkMode');
-      const htmlElement = document.documentElement;
-
-      if (darkModePref === 'true') {
-        htmlElement.classList.add('dark');
-      } else if (darkModePref === 'false') {
-        htmlElement.classList.remove('dark');
-      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        htmlElement.classList.add('dark');
-          localStorage.setItem('darkMode', 'true');
-      }
-    })();
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  <link rel="stylesheet" href="stylesheets/login.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <script src="scripts/loginpage.js" defer></script>
-  <script src="scripts/darkmode.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Drinkly</title>
+    <link rel="stylesheet" href="/stylesheets/login.css">
 </head>
 
 <body>
-  <!-- Top Navigation Bar -->
-  <div class="header">
-    <nav class="text-center margin-from-top">
-      <div class="logo">
-        <i class="fa-solid fa-martini-glass"></i>
-        <p>Drinkly</p>
-      </div>
-      <!-- Right side of the navigation: buttons -->
-      <div class="nav-buttons">
-        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode"><i class="fa-solid fa-circle-half-stroke fa-2x"></i></button>
-      </div>
-    </nav>
-  </div>
+    <div class="page-wrapper">
+        <header>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="./index.html">Main Page</a></li>
+                    <li><a href="#">Members</a></li>
+                    <li><a href="./drink_page.html">Lists</a></li>
+                </ul>
+            </nav>
+        </header>
 
-  <main class="main-content container text-center margin-from-top ">
-      <div class="overlay-content">
-      <div class="container margin-from-top text-center">
-      <form id="login">
-        <h1>Log In To Your Account</h1>
-        <input type="text" id="username" class="login-input" placeholder="Enter username...">
-        <input type="text" id="password" class="login-input" placeholder="Enter password...">
-        <br>
-        <br>
-        <button type="button" id="submit" class="button-primary" title="Log In"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
-        <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p>
-        <br>
-        <hr>
-        <p>Don't Have An Account?</p>
-        <button type="button" id="gotosignup" class="button-primary" title="Sign Up"><i class="fa-solid fa-user-plus fa-2x"></i> </button>
-      </form>
+        <main>
+            <div class="auth-form-wrapper">
+                <div class="auth-form-container">
 
-      <form id="signup" style="display: none;">
-        <h1>Sign Up For An Account</h1>
-        <input type="text" id="usernameS" class="login-input" placeholder="Enter username...">
-        <input type="text" id="email" class="login-input" placeholder="Enter email...">
-        <input type="text" id="passwordS" class="login-input" placeholder="Enter password...">
-        <br>
-        <br>
-        <button type="button" id="submitS" class="button-primary" title="Sign Up"><i class="fa-solid fa-user-plus fa-2x"></i></button>
-        <p id="alert-txtS" style="color: red; display: none;">Invalid! Username in use.</p>
-        <br>
-        <hr>
-        <p>Already Have An Account?</p>
-        <button type="button" id="gotologin" class="button-primary" title="Log In"><i class="fa-solid fa-right-to-bracket fa-2x"></i></button>
-      </form>
+                    <!-- normal login part -->
+                    <form id="login">
+                        <h1>Log In</h1>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <button type="button" id="submit" class="form-submit-btn">Log In</button>
+                        <p id="alert-txt" class="alert-message" style="display: none;">Username/Password is wrong!</p>
+                        <p class="form-toggle-link">Don't have an account? <button type="button" id="gotosignup" class="link-button">Sign Up</button></p>
+                    </form>
+
+                    <!-- sinup part of the form -->
+                    <form id="signup" style="display: none;">
+                        <h1>Sign Up</h1>
+                        <div class="form-group">
+                            <label for="usernameS">Username</label>
+                            <input type="text" id="usernameS" name="usernameS" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordS">Password</label>
+                            <input type="password" id="passwordS" name="passwordS" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileImage">Profile Image</label>
+                            <input type="file" id="profileImage" name="profileImage" accept="image/*">
+                        </div>
+
+                        <button type="button" id="submitS" class="form-submit-btn">Sign Up</button>
+                        <p id="alert-txtS" class="alert-message" style="display: none;">Username in use or invalid data!</p>
+                        <p class="form-toggle-link">Already have an account? <button type="button" id="gotologin" class="link-button">Log In</button></p>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
-      </div>
-    </main>
-
-  <div class="footer">
-    <p>&copy; 2025 Drinkly</p>
-  </div>
-
+    <script src="scripts/loginpage.js" defer></script>
 </body>
 
 </html>

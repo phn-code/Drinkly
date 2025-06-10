@@ -8,7 +8,10 @@ const app = Vue.createApp({
             suggestedPeople: [],
             friends: [],
             searchVal: "",
-            timeout: null
+            timeout: null,
+            activeTab: "all",
+            topN: 10
+
         };
     },
     watch: {
@@ -25,10 +28,32 @@ const app = Vue.createApp({
         //     console.log(this.suggestedPeople);
         // });
         this.getFriends();
-        this.searchUsers();
+        // this.searchUsers();
+    },
+    computed: {
+        displayedPeople() {
+            if (this.activeTab === 'popular') {
+                return [...this.suggestedPeople].filter((u) => u.ranking !== null).sort((a, b) => a.ranking - b.ranking).slice(0, this.topN);
+            }
+            return this.suggestedPeople;
+        }
     },
 
     methods: {
+
+
+        // bufferToBase64(buffer) {
+        //     // if (!this.p_image) return '';
+
+        //     console.log("BUFFER: ", buffer);
+        //     let binary = '';
+        //     let bytes = new Uint8Array(buffer);
+        //     let len = bytes.byteLength;
+        //     for (let i = 0; i < len; i++) {
+        //         binary += String.fromCharCode(bytes[i]);
+        //     }
+        //     return `data:image/png;base64,${btoa(binary)}`;
+        // },
 
         getFriends() {
             fetch(`friends/getFriends`, { method: 'GET' }).then((result) => result.json()).then((results) => {
