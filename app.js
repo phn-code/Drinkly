@@ -54,11 +54,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/', indexRouter);
 app.use('/loginUser', loginRouter);
 app.use('/friends', personRouter);
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-
+app.use('/drinks', drinksRouter);
+app.use('/lists', listsRouter);
+app.use('/lists', listRoutes);
 
 module.exports = app;
