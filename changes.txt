@@ -1,0 +1,1511 @@
+diff --git a/app.js b/app.js
+index 02f3ade..08bf2f8 100644
+--- a/app.js
++++ b/app.js
+@@ -1,36 +1,39 @@
+ console.log('Server starting / App initializing...');
+ var express = require('express');
++var app = express();
++
+ var path = require('path');
+ var cookieParser = require('cookie-parser');
+ var logger = require('morgan');
+ // const PORT = process.env.PORT || 3000;
+ const session = require('express-session');
+ 
+-
+ var indexRouter = require('./routes/index');
+-// var usersRouter = require('./routes/users');
+ var loginRouter = require('./routes/login');
+ var personRouter = require('./routes/friends');
++var drinksRouter = require('./routes/drinks');
++var listsRouter = require('./routes/lists');
++const listRoutes = require('./routes/lists');
+ 
+-var app = express();
++app.set('views', path.join(__dirname, 'views'));
++app.set('view engine', 'ejs');
+ 
+-app.use(express.json());
+ app.use(logger('dev'));
+-// app.use(express.json());
++app.use(express.json());
+ app.use(express.urlencoded({ extended: false }));
+ app.use(cookieParser());
+-
+ app.use(session({
+     secret: 'test23',
+     resave: false,
+     saveUninitialized: false,
+     cookie: {
+-         maxAge: 3600000, sameSite: 'lax'
++         maxAge: 3600000,
++         sameSite: 'lax'
+     }
+ }));
+ 
+ app.use(express.json());
+-app.use(logger('dev'));
++// app.use(logger('dev'));
+ app.use(express.json());
+ app.use(express.urlencoded({ extended: false }));
+ app.use(cookieParser());
+@@ -39,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
+ // Phucs's different APIs
+ // app.listen(PORT, () => { console.log(`Server is running at http://localhost:${PORT}`); });
+ 
+-var drinksRouter = require('./routes/drinks');
++// var drinksRouter = require('./routes/drinks');
+ app.use('/drinks', drinksRouter);
+ 
+ 
+@@ -49,14 +52,10 @@ app.set('view engine', 'ejs');
+ app.set('views', path.join(__dirname, 'views'));
+ 
+ app.use('/', indexRouter);
+-// app.use('/users', usersRouter);
+ app.use('/loginUser', loginRouter);
+ app.use('/friends', personRouter);
+-
+-
+-app.use(express.static(path.join(__dirname, 'public')));
+-
+-
+-
++app.use('/drinks', drinksRouter);
++app.use('/lists', listsRouter);
++app.use('/lists', listRoutes);
+ 
+ module.exports = app;
+diff --git a/drinkly_db.sql b/drinkly_db.sql
+index 3e328f4..d9e8d9d 100644
+--- a/drinkly_db.sql
++++ b/drinkly_db.sql
+@@ -77,8 +77,5 @@ CREATE TABLE IF NOT EXISTS UserListDrinks (
+     drink_api_id VARCHAR(50) NOT NULL,
+     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     
+-    PRIMARY KEY (list_id, drink_api_id),
+-    FOREIGN KEY (list_id) REFERENCES UserLists(list_id) ON DELETE CASCADE,
+-    FOREIGN KEY (drink_api_id) REFERENCES Drinks(api_id) ON DELETE CASCADE
++    PRIMARY KEY (list_id, drink_api_id)
+ );
+-
+diff --git a/package-lock.json b/package-lock.json
+index 73670ad..ecde9d9 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -11,6 +11,7 @@
+         "bcryptjs": "^3.0.2",
+         "body-parser": "^2.2.0",
+         "cookie-parser": "~1.4.4",
++        "cors": "^2.8.5",
+         "debug": "~2.6.9",
+         "dotenv": "^16.5.0",
+         "ejs": "^3.1.10",
+@@ -336,6 +337,19 @@
+       "resolved": "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz",
+       "integrity": "sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ=="
+     },
++    "node_modules/cors": {
++      "version": "2.8.5",
++      "resolved": "https://registry.npmjs.org/cors/-/cors-2.8.5.tgz",
++      "integrity": "sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==",
++      "license": "MIT",
++      "dependencies": {
++        "object-assign": "^4",
++        "vary": "^1"
++      },
++      "engines": {
++        "node": ">= 0.10"
++      }
++    },
+     "node_modules/debug": {
+       "version": "2.6.9",
+       "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
+@@ -1041,6 +1055,15 @@
+         "node": ">= 0.6"
+       }
+     },
++    "node_modules/object-assign": {
++      "version": "4.1.1",
++      "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz",
++      "integrity": "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/object-inspect": {
+       "version": "1.13.4",
+       "resolved": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz",
+@@ -1604,6 +1627,15 @@
+       "resolved": "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz",
+       "integrity": "sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ=="
+     },
++    "cors": {
++      "version": "2.8.5",
++      "resolved": "https://registry.npmjs.org/cors/-/cors-2.8.5.tgz",
++      "integrity": "sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==",
++      "requires": {
++        "object-assign": "^4",
++        "vary": "^1"
++      }
++    },
+     "debug": {
+       "version": "2.6.9",
+       "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
+@@ -2103,6 +2135,11 @@
+       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz",
+       "integrity": "sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg=="
+     },
++    "object-assign": {
++      "version": "4.1.1",
++      "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz",
++      "integrity": "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg=="
++    },
+     "object-inspect": {
+       "version": "1.13.4",
+       "resolved": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz",
+diff --git a/package.json b/package.json
+index 64477e1..2c62d0d 100644
+--- a/package.json
++++ b/package.json
+@@ -9,6 +9,7 @@
+     "bcryptjs": "^3.0.2",
+     "body-parser": "^2.2.0",
+     "cookie-parser": "~1.4.4",
++    "cors": "^2.8.5",
+     "debug": "~2.6.9",
+     "dotenv": "^16.5.0",
+     "ejs": "^3.1.10",
+diff --git a/public/drink_page.html b/public/drink_page.html
+index 2189d03..2bd6cca 100644
+--- a/public/drink_page.html
++++ b/public/drink_page.html
+@@ -25,6 +25,7 @@
+                     <span class="create-new-list-icon">+</span>
+                     <span class="create-new-list-text">Create new list</span>
+                 </a>
++                <div id="existingLists" class="existing-lists-grid"></div>
+             </section>
+         </main>
+     </div>
+diff --git a/public/drinks.html b/public/drinks.html
+index b61a143..e85c3c9 100644
+--- a/public/drinks.html
++++ b/public/drinks.html
+@@ -111,7 +111,7 @@
+   <div id="app" v-if="drink">
+     <div class="card">
+       <div class="card-header">
+-        <img :src="drink.strDrinkThumb" :alt="drink.strDrink" />
++        <img src="drink.strDrinkThumb" alt="drink.strDrink" />
+         <div class="drink-info">
+           <h1>{{ drink.strDrink }}</h1>
+           <p>by DRINKLY ENTERPRISE LOL</p>
+diff --git a/public/friends.html b/public/friends.html
+index b9fc599..cc691f7 100644
+--- a/public/friends.html
++++ b/public/friends.html
+@@ -1,79 +1,70 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Friends</title>
+-    <link rel="stylesheet" href="/stylesheets/style.css">
++    <link rel="stylesheet" href="/stylesheets/friends.css">
++    
+     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+     <script src="scripts/friends.js" defer></script>
+-
+ </head>
+-
+ <body id="body-cont">
+-    <h1>DRINKLY</h1>
+-    <p id="welcome-txt">Friends</p>
+-    <p>{{test}}</p>
+-
+-
+-    <div id="main-cont">
+-        <div id="friends-cont">
+-            <section class="friends-grid">
+-                <article class="friend-card" v-for="user in friends">
+-                  <h3 class="username">{{user.name}}</h3>
+-                  <!-- <button type="button" class="btn-unfollow">Unfollow</button> -->
+-                  <!-- <span>{{user.name}}</span> -->
+-                  <button type="button" class="" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
+-                    {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+-                  </button>
+-                </article>
+-
+-                <!-- <article class="friend-card">
+-                  <h3 class="username">Sarah S.</h3>
+-                  <button type="button" class="btn-unfollow">Unfollow</button>
+-                </article> -->
+ 
+-              </section>
+-        </div>
+-        <div id="follow-cont">
+-
+-                <h2>Find People</h2>
+-                <div style="display: flex; flex-direction: row;">
+-                  <input type="text" placeholder="Search users…" class="search-box" v-model="searchVal">
+-                  <button type="button" class="btn-unfollow" @click="searchUsers">Search</button>
++    <div class="page-wrapper">
++        <header>
++            <nav class="main-nav">
++                <ul>
++                    <!-- <li><a href="#">Recipes</a></li> -->
++                    <li><a href="./index.html">Main Page</a></li>
++                    <li><a href="#">Members</a></li>
++                    <li><a href="./drink_page.html">Lists</a></li>
++                    <!-- <li><a href="#">Log In</a></li> -->
++                </ul>
++            </nav>
++        </header>
++
++        <main>
++        <section class="friends-page-container">
++            <h1>Friends</h1>
++
++
++            <div id="main-cont">
++                <div id="friends-cont">
++                  <!-- <h2>Your Friends</h2> -->
++                  <section class="friends-grid">
++                      <article class="friend-card" v-for="user in friends" :key="user.id">
++                        <h3 class="username">{{user.name}}</h3>
++                        <button type="button" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
++                          {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
++                        </button>
++                      </article>
++                  </section>
+                 </div>
+ 
+-
+-                <!-- <div class="filter-row">
+-                    <button type="button" class="filter-pill active">All</button>
+-
+-                  </div> -->
+-
+-                  <div class="filter-row">
+-                    <button type="button" class="filter-pill" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All</button>
+-                    <button type="button" class="filter-pill" :class="{ active: activeTab === 'popular' }" @click="activeTab = 'popular'">Popular</button>
+-                  </div>
+-
+-
+-                  <ul class="suggested-users">
+-                    <li class="suggested-user" :key="user.id" v-for="user in suggestedPeople">
+-                      <span>{{user.name}}</span>
+-                      <button type="button" class="" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
+-                        {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+-                      </button>
+-                    </li>
+-
+-                  </ul>
+-
+-        </div>
+-
++                <aside id="follow-cont">
++                    <h2>Find People</h2>
++                    <input type="text" placeholder="Search users…" class="search-box" v-model="searchVal">
++                    <div class="filter-row">
++                        <button type="button" class="filter-pill" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All</button>
++                        <button type="button" class="filter-pill" :class="{ active: activeTab === 'popular' }" @click="activeTab = 'popular'">Popular</button>
++                    </div>
++                    <ul class="suggested-users">
++                        <li class="suggested-user" :key="user.id" v-for="user in suggestedPeople">
++
++                          <span>{{user.name}}</span>
++                          <button type="button" @click="toggleFriend(user.id, user.isFriend)" :disabled="user.isProcessing" :class="{ 'btn-rm': user.isFriend, 'btn-unfollow': !user.isFriend }">
++                            {{ user.isProcessing ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
++                          </button>
++                        </li>
++                    </ul>
++                </aside>
++            </div>
++        </section>
++    </main>
+ 
+     </div>
+ 
+-    <!-- <button type="button" onclick="location.href='/login'">Log in</button> -->
+-
+-
+-
+-
+-    <!-- <button type="button" id="friends" onclick="location.href='/friends'">Log out</button> -->
+ 
+ 
+ </body>
+diff --git a/public/login.html b/public/login.html
+index c4d18fe..01f5f79 100644
+--- a/public/login.html
++++ b/public/login.html
+@@ -3,36 +3,64 @@
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Document</title>
+-    <script src="scripts/loginpage.js"></script>
++    <title>Login - Drinkly</title>
++    <link rel="stylesheet" href="/stylesheets/login.css">
+ </head>
+ <body>
++    <div class="page-wrapper">
++        <header>
++            <nav class="main-nav">
++                <ul>
++                    <li><a href="./index.html">Main Page</a></li>
++                    <li><a href="#">Members</a></li>
++                    <li><a href="./drink_page.html">Lists</a></li>
++                </ul>
++            </nav>
++        </header>
+ 
+-    <form id="login">
+-        <h1>Login Form</h1>
+-        <p>Please input your username:</p>
+-        <input type="text" id="username">
+-        <p>Please input your password:</p>
+-        <input type="text" id="password">
+-        <button type="button" id="submit">Login</button>
+-        <p id="alert-txt" style="color: red; display: none;">Username/Password is wrong!</p><br>
+-        <button type="button" id="gotosignup"> Go to Sign Up </button>
+-    </form>
+-
+-    <form id="signup" style="display: none;">
+-        <h1>Signup Form</h1>
+-        <p>Please input your username:</p>
+-        <input type="text" id="usernameS">
+-        <p>Please input your email:</p>
+-        <input type="text" id="email">
+-        <p>Please input your password:</p>
+-        <input type="text" id="passwordS">
+-        <button type="button" id="submitS">Login</button>
+-        <p id="alert-txtS" style="color: red; display: none;">Username in use!</p><br>
+-        <button type="button" id="gotologin"> Go to Log In </button>
+-    </form>
+-
++        <main>
++            <div class="auth-form-wrapper">
++                <div class="auth-form-container">
+ 
++                    <!-- normal login part -->
++                    <form id="login">
++                        <h1>Log In</h1>
++                        <div class="form-group">
++                            <label for="username">Username</label>
++                            <input type="text" id="username" name="username" required>
++                        </div>
++                        <div class="form-group">
++                            <label for="password">Password</label>
++                            <input type="password" id="password" name="password" required>
++                        </div>
++                        <button type="button" id="submit" class="form-submit-btn">Log In</button>
++                        <p id="alert-txt" class="alert-message" style="display: none;">Username/Password is wrong!</p>
++                        <p class="form-toggle-link">Don't have an account? <button type="button" id="gotosignup" class="link-button">Sign Up</button></p>
++                    </form>
+ 
++                    <!-- sinup part of the form -->
++                    <form id="signup" style="display: none;">
++                        <h1>Sign Up</h1>
++                        <div class="form-group">
++                            <label for="usernameS">Username</label>
++                            <input type="text" id="usernameS" name="usernameS" required>
++                        </div>
++                        <div class="form-group">
++                            <label for="email">Email</label>
++                            <input type="email" id="email" name="email" required>
++                        </div>
++                        <div class="form-group">
++                            <label for="passwordS">Password</label>
++                            <input type="password" id="passwordS" name="passwordS" required>
++                        </div>
++                        <button type="button" id="submitS" class="form-submit-btn">Sign Up</button>
++                        <p id="alert-txtS" class="alert-message" style="display: none;">Username in use or invalid data!</p>
++                        <p class="form-toggle-link">Already have an account? <button type="button" id="gotologin" class="link-button">Log In</button></p>
++                    </form>
++                </div>
++            </div>
++        </main>
++    </div>
++    <script src="scripts/loginpage.js" defer></script>
+ </body>
+ </html>
+\ No newline at end of file
+diff --git a/public/scripts/friends.js b/public/scripts/friends.js
+index 94dc309..96c5e8a 100644
+--- a/public/scripts/friends.js
++++ b/public/scripts/friends.js
+@@ -8,15 +8,24 @@ const app = Vue.createApp({
+             suggestedPeople: [],
+             friends: [],
+             searchVal: "",
++            timeout: null
+         };
+     },
++    watch: {
++        searchVal(newVal) {
++            clearTimeout(this.timeout);
++            this.timeout = setTimeout(() => {
++                this.searchUsers();
++            }, 300);
++        }
++    },
+     created() {
+         // fetch('/friends/getRandomUsers', { method: 'GET' }).then((result) => result.json()).then((results) => {
+         //     this.suggestedPeople = results.users;
+         //     console.log(this.suggestedPeople);
+         // });
+         this.getFriends();
+-        this.searchUsers();
++        // this.searchUsers();
+     },
+ 
+     methods: {
+@@ -29,6 +38,7 @@ const app = Vue.createApp({
+                     ...user,
+                     isProcessing: false
+                 }));
++                this.searchUsers();
+             });
+         },
+ 
+@@ -41,6 +51,7 @@ const app = Vue.createApp({
+                     isProcessing: false
+                 }));
+             });
++
+         },
+ 
+ 
+diff --git a/public/scripts/list_page.js b/public/scripts/list_page.js
+index 45a2e65..6241e11 100644
+--- a/public/scripts/list_page.js
++++ b/public/scripts/list_page.js
+@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
+ 
+     //image logic
+     const imageOptions = document.querySelectorAll('.default-image-option');
+-    const selectedListIconInput = document.getElementById('selectedListIcon');  //records which image chosen
+-    // const selectedImagePreview = document.getElementById('selectedImagePreview'); 
+-    imageOptions.forEach(image => {
++    const selectedListIconInput = document.getElementById('selectedListIcon');
++    // const selectedImagePreview = document.getElementById('selectedImagePreview');
++    imageOptions.forEach((image) => {
+         image.addEventListener('click', () => {
+-            imageOptions.forEach(img => img.classList.remove('selected'));
++            imageOptions.forEach((img) => img.classList.remove('selected'));
+             image.classList.add('selected');
+             const iconPath = image.dataset.iconPath;
+             selectedListIconInput.value = iconPath;
+@@ -25,6 +25,36 @@ document.addEventListener('DOMContentLoaded', () => {
+         });
+     });
+ 
++    fetch('/lists/getUserLists')
++    .then(res => res.json())
++    .then(lists => {
++        const container = document.getElementById('existingLists');
++        if (lists.length === 0) {
++            container.innerHTML = '<p>You have no drink lists yet.</p>';
++            return;
++        }
++
++        lists.forEach(list => {
++            const card = document.createElement('div');
++            card.className = 'list-card';
++            card.innerHTML = `
++                <img src="${list.list_icon_url}" alt="${list.list_name}" class="list-icon">
++                <div class="list-info">
++                    <h3>${list.list_name}</h3>
++                    <p>${list.drink_count} drinks</p>
++                </div>
++            `;
++            card.addEventListener('click', () => {
++                // Placeholder for future implementation
++                alert(`List "${list.list_name}" clicked. Open detail view here.`);
++            });
++            container.appendChild(card);
++        });
++    })
++    .catch(err => {
++        console.error('Failed to fetch lists:', err);
++    });
++
+ 
+     function openModal() {
+         modalOverlay.style.display = 'flex';
+@@ -65,23 +95,52 @@ document.addEventListener('DOMContentLoaded', () => {
+         createListForm.addEventListener('submit', async (event) => {
+             event.preventDefault();
+             const formData = new FormData(createListForm);
++
+             const listName = formData.get('listName').trim();
+-    
++
+             console.log('Form submitted!');
+             console.log('List Name:', listName);
+             console.log('Description:', formData.get('listDescription'));
+             console.log('Icon File:', formData.get('listIcon'));
+-    
++
+             if (listName) {
+                 window.location.href = 'searchDemo.html';
+             } else {
+                 alert('Please enter a List Name.');
++            const listDescription = formData.get('listDescription').trim();
++            const selectedListIcon = formData.get('selectedListIcon');
++
++            if (!listName) {
++                alert('Please enter a List Name.');
++                return;
++            }
++
++            try {
++                const response = await fetch('http://localhost:3000/loginUser/storeListDetails', {
++                    method: 'POST',
++                    headers: {
++                        'Content-Type': 'application/json'
++                    },
++                    credentials: 'include',
++                    body: JSON.stringify({ listName, listDescription, selectedListIcon })
++                });
++
++                if (response.ok) {
++                    window.location.href = 'searchDemo.html';
++                } else {
++                    const error = await response.json();
++                    alert('Failed to save session data: ' + error.error);
++                }
++            } catch (err) {
++                console.error('Error saving list details:', err);
++                alert('Network or server error occurred.');
+             }
+-    
++
+             closeModal();
+             createListForm.reset();
+         });
+-    }  
++    }
++    }
++
+ 
+-    
+ });
+diff --git a/public/searchDemo.html b/public/searchDemo.html
+index 5dc796c..50ec3c7 100644
+--- a/public/searchDemo.html
++++ b/public/searchDemo.html
+@@ -7,8 +7,8 @@
+   <link rel="stylesheet" href="stylesheets/search_style.css" />
+ </head>
+ <body>
+-  <button id="closeBtn" class="close-button">×</button>
+-  <button id="doneBtn" class="done-button">Done</button>
++  <button type="button" id="closeBtn" class="close-button">×</button>
++  <button type="button" id="doneBtn" class="done-button">Done</button>
+ 
+   <h1>Searching feature</h1>
+   <input type="text" id="searchBox" size="50" placeholder="Enter drink name..." />
+@@ -24,6 +24,27 @@
+ 
+   <script>
+     document.addEventListener('DOMContentLoaded', () => {
++      (async () => {
++        try {
++          const response = await fetch('http://localhost:3000/loginUser/getListDetails', {
++            credentials: 'include'
++          });
++    
++          if (response.ok) {
++            const data = await response.json();
++            console.log('Session List Data:', data);
++    
++            const header = document.createElement('h2');
++            header.textContent = `Creating list: ${data.listName}`;
++            document.body.insertBefore(header, document.body.firstChild);
++          } else {
++            console.warn('No session data found');
++          }
++        } catch (err) {
++          console.error('Failed to fetch session data', err);
++        }
++      })();
++
+       const btn = document.getElementById('searchBtn');
+       const box = document.getElementById('searchBox');
+       const results = document.getElementById('results');
+@@ -34,6 +55,20 @@
+       const selectedDrinkNames = new Map(); // id => name
+       const selectedNamesList = document.getElementById('selectedNames');
+ 
++      //testing:
++      fetch('/loginUser/profile', {
++        method: 'GET',
++        credentials: 'include'
++      })
++      .then(response => response.json())
++      .then(data => {
++          console.log('Session userId:', data.userId); 
++      })
++      .catch(error => {
++          console.error('Error fetching profile:', error);
++      });
++
++
+       function updateSelectedCountDisplay() {
+         selectedCountSpan.textContent = selectedDrinkIds.size;
+ 
+@@ -53,17 +88,46 @@
+         window.location.href = 'drink_page.html';
+       });
+ 
+-      doneBtn.addEventListener('click', () => {
+-        if (selectedDrinkIds.size > 0) {
+-          console.log("Done clicked! Selected drink IDs:", Array.from(selectedDrinkIds));
+-          console.log("Selected drink names:", Array.from(selectedDrinkNames.values()));
+-          alert(`You have selected ${selectedDrinkIds.size} drink(s). Check the console.`);
+-        } else {
++      doneBtn.addEventListener('click', async () => {
++        if (selectedDrinkIds.size === 0) {
+           alert("No drinks have been selected.");
++          return;
+         }
++
++        const selectedDrinks = Array.from(selectedDrinkIds).map(id => ({ id }));
++
++        try {
++          const response = await fetch('http://localhost:3000/lists/saveFullList', {
++            method: 'POST',
++            headers: {
++              'Content-Type': 'application/json'
++            },
++            credentials: 'include', // Important: includes session cookies
++            body: JSON.stringify({ selectedDrinks })
++          });
++
++          const data = await response.json();
++
++          if (response.ok) {
++            alert('List saved successfully!');
++          } else {
++            alert('Error saving list: ' + data.error);
++          }
++        } catch (err) {
++          console.error('Network or server error:', err);
++          alert('Something went wrong while saving the list.');
++        }
++
++        // Clear selections after saving
++        selectedDrinkIds.clear();
++        selectedDrinkNames.clear();
++        updateSelectedCountDisplay();
++
++        // Redirect or reset UI
+         window.location.href = 'drink_page.html';
+       });
+ 
++
+       btn.addEventListener('click', async () => {
+         const name = box.value.trim();
+         if (!name) return;
+@@ -130,6 +194,8 @@
+ 
+       updateSelectedCountDisplay();
+     });
++
++    
+   </script>
+ 
+ </body>
+diff --git a/public/stylesheets/drinks_page.css b/public/stylesheets/drinks_page.css
+new file mode 100644
+index 0000000..e7ed2d0
+--- /dev/null
++++ b/public/stylesheets/drinks_page.css
+@@ -0,0 +1,70 @@
++  .card {
++    max-width: 500px;
++    margin: auto;
++    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
++    border: 1px solid #ddd;
++    border-radius: 12px;
++    padding: 16px;
++    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
++  }
++
++  .card a {
++    color: #419677;
++    font-weight: bold;
++    text-decoration: none; /* Optional: Removes underline */
++  }
++
++  .card-header {
++    display: flex;
++    gap: 50px;
++  }
++
++  .card-header img {
++    width: 170px;
++    height: 160px;
++    border-radius: 12px;
++  }
++  .tabs {
++    margin-top: 16px;
++    border-radius: 8px;
++  }
++  .tabs button {
++    padding: 10px 18px;
++    font-family: 'Poppins', sans-serif;
++    border: none;
++    border-radius: 8px;
++    background: #eee;
++    cursor: pointer;
++  }
++  .tabs .active {
++    background: #59caa0;
++    color: white;
++  }
++
++  .tab-content ul, .tab-content ol {
++    margin: 12px 0;
++    font-family: 'Poppins', sans-serif;
++  }
++  .review-btn {
++    background: #59caa0;
++    font-family: 'Poppins', sans-serif;
++    color: white;
++    padding: 10px;
++    border: none;
++    border-radius: 8px;
++    margin-top: 16px;
++    cursor: pointer;
++    width: 100%;
++  }
++
++  .review-btn:hover{
++    background: #2a806d;
++  }
++  .reviews {
++    margin-top: 16px;
++  }
++  .review {
++    border-top: 1px solid #eee;
++    font-family: 'Poppins', sans-serif;
++    padding: 8px 0;
++  }
+\ No newline at end of file
+diff --git a/public/stylesheets/friends.css b/public/stylesheets/friends.css
+new file mode 100644
+index 0000000..316509c
+--- /dev/null
++++ b/public/stylesheets/friends.css
+@@ -0,0 +1,251 @@
++/* General Body and Font Styles (from list_page.css) */
++body {
++    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
++    margin: 0;
++    padding: 20px;
++    background-color: #fdfbf8; /* A very light, slightly warm off-white */
++    color: #333;
++    line-height: 1.6;
++}
++
++header {
++    margin-bottom: 40px; /* Space below the navigation */
++}
++
++.main-nav {
++    display: flex;
++    justify-content: center; /* Center nav items if no logo */
++    align-items: center;
++    padding: 10px 0;
++}
++
++.main-nav ul {
++    list-style-type: none;
++    padding: 0;
++    margin: 0;
++    display: flex;
++}
++
++.main-nav li {
++    margin-left: 30px;
++}
++
++.main-nav li:first-child {
++    margin-left: 0;
++}
++
++.main-nav a {
++    text-decoration: none;
++    color: #5a5a5a; /* Dark grey for nav links */
++    font-weight: 500; /* Semi-bold */
++    font-size: 1.1em;
++}
++
++.main-nav a:hover {
++    color: #000; /* Darker on hover */
++}
++
++/* Main Content Area */
++main {
++    padding: 0 20px 40px 20px; /* Bottom padding added */
++}
++
++.friends-page-container {
++    max-width: 1100px;
++    margin: 0 auto;
++}
++
++.friends-page-container > h1 {
++    font-size: 2.5em;
++    font-weight: 600;
++    color: #2c2c2c;
++    margin-bottom: 30px;
++    text-align: center;
++}
++
++/* Layout for Main Content Sections */
++#main-cont {
++  display: flex;
++  flex-wrap: wrap; /* Allow wrapping on smaller screens */
++  gap: 30px; /* Adjusted gap */
++  align-items: flex-start;
++}
++
++#friends-cont {
++  flex: 2;
++  min-width: 300px; /* Minimum width before wrapping */
++}
++
++#follow-cont { /* Sidebar for finding people */
++  flex: 1;
++  background-color: #ffffff;
++  padding: 25px;
++  border-radius: 12px;
++  box-shadow: 0 3px 10px rgba(0,0,0,0.07);
++  min-width: 280px; /* Minimum width before wrapping */
++  max-width: 380px; /* Max width for sidebar */
++  margin: 0 auto; /* Center if it wraps to its own line */
++}
++
++#follow-cont h2 {
++    font-size: 1.7em; /* Adjusted size */
++    color: #2c2c2c;
++    margin-top: 0;
++    margin-bottom: 20px;
++    font-weight: 600;
++}
++
++/* Friends Grid and Cards */
++.friends-grid {
++  display: grid;
++  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
++  gap: 20px;
++}
++
++.friend-card {
++  background: #ffffff;
++  border: 1px solid #e0e0e0;
++  border-radius: 10px; /* Slightly more rounded */
++  padding: 20px;
++  text-align: center;
++  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
++  transition: box-shadow 0.2s ease, transform 0.2s ease;
++  display: flex;
++  flex-direction: column;
++  justify-content: space-between;
++  min-height: 170px; /* Ensured min height */
++}
++
++.friend-card:hover {
++  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
++  transform: translateY(-3px);
++}
++
++.username {
++  font-weight: 600;
++  font-size: 1.15em;
++  color: #2c2c2c;
++  margin-bottom: 15px;
++  word-break: break-word;
++}
++
++/* Search Box Styling */
++.search-box {
++  width: 100%;
++  padding: 12px 15px;
++  border: 1px solid #ccc;
++  border-radius: 6px;
++  box-sizing: border-box;
++  font-size: 1em;
++  margin-bottom: 20px;
++  transition: border-color 0.2s ease, box-shadow 0.2s ease;
++}
++.search-box:focus {
++    border-color: #36a28b;
++    outline: none;
++    box-shadow: 0 0 0 3px rgba(54, 162, 139, 0.15);
++}
++
++/* Filter Pills Styling */
++.filter-row {
++  display: flex;
++  gap: 10px;
++  margin-bottom: 25px;
++}
++
++.filter-pill {
++  padding: 8px 18px;
++  border: 1px solid #ccc;
++  border-radius: 20px;
++  background: white;
++  cursor: pointer;
++  font-weight: 500;
++  font-size: 0.9em;
++  color: #5a5a5a;
++  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
++}
++
++.filter-pill:hover {
++  border-color: #a0d8c0;
++  color: #36a28b;
++}
++
++.filter-pill.active {
++  background: #36a28b;
++  color: white;
++  border-color: #36a28b;
++}
++
++/* Suggested Users List Styling */
++.suggested-users {
++  list-style: none;
++  padding: 0;
++  margin: 0;
++  display: flex;
++  flex-direction: column;
++  gap: 10px;
++}
++
++.suggested-user {
++  display: flex;
++  align-items: center;
++  gap: 12px;
++  justify-content: space-between;
++  padding: 12px 5px; /* Adjusted padding */
++  border-bottom: 1px solid #f0f0f0;
++}
++.suggested-user:last-child {
++    border-bottom: none;
++}
++
++.suggested-user span {
++    font-weight: 500;
++    color: #333;
++    flex-grow: 1; /* Allow name to take available space */
++    margin-right: 10px; /* Space before button */
++}
++
++.avatar-sm {
++  width: 40px;
++  height: 40px;
++  border-radius: 50%;
++  object-fit: cover;
++  background-color: #e9e9e9; /* Placeholder if no image */
++  margin-right: 5px; /* Space after avatar */
++}
++
++/* Button Styling (using .btn-rm and .btn-unfollow as per your Vue bindings) */
++.btn-rm, .btn-unfollow {
++    padding: 9px 16px; /* Slightly adjusted padding */
++    border: none;
++    border-radius: 6px;
++    color: #ffffff;
++    font-weight: 500;
++    font-size: 0.9em;
++    cursor: pointer;
++    min-width: 110px; /* Ensure buttons have a decent min-width */
++    text-align: center;
++    transition: background-color 0.2s ease, opacity 0.2s ease;
++    line-height: 1.4; /* For better text alignment in button */
++}
++
++.btn-unfollow { /* This class is for "Add Friend" state */
++  background-color: #36a28b; /* Teal color */
++}
++.btn-unfollow:hover {
++  background-color: #2a806d; /* Darker teal on hover */
++}
++
++.btn-rm { /* This class is for "Remove Friend" state */
++  background-color: #b0b0b0; /* Softer grey color */
++}
++.btn-rm:hover {
++  background-color: #999999; /* Darker grey on hover */
++}
++
++/* Disabled state for buttons */
++.btn-rm:disabled, .btn-unfollow:disabled {
++    opacity: 0.6;
++    cursor: not-allowed;
++    background-color: #cccccc; /* More distinct disabled color */
++}
+\ No newline at end of file
+diff --git a/public/stylesheets/list_page.css b/public/stylesheets/list_page.css
+index 356ba88..1506c50 100644
+--- a/public/stylesheets/list_page.css
++++ b/public/stylesheets/list_page.css
+@@ -273,4 +273,42 @@ header {
+     border-radius: 4px;
+ }
+ 
++.existing-lists-grid {
++    display: flex;
++    flex-wrap: wrap;
++    gap: 20px;
++    margin-top: 20px;
++}
++
++.list-card {
++    border: 1px solid #ccc;
++    border-radius: 8px;
++    width: 180px;
++    padding: 10px;
++    cursor: pointer;
++    transition: box-shadow 0.3s ease;
++    text-align: center;
++}
++
++.list-card:hover {
++    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
++}
++
++.list-icon {
++    width: 100%;
++    height: 100px;
++    object-fit: cover;
++    border-radius: 4px;
++}
++
++.list-info h3 {
++    font-size: 1.1em;
++    margin: 10px 0 5px;
++}
++
++.list-info p {
++    color: #555;
++    font-size: 0.9em;
++}
++
+ 
+diff --git a/public/stylesheets/login.css b/public/stylesheets/login.css
+new file mode 100644
+index 0000000..25d88e3
+--- /dev/null
++++ b/public/stylesheets/login.css
+@@ -0,0 +1,207 @@
++body {
++    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
++    margin: 0;
++    padding: 20px;
++    background-color: #fdfbf8; /* A very light, slightly warm off-white */
++    color: #333;
++    line-height: 1.6;
++}
++
++header {
++    margin-bottom: 40px; /* Space below the navigation */
++}
++
++.main-nav {
++    display: flex;
++    justify-content: center; /* Center nav items if no logo */
++    align-items: center;
++    padding: 10px 0;
++}
++
++.main-nav ul {
++    list-style-type: none;
++    padding: 0;
++    margin: 0;
++    display: flex;
++}
++
++.main-nav li {
++    margin-left: 30px;
++}
++
++.main-nav li:first-child {
++    margin-left: 0;
++}
++
++.main-nav a {
++    text-decoration: none;
++    color: #5a5a5a; /* Dark grey for nav links */
++    font-weight: 500; /* Semi-bold */
++    font-size: 1.1em;
++}
++
++.main-nav a:hover {
++    color: #000; /* Darker on hover */
++}
++
++header {
++    padding: 0 20px;
++    background-color: #fff;
++    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
++}
++
++.main-nav {
++    display: flex;
++    justify-content: center;
++    align-items: center;
++    padding: 15px 0;
++    max-width: 1100px;
++    margin: 0 auto;
++}
++
++.main-nav ul {
++    list-style-type: none;
++    padding: 0;
++    margin: 0;
++    display: flex;
++}
++
++.main-nav li {
++    margin-left: 35px;
++}
++
++.main-nav li:first-child {
++    margin-left: 0;
++}
++
++.main-nav a {
++    text-decoration: none;
++    color: #5a5a5a;
++    font-weight: 500;
++    font-size: 1.1em;
++    transition: color 0.2s ease-in-out;
++}
++
++.main-nav a:hover,
++.main-nav a.active {
++    color: #36a28b;
++}
++
++main {
++    flex-grow: 1;
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    padding: 40px 20px;
++}
++
++.auth-form-wrapper {
++    width: 100%;
++    max-width: 420px;
++}
++
++.auth-form-container {
++    background-color: #fff;
++    padding: 30px 40px;
++    border-radius: 12px;
++    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
++}
++
++.auth-form-container h1 {
++    text-align: center;
++    font-size: 2.2em;
++    font-weight: 600;
++    color: #2c2c2c;
++    margin-top: 0;
++    margin-bottom: 30px;
++}
++
++.form-group {
++    margin-bottom: 20px;
++}
++
++.form-group label {
++    display: block;
++    margin-bottom: 8px;
++    font-weight: 500;
++    color: #555;
++    font-size: 0.95em;
++}
++
++.form-group input[type="text"],
++.form-group input[type="password"],
++.form-group input[type="email"] {
++    width: 100%;
++    padding: 12px 15px;
++    border: 1px solid #ccc;
++    border-radius: 6px;
++    box-sizing: border-box;
++    font-size: 1em;
++    transition: border-color 0.2s ease, box-shadow 0.2s ease;
++}
++
++.form-group input[type="text"]:focus,
++.form-group input[type="password"]:focus,
++.form-group input[type="email"]:focus {
++    border-color: #36a28b;
++    outline: none;
++    box-shadow: 0 0 0 3px rgba(54, 162, 139, 0.15);
++}
++
++.form-submit-btn {
++    display: block;
++    width: 100%;
++    padding: 14px;
++    background-color: #36a28b;
++    color: white;
++    border: none;
++    border-radius: 8px;
++    font-size: 1.1em;
++    font-weight: 500;
++    cursor: pointer;
++    transition: background-color 0.3s ease;
++    margin-top: 10px;
++    margin-bottom: 15px;
++}
++
++.form-submit-btn:hover {
++    background-color: #2a806d;
++}
++
++.alert-message {
++    color: #d9534f;
++    font-size: 0.9em;
++    text-align: center;
++    margin-top: 10px;
++    margin-bottom: 10px;
++    min-height: 1.2em;
++}
++
++.form-toggle-link {
++    text-align: center;
++    font-size: 0.9em;
++    color: #555;
++    margin-top: 20px;
++}
++
++.link-button {
++    background: none;
++    border: none;
++    color: #36a28b;
++    font-weight: 500;
++    cursor: pointer;
++    padding: 0;
++    font-size: inherit;
++    text-decoration: underline;
++}
++
++.link-button:hover {
++    color: #2a806d;
++    text-decoration: none;
++}
++
++form#login,
++form#signup {
++    margin: 0;
++    padding: 0;
++}
+\ No newline at end of file
+diff --git a/routes/friends.js b/routes/friends.js
+index 997fd54..abea26c 100644
+--- a/routes/friends.js
++++ b/routes/friends.js
+@@ -35,7 +35,7 @@ router.get('/searchUsers', function(req, res) {
+         FROM Users
+         LEFT JOIN Follows ON Users.id = Follows.following_id AND Follows.follower_id = ?
+         LEFT JOIN RankedUsers ON Users.id = RankedUsers.following_id
+-        WHERE Users.username LIKE ? AND Users.username <> ?
++        WHERE Users.username LIKE ? AND Users.id <> ?
+         ORDER BY RAND()
+         LIMIT 10;
+     `;
+@@ -54,7 +54,7 @@ router.get('/searchUsers', function(req, res) {
+             id: user.id,
+             name: user.username,
+             isFriend: Boolean(user.isFriend),
+-            ranking: user.ranking
++            ranking: user.popularity_rank
+         }));
+ 
+         console.log(users);
+diff --git a/routes/lists.js b/routes/lists.js
+new file mode 100644
+index 0000000..475083c
+--- /dev/null
++++ b/routes/lists.js
+@@ -0,0 +1,61 @@
++var express = require('express');
++var router = express.Router();
++const path = require('path');
++const db = require('../scripts/db'); 
++
++router.post('/saveFullList', async (req, res) => {
++    const { selectedDrinks } = req.body;
++    const userId = req.session.userId;
++    const { listName, listDescription, selectedListIcon } = req.session.listDetails || {};
++
++    if (!userId || !listName || !selectedDrinks) {
++        return res.status(400).json({ error: 'Missing required session data or selected drinks' });
++    }
++
++    const conn = db;
++
++    try {
++        const [result] = await conn.execute(
++            `INSERT INTO UserLists (user_id, list_name, description, list_icon_url) VALUES (?, ?, ?, ?)`,
++            [userId, listName, listDescription || null, selectedListIcon || null]
++        );  
++    
++        const listId = result.insertId;
++        const insertValues = selectedDrinks.map(drink => [listId, drink.id]);
++    
++        await db.query(
++            `INSERT INTO UserListDrinks (list_id, drink_api_id) VALUES ?`,
++            [insertValues]
++        );
++    
++        req.session.listDetails = null;
++        res.json({ message: 'List and drinks saved successfully!' });
++    
++    } catch (err) {
++        console.error('Error saving full list:', err);
++        res.status(500).json({ error: 'Failed to save list' });
++    }
++    
++});
++
++router.get('/getUserLists', async (req, res) => {
++    const userId = req.session.userId;
++    if (!userId) return res.status(401).json({ error: 'Unauthorized' });
++
++    try {
++        const [rows] = await db.query(`
++            SELECT ul.list_id, ul.list_name, ul.list_icon_url, COUNT(uld.drink_api_id) AS drink_count
++            FROM UserLists ul
++            LEFT JOIN UserListDrinks uld ON ul.list_id = uld.list_id
++            WHERE ul.user_id = ?
++            GROUP BY ul.list_id
++        `, [userId]);
++
++        res.json(rows);
++    } catch (err) {
++        console.error("Error fetching user lists:", err);
++        res.status(500).json({ error: 'Database error' });
++    }
++});
++
++module.exports = router;
+diff --git a/routes/login.js b/routes/login.js
+index 0efb0ad..5cf2346 100644
+--- a/routes/login.js
++++ b/routes/login.js
+@@ -17,14 +17,13 @@ router.post('/', (req,res) => {
+         if(err) {
+             console.log("EREROR WITH SQL QUERY");
+             console.log(err);
+-            return res.status(500).send('SERVER ERORR');
++            return res.status(500).send('SERVER ERROR');
+         }
+ 
+         if(results.length === 0) {
+             return res.status(401).send('Put in the wrong username/password ');
+         }
+ 
+-        // SOMEONE IMPLEMENT CHEKC PASSWORD
+ 
+ 
+         bcrypt.compare(password, results[0].password).then((matchesPassword) => {
+@@ -107,9 +106,46 @@ router.post('/logout', (req, res) => {
+     });
+ 
+ });
++//Phuc's new part: 
++//Grabs the userID from ethan's cookie
++router.get('/profile', (req, res) => {
++    if (!req.session.userId) {
++        return res.status(401).json({ error: 'Not logged in' });
++    }
++
++    res.json({ userId: req.session.userId });
++});
++//Mock Login:
++//http://localhost:3000/loginUser/mock-login
++router.get('/mock-login', (req, res) => {
++    req.session.userId = 123; // or any test ID
++    req.session.username = 'testuser'; // optional, for debugging
++    res.send('Mock login successful. Session userId set to 123.');
++});
+ 
++//storing user selection for list
++router.post('/storeListDetails', (req, res) => {
++    const { listName, listDescription, selectedListIcon } = req.body;
++
++    if (!listName) {
++        return res.status(400).json({ error: 'List name is required' });
++    }
++
++    // Save to session
++    req.session.listDetails = {
++        listName,
++        listDescription,
++        selectedListIcon
++    };
++    res.status(200).json({ message: 'List details saved to session' });
++});
+ 
+-
++router.get('/getListDetails', (req, res) => {
++    if (!req.session.listDetails) {
++        return res.status(404).json({ error: 'No list details in session' });
++    }
++    res.json(req.session.listDetails);
++});
+ 
+ 
+ module.exports = router;
+diff --git a/scripts/db.js b/scripts/db.js
+index c200ced..c689064 100644
+--- a/scripts/db.js
++++ b/scripts/db.js
+@@ -1,19 +1,16 @@
++// db.js
+ require('dotenv').config();
+-var mysql = require('mysql2');
++const mysql = require('mysql2/promise'); 
+ 
+-var db = mysql.createConnection({
++const pool = mysql.createPool({
+   host: process.env.DB_HOST || 'localhost',
+   user: process.env.DB_USER || 'root',
+   password: process.env.DB_PASSWORD || 'test',
+   database: process.env.DB_NAME || 'Drinkly',
+-  port: process.env.DB_PORT || 3306
++  port: process.env.DB_PORT || 3306,
++  waitForConnections: true,
++  connectionLimit: 10,
++  queueLimit: 0
+ });
+ 
+-
+-
+-db.connect(function(err) {
+-  if (err) throw err;
+-  console.log("Connected!");
+-});
+-
+-module.exports = db;
++module.exports = pool;
