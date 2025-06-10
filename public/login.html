@@ -5,21 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Drinkly</title>
+     <script>
+    (function() {
+      const darkModePref = localStorage.getItem('darkMode');
+      const htmlElement = document.documentElement;
+
+      if (darkModePref === 'true') {
+        htmlElement.classList.add('dark');
+      } else if (darkModePref === 'false') {
+        htmlElement.classList.remove('dark');
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark');
+          localStorage.setItem('darkMode', 'true');
+      }
+    })();
+  </script>
     <link rel="stylesheet" href="/stylesheets/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="scripts/darkmode.js" defer></script>
+
 </head>
 
-<body>
+<body id="body-cont">
+  <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass pulse-hover"></i>
+        <p>Drinkly</p>
+      </div>
+      <div class="nav-buttons">
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-2x pulse-hover"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
     <div class="page-wrapper">
-        <header>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="./index.html">Main Page</a></li>
-                    <li><a href="#">Members</a></li>
-                    <li><a href="./drink_page.html">Lists</a></li>
-                </ul>
-            </nav>
-        </header>
-
         <main>
             <div class="auth-form-wrapper">
                 <div class="auth-form-container">
