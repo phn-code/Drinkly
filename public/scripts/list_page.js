@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.ok) {
-          window.location.href = 'searchDemo.html';
+          window.location.href = 'create_list.html';
         } else {
           const error = await response.json();
           alert('Failed to save session data: ' + error.error);

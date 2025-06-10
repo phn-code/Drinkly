@@ -391,7 +391,7 @@ header {
 .modal-overlay.active {
     opacity: 1;
     visibility: visible;
-    display: flex; 
+    display: flex;
 }
 
 

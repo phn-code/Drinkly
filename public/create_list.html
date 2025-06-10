@@ -1,12 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Imma search</title>
-  <link rel="stylesheet" href="stylesheets/search_style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drinkly - Your Drink Lists</title>
+  <script>
+    (function() {
+      const darkModePref = localStorage.getItem('darkMode');
+      const htmlElement = document.documentElement;
+
+      if (darkModePref === 'true') {
+        htmlElement.classList.add('dark');
+      } else if (darkModePref === 'false') {
+        htmlElement.classList.remove('dark');
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark');
+          localStorage.setItem('darkMode', 'true');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/search.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="scripts/darkmode.js" defer></script>
+  <script src="search.js"></script>
+
+
 </head>
 <body>
+  <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass pulse-hover"></i>
+        <p>Drinkly</p>
+      </div>
+      <div class="nav-links">
+        <a href="/index.html" class="nav-item pulse-hover" title="Home">Home</a>
+        <a href="/lists.html" class="nav-item pulse-hover" title="Lists">Lists</a>
+        <a href="#" class="nav-item pulse-hover" title="Reviews">Reviews</a>
+        <a href="/friends.html" class="nav-item pulse-hover" title="Friends">Friends</a>
+        <a href="/about.html" class="nav-item pulse-hover" title="About">About</a>
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" id="logout" class="button-primary" title="Log Out">
+          <i class="fa-solid fa-door-open fa-2x pulse-hover"></i>
+        </button>
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-2x pulse-hover"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+
   <button type="button" id="closeBtn" class="close-button">×</button>
   <button type="button" id="doneBtn" class="done-button">Done</button>
 
@@ -29,11 +77,11 @@
           const response = await fetch('http://localhost:3000/loginUser/getListDetails', {
             credentials: 'include'
           });
-    
+
           if (response.ok) {
             const data = await response.json();
             console.log('Session List Data:', data);
-    
+
             const header = document.createElement('h2');
             header.textContent = `Creating list: ${data.listName}`;
             document.body.insertBefore(header, document.body.firstChild);
@@ -62,7 +110,7 @@
       })
       .then(response => response.json())
       .then(data => {
-          console.log('Session userId:', data.userId); 
+          console.log('Session userId:', data.userId);
       })
       .catch(error => {
           console.error('Error fetching profile:', error);
@@ -85,7 +133,7 @@
 
       closeBtn.addEventListener('click', () => {
         console.log("Navigating away (Close). Selected drinks:", Array.from(selectedDrinkIds));
-        window.location.href = 'drink_page.html';
+        window.location.href = 'lists.html';
       });
 
       doneBtn.addEventListener('click', async () => {
@@ -124,7 +172,7 @@
         updateSelectedCountDisplay();
 
         // Redirect or reset UI
-        window.location.href = 'drink_page.html';
+        window.location.href = 'lists.html';
       });
 
 
@@ -195,7 +243,7 @@
       updateSelectedCountDisplay();
     });
 
-    
+
   </script>
 
 </body>
