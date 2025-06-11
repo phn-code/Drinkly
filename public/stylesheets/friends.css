@@ -70,8 +70,6 @@ h1.centered { /* From friends.css */
 /* Dark mode specific container styles from friends.css */
 .dark #friends-cont {
   /* background-color: var(--box-color); */ /* Already set by var(--box-color) if it changes */
-  border: 1px solid var(--border-color-dark, #2a2a2a); /* Use a specific dark border var */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   /* color: var(--text-main); */ /* Already set */
 }
 
