@@ -63,11 +63,10 @@
     background: var(--bg2);
     color: var(--text-main);
     border-radius: 8px;
-    width: 250px;
+    width: 500px;
     box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-
 
 
 .dark #searchBox:focus {
@@ -134,8 +133,6 @@
 .search-result:hover .drink-name {
   color: var(--accent-primary-hover);
 }
-
-
 
 
 .drink-image {

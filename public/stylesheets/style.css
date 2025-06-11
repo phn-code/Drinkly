@@ -1,4 +1,5 @@
 /* CSS THEME VARIABLES AND BASE STYLES */
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* Light mode (default) */
 :root {
@@ -321,8 +322,8 @@ nav .nav-item:hover {
       text-align: center; /* Center the image if it's smaller than container */
     }
     .hero-image {
-      width: 30%; /* Make image responsive */
-      height: auto; /* Maintain aspect ratio */
+      width: auto; /* Make image responsive */
+      height: 30vh; /* Maintain aspect ratio */
     }
 
 
