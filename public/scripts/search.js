@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const drinkDiv = document.createElement('div');
       drinkDiv.innerHTML = `
     <div class="search-result">
-      <a href="/drinks.html?id=${drink.idDrink}" class="drink-name">${drink.strDrink}</a>
       <a href="/drinks.html?id=${drink.idDrink}">
       <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="drink-image">
       </a>
+      <a href="/drinks.html?id=${drink.idDrink}" class="drink-name">${drink.strDrink}</a>
     </div>
   `;
 

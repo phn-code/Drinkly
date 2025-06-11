@@ -38,6 +38,9 @@
   --warning-color: #ffc107;
   --error-color: #e74c3c;
   --error-color-hover: #c0392b; /* Unused but defined */
+
+  --headline: 'Gloock', serif;
+  --body:     'Raleway', sans-serif;
 }
 
 /* Dark mode (when .dark class is on <body>) */
@@ -89,7 +92,6 @@
 body {
   background-color: var(--bg);
   color: var(--text-main);
-  font-family: 'Inter', sans-serif;
   transition: background-color 0.3s, color 0.3s;
   margin: 0;
   padding: 0;
@@ -99,6 +101,17 @@ html, body {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+h1, h2, .logo, .card-title{
+  font-family: var(--headline);
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+body, button, input, select{
+  font-family: var(--body);
+  font-weight: 400;
 }
 
 .main-content {
@@ -301,3 +314,16 @@ nav .nav-item:hover {
   font-size: 1.5rem; /* Adjust as needed */
   font-weight: bold;
 }
+
+/*hero image in index html */
+ .hero-section {
+      margin-bottom: 30px; /* Space below the hero image */
+      text-align: center; /* Center the image if it's smaller than container */
+    }
+    .hero-image {
+      width: 30%; /* Make image responsive */
+      height: auto; /* Maintain aspect ratio */
+    }
+
+
+html{ -webkit-font-smoothing: antialiased; }

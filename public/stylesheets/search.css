@@ -40,9 +40,10 @@
     background: var(--bg);
     color: var(--text-main);
     border-radius: 8px;
-    width: 250px;
+    width: 500px;
     box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    height: 60px;
 }
 
 
@@ -132,18 +133,8 @@
 
 .search-result:hover .drink-name {
   color: var(--accent-primary-hover);
-  text-decoration: underline;
 }
 
-
-.drink-name {
-  flex: 1;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-align: left;
-  text-decoration: none;
-  color: var(--text-main);
-}
 
 
 
@@ -153,4 +144,13 @@
   object-fit: cover;
   border-radius: 6px;
   margin-left: 1rem;
+}
+
+.drink-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-main);
 }
