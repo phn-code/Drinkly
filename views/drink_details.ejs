@@ -1,0 +1,49 @@
+<!-- views/search-drinks.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style> /* Basic styles */
+        .search-form { margin-bottom: 20px; }
+        .results-list { list-style: none; padding: 0; }
+        .results-list li { margin-bottom: 10px; padding: 5px; border: 1px solid #eee; }
+        .results-list li img { width: 40px; height: 40px; margin-right: 10px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <%- include('partials/header') %> <!-- Assuming you have a header -->
+
+    <h1><%= title %></h1>
+
+    <form action="/drinks/search" method="GET" class="search-form">
+        <input type="text" name="s" placeholder="Enter cocktail name" value="<%= searchTerm %>" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <% if (locals.error) { %>
+        <p style="color:red;"><%= error %></p>
+    <% } %>
+
+    <% if (drinks && drinks.length > 0) { %>
+        <ul class="results-list">
+            <% drinks.forEach(function(drink) { %>
+                <li>
+                    <a href="/drinks/detail/<%= drink.idDrink %>"> <!-- Links to your detail route -->
+                        <% if (drink.strDrinkThumb) { %>
+                            <img src="<%= drink.strDrinkThumb %>/preview" alt="<%= drink.strDrink %>">
+                        <% } %>
+                        <%= drink.strDrink %>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else if (searchTerm && !locals.error) { %>
+        <p>No results found for "<%= searchTerm %>".</p>
+    <% } %>
+
+    <%- include('partials/footer') %> <!-- Assuming you have a footer -->
+</body>
+</html>

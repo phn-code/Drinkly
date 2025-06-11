@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Drinkly</title>
-    <link rel="stylesheet" href="/stylesheets/login.css">
-</head>
-<body>
-    <div class="page-wrapper">
-        <header>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="./index.html">Main Page</a></li>
-                    <li><a href="#">Members</a></li>
-                    <li><a href="./drink_page.html">Lists</a></li>
-                </ul>
-            </nav>
-        </header>
+     <script>
+    (function() {
+      const darkModePref = localStorage.getItem('darkMode');
+      const htmlElement = document.documentElement;
 
-        <main>
+      if (darkModePref === 'true') {
+        htmlElement.classList.add('dark');
+      } else if (darkModePref === 'false') {
+        htmlElement.classList.remove('dark');
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark');
+          localStorage.setItem('darkMode', 'true');
+      }
+    })();
+  </script>
+    <link rel="stylesheet" href="/stylesheets/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <script src="scripts/darkmode.js" defer></script>
+
+</head>
+
+<body id="body-cont">
+  <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass pulse-hover"></i>
+        <p>Drinkly</p>
+      </div>
+      <div class="nav-buttons">
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-2x pulse-hover"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+  <main class="container text-center main-content">
             <div class="auth-form-wrapper">
                 <div class="auth-form-container">
 
@@ -64,8 +88,14 @@
                     </form>
                 </div>
             </div>
-        </main>
-    </div>
+
+    </main>
     <script src="scripts/loginpage.js" defer></script>
+
+     <div class="footer">
+    <p>&copy; 2025 Drinkly</p>
+  </div>
+
 </body>
+
 </html>

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchNow = async () => {
     const name = box.value.trim();
     if (!name) return;
-    results.innerHTML = 'Searching at da mommnent...';
+    results.innerHTML = 'Searching for drinks...';
 
     const response = await fetch(`/search?name=${encodeURIComponent(name)}`);
     const data = await response.json();
@@ -20,10 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     data.drinks.forEach((drink) => {
       const drinkDiv = document.createElement('div');
       drinkDiv.innerHTML = `
-        <h2><a href="/drinks.html?id=${drink.idDrink}">${drink.strDrink}</a></h2>
-        <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" width="200">
-        <hr>
-      `;
+    <div class="search-result">
+      <a href="/drinks.html?id=${drink.idDrink}" class="drink-name">${drink.strDrink}</a>
+      <a href="/drinks.html?id=${drink.idDrink}">
+      <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" class="drink-image">
+      </a>
+    </div>
+  `;
+
       results.appendChild(drinkDiv);
     });
   };

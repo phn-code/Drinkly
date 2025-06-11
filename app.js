@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 console.log('Server starting / App initializing...');
 var express = require('express');
 var app = express();
@@ -25,27 +27,19 @@ app.use(cookieParser());
 app.use(session({
     secret: 'test23',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
-         maxAge: 3600000,
-         sameSite: 'lax'
+        maxAge: 3600000,
+        sameSite: 'lax'
     }
 }));
 
-app.use(express.json());
-// app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Phucs's different APIs
 // app.listen(PORT, () => { console.log(`Server is running at http://localhost:${PORT}`); });
 
 // var drinksRouter = require('./routes/drinks');
-app.use('/drinks', drinksRouter);
-
-
 
 
 app.set('view engine', 'ejs');

@@ -22,7 +22,7 @@ router.post('/', (req,res) => {
         }
 
         if(results.length === 0) {
-            return res.status(401).send('Put in the wrong username/password ');
+            return res.status(401).send('Put in the wrong username/password');
         }
 
 
@@ -99,7 +99,7 @@ router.post('/new', upload.single('p_image'), (req, res) => {
 
         if(results.length !== 0) {
             // not allowed, already a user in there
-            return res.status(401).send('Put in the wrong username/password ');
+            return res.status(401).send('Put in the wrong username/password');
         }
 
         // else allowed
@@ -113,7 +113,7 @@ router.post('/new', upload.single('p_image'), (req, res) => {
 
                 }
 
-                // req.session.userId = newRes.user_id;
+                // req.session.userId = newRes.id;
                 req.session.userId = newRes.insertId;
                 req.session.username = username;
 

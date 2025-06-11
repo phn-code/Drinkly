@@ -2,68 +2,143 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const db = require('../scripts/db'); // this uses createConnection
-
-router.post('/saveFullList', (req, res) => {
-    const { selectedDrinks } = req.body;
+const axios = require('axios'); // To fetch from TheCocktailDB if needed
+router.post('/saveFullList', async (req, res) => {
     const userId = req.session.userId;
-    const { listName, listDescription, selectedListIcon } = req.session.listDetails || {};
+    const { listName, description, listIconUrl, selectedDrinks } = req.body;
 
-    if (!userId || !listName || !selectedDrinks) {
-        return res.status(400).json({ error: 'Missing required session data or selected drinks' });
+    if (!userId) { /* ... return 401 ... */ }
+    if (!listName || !selectedDrinks || !Array.isArray(selectedDrinks) || selectedDrinks.length === 0) {
+        /* ... return 400 ... */
     }
 
-    db.query(
-        `INSERT INTO UserLists (user_id, list_name, description, list_icon_url) VALUES (?, ?, ?, ?)`,
-        [userId, listName, listDescription || null, selectedListIcon || null],
-        (err, result) => {
-            if (err) {
-                console.error('Error inserting list:', err);
-                return res.status(500).json({ error: 'Failed to save list' });
+    // For a single connection, you use the connection directly for transactions.
+    // db.promise() should return a promise-wrapped version of your single connection.
+    const connection = db.promise(); // This is now your promise-wrapped connection
+
+    try {
+        await connection.beginTransaction(); // START TRANSACTION on the connection
+
+        const successfullyProcessedDrinkApiIds = new Set();
+        for (const selectedDrink of selectedDrinks) {
+            const drinkApiId = selectedDrink.id;
+            if (!drinkApiId) { /* ... continue ... */ }
+
+            // Use connection.query for all queries within the transaction
+            const [existingDrinks] = await connection.query('SELECT api_id FROM Drinks WHERE api_id = ?', [drinkApiId]);
+
+            if (existingDrinks.length > 0) {
+                successfullyProcessedDrinkApiIds.add(drinkApiId);
+                console.log(`Drink ${drinkApiId} already in local DB.`);
+            } else {
+                // ... (fetch from CocktailDB using axios) ...
+                const cocktailDbResponse = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drinkApiId}`);
+                const drinkData = cocktailDbResponse.data.drinks ? cocktailDbResponse.data.drinks[0] : null;
+
+                if (drinkData) {
+                    const newDrink = { /* ... map your newDrink object ... */
+                        api_id: drinkData.idDrink, name: drinkData.strDrink,
+                        alternate_name: drinkData.strDrinkAlternate || null, tags: drinkData.strTags || null,
+                        category: drinkData.strCategory || null, iba_category: drinkData.strIBA || null,
+                        alcoholic_status: drinkData.strAlcoholic || null, glass_type: drinkData.strGlass,
+                        instructions: drinkData.strInstructions || null, thumbnail_url: drinkData.strDrinkThumb || null,
+                        image_source_url: drinkData.strImageSource || null
+                    };
+                    await connection.query( // Use connection.query
+                        `INSERT INTO Drinks (api_id, name, alternate_name, tags, category, iba_category, alcoholic_status, glass_type, instructions, thumbnail_url, image_source_url)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                         ON DUPLICATE KEY UPDATE name = VALUES(name)`,
+                        [newDrink.api_id, newDrink.name, newDrink.alternate_name, newDrink.tags, newDrink.category, newDrink.iba_category, newDrink.alcoholic_status, newDrink.glass_type, newDrink.instructions, newDrink.thumbnail_url, newDrink.image_source_url]
+                    );
+                    successfullyProcessedDrinkApiIds.add(drinkApiId);
+                    console.log(`Inserted/Updated drink ${drinkApiId} into local DB.`);
+                } else { /* ... console.warn ... */ }
             }
-
-            const listId = result.insertId;
-            const insertValues = selectedDrinks.map(drink => [listId, drink.id]);
-
-            db.query(
-                `INSERT INTO UserListDrinks (list_id, drink_api_id) VALUES ?`,
-                [insertValues],
-                (err2) => {
-                    if (err2) {
-                        console.error('Error inserting drinks:', err2);
-                        return res.status(500).json({ error: 'Failed to save list drinks' });
-                    }
-
-                    req.session.listDetails = null;
-                    res.json({ message: 'List and drinks saved successfully!' });
-                }
-            );
         }
-    );
+        // ... (catch for CocktailDB API errors inside the loop if you want to be more granular) ...
+
+        if (selectedDrinks.length > 0 && successfullyProcessedDrinkApiIds.size === 0) {
+            await connection.rollback();
+            return res.status(400).json({ error: 'None of the selected drinks could be processed. List not saved.' });
+        }
+
+        let newListId;
+        try {
+            const [listResult] = await connection.query( // Use connection.query
+                'INSERT INTO UserLists (user_id, list_name, description, list_icon_url) VALUES (?, ?, ?, ?)',
+                [userId, listName, description || null, listIconUrl || null]
+            );
+            newListId = listResult.insertId;
+            console.log(`New list created with ID: ${newListId} for user ${userId}`);
+        } catch (listInsertError) {
+            await connection.rollback();
+            if (listInsertError.code === 'ER_DUP_ENTRY') { /* ... return 409 ... */ }
+            console.error('Error inserting new list:', listInsertError);
+            return res.status(500).json({ error: 'Failed to create the new list.' });
+        }
+
+        if (newListId && successfullyProcessedDrinkApiIds.size > 0) {
+            const userListDrinksValues = Array.from(successfullyProcessedDrinkApiIds).map(validDrinkId => [newListId, validDrinkId]);
+            try {
+                await connection.query( // Use connection.query
+                    'INSERT INTO UserListDrinks (list_id, drink_api_id) VALUES ?',
+                    [userListDrinksValues]
+                );
+                console.log(`${successfullyProcessedDrinkApiIds.size} drinks added to list ${newListId}`);
+            } catch (linkError) {
+                await connection.rollback();
+                console.error('Error inserting into UserListDrinks:', linkError);
+                return res.status(500).json({ error: 'Failed to add drinks to the new list after list creation.' });
+            }
+        }
+
+        await connection.commit(); // COMMIT TRANSACTION on the connection
+        req.session.listDetails = null;
+        res.status(201).json({ message: 'List and drinks saved successfully!', listId: newListId });
+
+    } catch (error) {
+        // If an error occurred before or during beginTransaction, or after commit
+        // and connection might not be in a transaction state for rollback.
+        // However, if beginTransaction was called, we should try to rollback.
+        // More sophisticated error handling might be needed here for the connection state.
+        try {
+            if (connection && typeof connection.rollback === 'function') { // Check if rollback is a function
+                 await connection.rollback(); // ROLLBACK on the connection
+                 console.log("Transaction rolled back due to error.");
+            }
+        } catch (rollbackError) {
+            console.error("Error during rollback:", rollbackError);
+        }
+        console.error('Overall error in saveFullList:', error);
+        res.status(500).json({ error: 'An unexpected error occurred while saving the list.' });
+    }
+    // NO finally { connection.release() } for single connections.
+    // Single connections are typically ended with connection.end() when the app closes, or managed differently.
+    // If db.js manages connection lifecycle, you might not do anything here.
 });
 
-router.get('/getUserLists', (req, res) => {
+router.get('/getUserLists', async (req, res) => { // Changed to async
     const userId = req.session.userId;
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-
-    db.query(`
-        SELECT ul.list_id, ul.list_name, ul.list_icon_url, COUNT(uld.drink_api_id) AS drink_count
-        FROM UserLists ul
-        LEFT JOIN UserListDrinks uld ON ul.list_id = uld.list_id
-        WHERE ul.user_id = ?
-        GROUP BY ul.list_id
-    `, [userId], (err, rows) => {
-        if (err) {
-            console.error("Error fetching user lists:", err);
-            return res.status(500).json({ error: 'Database error' });
-        }
+    try {
+        const [rows] = await db.promise().query(`
+            SELECT ul.list_id, ul.list_name, ul.list_icon_url, COUNT(uld.drink_api_id) AS drink_count
+            FROM UserLists ul
+            LEFT JOIN UserListDrinks uld ON ul.list_id = uld.list_id
+            WHERE ul.user_id = ?
+            GROUP BY ul.list_id
+            ORDER BY ul.list_name ASC
+        `, [userId]);
         res.json(rows);
-    });
+    } catch (err) {
+        console.error("Error fetching user lists:", err);
+        return res.status(500).json({ error: 'Database error while fetching lists' });
+    }
 });
 
 router.delete('/:id', (req, res) => {
     const listId = req.params.id;
     const userId = req.session.userId;
-
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
     db.query(`SELECT * FROM UserLists WHERE list_id = ? AND user_id = ?`, [listId, userId], (err, rows) => {
@@ -92,11 +167,10 @@ router.delete('/:id', (req, res) => {
             });
         });
     });
-});
 
+});
 router.get('/:list_id/drinks', (req, res) => {
     const { list_id } = req.params;
-
     db.query(`SELECT drink_api_id FROM UserListDrinks WHERE list_id = ?`, [list_id], async (err, rows) => {
         if (err) {
             console.error('Error fetching drink IDs:', err);
@@ -121,5 +195,4 @@ router.get('/:list_id/drinks', (req, res) => {
         }
     });
 });
-
 module.exports = router;
