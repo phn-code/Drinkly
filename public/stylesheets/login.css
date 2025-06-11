@@ -68,7 +68,6 @@ body > .main-content {
     border-radius: 8px;
     box-sizing: border-box;
     font-size: 1em;
-    font-family: 'Inter', sans-serif;
     background-color: var(--input-bg, #FFFFFF); /* Default light input background */
     color: var(--input-text, #212529);          /* Default light input text */
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;

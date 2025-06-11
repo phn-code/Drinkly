@@ -99,7 +99,6 @@ h1.centered { /* From friends.css */
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 1em;
-  font-family: 'Inter', sans-serif; /* Ensure font consistency */
   margin-bottom: 20px; /* Consistent margin */
   background-color: var(--bg);
   color: var(--text-main);

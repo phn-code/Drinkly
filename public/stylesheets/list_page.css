@@ -243,7 +243,6 @@
     border-radius: 8px;
     box-sizing: border-box;
     font-size: 1em;
-    font-family: 'Inter', sans-serif;
     background-color: var(--input-bg, var(--bg));
     color: var(--input-text, var(--text-main));
     transition: border-color 0.3s ease, box-shadow 0.3s ease;

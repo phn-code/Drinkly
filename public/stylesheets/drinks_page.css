@@ -4,7 +4,6 @@
 .card {
   max-width: 600px;
   margin: 30px auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   border: 1px solid var(--border-color); /* Uses theme variable */
   border-radius: 12px;
   padding: 25px;
@@ -71,7 +70,6 @@
 
 .tabs button {
   padding: 12px 20px;
-  font-family: 'Poppins', sans-serif;
   border: none;
   border-bottom: 3px solid transparent;
   background: transparent;
@@ -94,7 +92,6 @@
 /* Tab Content */
 .tab-content {
   padding: 20px 5px;
-  font-family: 'Poppins', sans-serif;
   min-height: 120px;
   /* display: none; /* Vue handles display with v-if */
 }
@@ -144,7 +141,6 @@ p.loading-message { /* General loading message */
 /* Review Button and Form */
 .review-btn {
   background: var(--accent-primary); /* Themed */
-  font-family: 'Poppins', sans-serif;
   color: var(--text-on-accent);       /* Themed */
   padding: 12px 15px;
   border: none;
@@ -175,7 +171,6 @@ p.loading-message { /* General loading message */
 .review-form h3 {
     margin-top: 0;
     margin-bottom: 15px;
-    font-family: 'Poppins', sans-serif;
     color: var(--text-emphasis); /* Themed */
 }
 
@@ -183,7 +178,6 @@ p.loading-message { /* General loading message */
   display: block;
   margin-bottom: 12px;
   font-weight: 500;
-  font-family: 'Poppins', sans-serif;
   color: var(--text-main); /* Themed */
 }
 
@@ -195,7 +189,6 @@ p.loading-message { /* General loading message */
   border: 1px solid var(--border-color); /* Themed */
   border-radius: 6px;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
   font-size: 0.95em;
   background-color: var(--input-bg);   /* Themed */
   color: var(--input-text);            /* Themed */
@@ -227,7 +220,6 @@ p.loading-message { /* General loading message */
   border-radius: 8px;
   margin-top: 15px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   font-size: 1em;
   transition: background-color 0.2s ease;
@@ -247,7 +239,6 @@ p.loading-message { /* General loading message */
 }
 
 .reviews h3 {
-  font-family: 'Poppins', sans-serif;
   margin-bottom: 15px;
   color: var(--text-emphasis); /* Themed */
   font-size: 1.4em;
@@ -255,7 +246,6 @@ p.loading-message { /* General loading message */
 
 .review {
   border-bottom: 1px solid var(--border-color-extralight); /* Themed */
-  font-family: 'Poppins', sans-serif;
   padding: 15px 0;
   color: var(--text-main); /* Ensure review text itself is themed */
 }
