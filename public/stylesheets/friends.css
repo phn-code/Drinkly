@@ -2,15 +2,6 @@
    Base and General Styles (Inspired by list_page.css & common needs)
    ========================================================================== */
 
-body { /* Applied via your main style.css, but good to keep in mind for context */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Default from list_page */
-    /* font-family: 'Inter', sans-serif; /* Used in friends.css, choose one or ensure Inter is loaded */
-    margin: 0;
-    /* padding: 20px; */ /* This might conflict with page-wrapper, adjust as needed */
-    background-color: var(--bg, #fdfbf8); /* Using var(--bg) as primary, with fallback */
-    color: var(--text-main, #333);
-    line-height: 1.6;
-}
 
 /* Assuming .header and .footer are styled in your global style.css */
 /* If not, you'd bring those styles here or ensure they are globally applied */

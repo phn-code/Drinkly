@@ -5,9 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Drinkly About Us Page</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!--icon for drinkly-->
   <script>
-    (function() {
+    (function () {
       const darkModePref = localStorage.getItem('darkMode');
       const htmlElement = document.documentElement;
 
@@ -17,20 +18,19 @@
         htmlElement.classList.remove('dark');
       } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         htmlElement.classList.add('dark');
-          localStorage.setItem('darkMode', 'true');
+        localStorage.setItem('darkMode', 'true');
       }
     })();
   </script>
   <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="stylesheet" href="/stylesheets/search.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <script src="scripts/darkmode.js" defer></script>
   <script src="scripts/index.js" defer></script>
   <script src="scripts/search.js" defer></script>
 </head>
 
 <body id="body-cont">
-      <!-- Top Navigation Bar -->
+  <!-- Top Navigation Bar -->
   <div class="header">
     <nav class="text-center margin-from-top">
       <div class="logo">
@@ -40,7 +40,6 @@
       <div class="nav-links">
         <a href="/index.html" class="nav-item pulse-hover" title="Home">Home</a>
         <a href="/lists.html" class="nav-item pulse-hover" title="Lists">Lists</a>
-        <a href="#" class="nav-item pulse-hover" title="Reviews">Reviews</a>
         <a href="/friends.html" class="nav-item pulse-hover" title="Friends">Friends</a>
         <a href="/about.html" class="nav-item pulse-hover" title="About">About</a>
       </div>
@@ -57,42 +56,41 @@
   </div>
 
 
-    <!-- Main Content -->
+  <!-- Main Content -->
   <main class="container text-center margin-from-top main-content">
-     <div class="overlay-content">
     <h1>About Drinkly</h1>
-    <h3 class="text-muted" style="color:var(--accent-primary)">Boi it's just alkahal</h3>
+    <h3 class="text-muted" style="color:var(--accent-primary)">Convenience at a sip</h3>
 
-   <section class="margin-from-top">
-  <h2>Our Mission</h2>
-  <div class="info-box" style="color:var(--accent-primary)">
-    <p>
-      Drinkly is your personal guide to cocktails, homebrewing, and beverage discovery. Whether you're mixing a
-      martini or crafting a ginger beer, we help you track, review, and share your drink experiences with friends.
-    </p>
-  </div>
-</section>
+    <section class="margin-from-top">
+      <h2>Our Mission</h2>
+      <div class="info-box" style="color:var(--accent-primary)">
+        <p>
+          Drinkly is your personal guide to cocktails, homebrewing, and beverage discovery. Whether you're mixing a
+          martini or crafting a ginger beer, we help you track, review, and share your drink experiences with friends.
+        </p>
+      </div>
+    </section>
 
-<section class="margin-from-top">
-  <h2>Why We Built This</h2>
-  <div class="info-box" style="color:var(--accent-primary)">
-    <p>
-      We believe that drinks bring people together. With so many amazing recipes and stories out there, we wanted a
-      single space to explore, save, and celebrate all things liquid and delicious.
-    </p>
-  </div>
-</section>
+    <section class="margin-from-top">
+      <h2>Why We Built This</h2>
+      <div class="info-box" style="color:var(--accent-primary)">
+        <p>
+          We believe that drinks bring people together. With so many amazing recipes and stories out there, we wanted a
+          single space to explore, save, and celebrate all things liquid and delicious.
+        </p>
+      </div>
+    </section>
 
-<section class="margin-from-top">
-  <h2>Meet the Team</h2>
-  <div class="info-box">
-    <p style="color:var(--accent-primary)">
-      This website was created by a group of Computer Science students at the University of Adelaide. We're developers, designers, and drink enthusiasts who wanted to blend our passions into something
-      meaningful. Cheers to community, creativity, and collaboration!
-    </p>
-  </div>
-</section>
-</div>
+    <section class="margin-from-top">
+      <h2>Meet the Team</h2>
+      <div class="info-box">
+        <p style="color:var(--accent-primary)">
+          This website was created by a group of Computer Science students at the University of Adelaide. We're
+          developers, designers, and drink enthusiasts who wanted to blend our passions into something
+          meaningful. Cheers to community, creativity, and collaboration!
+        </p>
+      </div>
+    </section>
 
   </main>
   <div class="footer">

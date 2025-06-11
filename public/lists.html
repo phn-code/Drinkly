@@ -22,7 +22,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
   <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="stylesheet" href="/stylesheets/search.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <script src="scripts/darkmode.js" defer></script>
   <script src="scripts/index.js" defer></script>
   <script src="scripts/search.js" defer></script>
@@ -42,7 +41,6 @@
       <div class="nav-links">
         <a href="/index.html" class="nav-item pulse-hover" title="Home">Home</a>
         <a href="/lists.html" class="nav-item pulse-hover" title="Lists">Lists</a>
-        <a href="#" class="nav-item pulse-hover" title="Reviews">Reviews</a>
         <a href="/friends.html" class="nav-item pulse-hover" title="Friends">Friends</a>
         <a href="/about.html" class="nav-item pulse-hover" title="About">About</a>
       </div>
@@ -57,6 +55,8 @@
       </div>
     </nav>
   </div>
+<main class="container text-center margin-from-top main-content">
+  <h1>Your Lists</h1>
     <div id="listDrinksModal" class="modal-overlay">
     <div class="modal-content">
         <button class="modal-close-btn">&times;</button>
@@ -65,16 +65,13 @@
     </div>
     </div>
     <div class="page-wrapper">
-        <main>
             <section class="lists-container">
-                <h1>Your Lists</h1>
                 <a href="#" id="openCreateListModalBtn" class="create-new-list-button">
                     <span class="create-new-list-icon">+</span>
                     <span class="create-new-list-text">Create new list</span>
                 </a>
                 <div id="existingLists" class="existing-lists-grid"></div>
             </section>
-        </main>
     </div>
 
     <div id="createListModal" class="modal-overlay" style="display: none;">
@@ -144,6 +141,12 @@
             </form>
         </div>
     </div>
+    </main>
     <script src="./scripts/list_page.js"></script>
+
+     <div class="footer">
+    <p>&copy; 2025 Drinkly</p>
+  </div>
+
 </body>
 </html>

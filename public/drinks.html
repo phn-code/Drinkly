@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drink Details</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    (function() {
+      const darkModePref = localStorage.getItem('darkMode');
+      const htmlElement = document.documentElement;
+
+      if (darkModePref === 'true') {
+        htmlElement.classList.add('dark');
+      } else if (darkModePref === 'false') {
+        htmlElement.classList.remove('dark');
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark');
+          localStorage.setItem('darkMode', 'true');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/drinks_page.css" />
+   <script src="scripts/darkmode.js" defer></script>
+   <script src="scripts/index.js" defer></script>
+
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass pulse-hover"></i>
+        <p>Drinkly</p>
+      </div>
+      <div class="nav-links">
+        <a href="/index.html" class="nav-item pulse-hover" title="Home">Home</a>
+        <a href="/lists.html" class="nav-item pulse-hover" title="Lists">Lists</a>
+        <a href="/friends.html" class="nav-item pulse-hover" title="Friends">Friends</a>
+        <a href="/about.html" class="nav-item pulse-hover" title="About">About</a>
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" id="logout" class="button-primary" title="Log Out">
+          <i class="fa-solid fa-door-open fa-2x pulse-hover"></i>
+        </button>
+        <button type="button" class="button-primary" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-2x pulse-hover"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+  <main class="container margin-from-top main-content">
+  <div id="app" v-if="drink">
+    <div class="card">
+      <div class="card-header">
+        <img :src="drink.strDrinkThumb" :alt="drink.strDrink" />
+        <div class="drink-info">
+          <h1>{{ drink.strDrink }}</h1>
+          <p>by DRINKLY ENTERPRISE LOL</p>
+          <p>⭐ 4.5 <a href="#">Add to Favourites</a></p>
+        </div>
+      </div>
+
+      <!-- switch btween ingredient and instruction tabs -->
+      <div class="tabs">
+        <button type="button" @click="activeTab = 'ingredients'" :class="{active: activeTab === 'ingredients'}">Ingredients</button>
+        <button type="button" @click="activeTab = 'preparation'" :class="{active: activeTab === 'preparation'}">Preparation</button>
+      </div>
+
+      <!-- Tab stuff -->
+      <div class="tab-content">
+        <ul v-if="activeTab === 'ingredients'">
+          <li v-for="ingredient in ingredients" :key="ingredient">{{ ingredient }}</li>
+        </ul>
+        <ol v-if="activeTab === 'preparation'">
+          <li>{{ drink.strInstructions }}</li>
+        </ol>
+      </div>
+
+  <!-- Temporary Reviews for now since we don't hve it sorted out -->
+  <button type="button" @click="showForm = !showForm" class="review-btn">
+    {{ showForm ? "Cancel" : "Write a Review" }}
+  </button>
+
+  <div v-if="showForm" class="review-form">
+    <label>
+      Name:
+      <input type="text" v-model="newReview.name" placeholder="Your name" />
+    </label>
+    <label>
+      Comment:
+      <textarea v-model="newReview.comment" placeholder="Your review..."></textarea>
+    </label>
+    <button type="button" @click="submitReview" class="submit-review-btn">Submit Review</button>
+  </div>
+  <div class="reviews">
+    <div class="review" v-for="review in reviews" :key="review.name + review.comment">
+      <p><strong>{{ review.name }}</strong></p>
+      <p>{{ review.comment }}</p>
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          drink: null,
+          activeTab: 'ingredients',
+          showForm: false,
+          reviews: [
+            { name: "Alice", comment: "I love this drink!!" },
+            { name: "Bob", comment: "Taste fantastic and wonderful and spectacular." }
+          ],
+          newReview: {
+            name: '',
+            comment: ''
+          }
+        };
+      },
+      computed: {
+        ingredients() {
+          if (!this.drink) return [];
+          const list = [];
+          for (let i = 1; i <= 15; i++) {
+            const ingredient = this.drink[`strIngredient${i}`];
+            const measure = this.drink[`strMeasure${i}`];
+            if (ingredient) {
+              list.push(`${measure ? measure : ''} ${ingredient}`.trim());
+            }
+          }
+          return list;
+        }
+      },
+      methods: {
+        submitReview() {
+        if (!this.newReview.name || !this.newReview.comment) {
+          alert("Please fill out both name and comment.");
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const drinkId = urlParams.get('id');
+
+        // Send the review to the backend
+        fetch('/addReview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+    credentials: 'include', // ⬅️ ensures the session cookie is sent
+    body: JSON.stringify({
+      drink_api_id: drinkId,
+      review_score: 5, // replace this with actual score input if you have one
+      review_text: this.newReview.comment,
+      times_drunk: 1 // you can make this dynamic too
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("✅ Saved to DB:", data);
+
+    // Optionally update local UI
+    this.reviews.push({
+      name: this.newReview.name,
+      comment: this.newReview.comment
+    });
+
+    // Reset form
+    this.newReview.name = '';
+    this.newReview.comment = '';
+    this.showForm = false;
+  })
+  .catch(error => {
+    console.error('❌ Error saving review:', error);
+    alert("Something went wrong while saving your review.");
+  });
+}
+      },
+      async created() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if (!id) return;
+
+        const response = await fetch(`/drink/${id}`);
+        const data = await response.json();
+        this.drink = data.drink;
+
+        try {
+    const reviewResponse = await fetch(`/getReviews/${id}`);
+    const reviewData = await reviewResponse.json();
+
+    // Map the backend reviews into your format
+    this.reviews = reviewData.map(r => ({
+      name: r.username,
+      comment: r.review_text,
+      score: r.review_score
+    }));
+  } catch (error) {
+    console.error("❌ Failed to load reviews", error);
+  }
+      }
+    });
+
+    app.mount('#app');
+  </script>
+   </main>
+
+<div class="footer">
+    <p>&copy; 2025 Drinkly</p>
+  </div>
+</body>
+</html>

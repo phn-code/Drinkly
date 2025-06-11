@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drinkly - Your Drink Lists</title>
-  <script>
+    <title>Drinkly - Add Drinks to List</title>
+    <script>
     (function() {
       const darkModePref = localStorage.getItem('darkMode');
       const htmlElement = document.documentElement;
@@ -19,17 +19,16 @@
       }
     })();
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
-  <link rel="stylesheet" href="/stylesheets/style.css" />
-  <link rel="stylesheet" href="/stylesheets/search.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <script src="scripts/darkmode.js" defer></script>
-  <script src="search.js"></script>
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css" />      <!-- Global styles -->
+    <link rel="stylesheet" href="/stylesheets/search.css" />    <!-- Shared search input styles -->
+    <link rel="stylesheet" href="/stylesheets/create_list.css" /> <!-- Styles specific to this page -->
+    <script src="/scripts/darkmode.js" defer></script>
+    <!-- No need for index.js or general search.js here -->
 </head>
-<body>
-  <!-- Top Navigation Bar -->
+<body id="body-cont"> <!-- Add class for page-specific body styles if needed, e.g., class="create-list-page" -->
+
+  <!-- Top Navigation Bar (from your global structure) -->
   <div class="header">
     <nav class="text-center margin-from-top">
       <div class="logo">
@@ -39,11 +38,9 @@
       <div class="nav-links">
         <a href="/index.html" class="nav-item pulse-hover" title="Home">Home</a>
         <a href="/lists.html" class="nav-item pulse-hover" title="Lists">Lists</a>
-        <a href="#" class="nav-item pulse-hover" title="Reviews">Reviews</a>
         <a href="/friends.html" class="nav-item pulse-hover" title="Friends">Friends</a>
         <a href="/about.html" class="nav-item pulse-hover" title="About">About</a>
       </div>
-
       <div class="nav-buttons">
         <button type="button" id="logout" class="button-primary" title="Log Out">
           <i class="fa-solid fa-door-open fa-2x pulse-hover"></i>
@@ -55,196 +52,50 @@
     </nav>
   </div>
 
-  <button type="button" id="closeBtn" class="close-button">×</button>
-  <button type="button" id="doneBtn" class="done-button">Done</button>
+  <!-- Main Content Wrapper for This Page -->
+     <main class="container text-center margin-from-top main-content">
+  <div class="create-list-page-wrapper"> <!-- NEW: Overall page wrapper -->
 
-  <h1>Searching feature</h1>
-  <input type="text" id="searchBox" size="50" placeholder="Enter drink name..." />
-  <button type="button" id="searchBtn">Search</button>
+    <div class="page-actions">
+        <button type="button" id="closeBtn" title="Cancel and Go Back">Cancel</button>
+        <div id="listTitleDisplay" class="list-title-display">Loading List Name...</div>
+        <button type="button" id="doneBtn" title="Save This List">Save List</button>
+    </div>
 
-  <div id="results"></div>
+ <div class="layout-container">
 
-  <div id="selectionStatus" style="margin-top: 15px; font-weight: bold;">
-    Selected Drinks: <span id="selectedCount">0</span>
-    <ul id="selectedNames" style="margin-top: 10px; font-weight: normal;"></ul>
+        <section id="search-column" class="column left-column">
+            <h1 class="page-title">Add Drinks to Your List</h1>
+
+            <div class="search-controls">
+              <div class="search-input-wrapper">
+                <input type="text" id="searchBox" class="search-box" placeholder="Search for drinks to add..." />
+                <button type="button" id="searchBtn" class="button-primary-search">
+                  <i class="fa-solid fa-magnifying-glass fa-2x pulse-hover"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="results">
+            </div>
+        </section>
+
+        <aside id="selection-column" class="column right-column">
+            <div id="selectionStatus">
+              <h3>Selected Drinks: <span id="selectedCount">0</span></h3>
+              <ul id="selectedNames"></ul>
+            </div>
+        </aside>
+
+    </div>
+  </div>
+  </main>
+
+
+  <div class="footer">
+    <p>© 2025 Drinkly</p>
   </div>
 
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      (async () => {
-        try {
-          const response = await fetch('http://localhost:3000/loginUser/getListDetails', {
-            credentials: 'include'
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            console.log('Session List Data:', data);
-
-            const header = document.createElement('h2');
-            header.textContent = `Creating list: ${data.listName}`;
-            document.body.insertBefore(header, document.body.firstChild);
-          } else {
-            console.warn('No session data found');
-          }
-        } catch (err) {
-          console.error('Failed to fetch session data', err);
-        }
-      })();
-
-      const btn = document.getElementById('searchBtn');
-      const box = document.getElementById('searchBox');
-      const results = document.getElementById('results');
-      const closeBtn = document.getElementById('closeBtn');
-      const doneBtn = document.getElementById('doneBtn');
-      const selectedDrinkIds = new Set();
-      const selectedCountSpan = document.getElementById('selectedCount');
-      const selectedDrinkNames = new Map(); // id => name
-      const selectedNamesList = document.getElementById('selectedNames');
-
-      //testing:
-      fetch('/loginUser/profile', {
-        method: 'GET',
-        credentials: 'include'
-      })
-      .then(response => response.json())
-      .then(data => {
-          console.log('Session userId:', data.userId);
-      })
-      .catch(error => {
-          console.error('Error fetching profile:', error);
-      });
-
-
-      function updateSelectedCountDisplay() {
-        selectedCountSpan.textContent = selectedDrinkIds.size;
-
-        selectedNamesList.innerHTML = '';
-        selectedDrinkIds.forEach(id => {
-          const name = selectedDrinkNames.get(id);
-          if (name) {
-            const li = document.createElement('li');
-            li.textContent = name;
-            selectedNamesList.appendChild(li);
-          }
-        });
-      }
-
-      closeBtn.addEventListener('click', () => {
-        console.log("Navigating away (Close). Selected drinks:", Array.from(selectedDrinkIds));
-        window.location.href = 'lists.html';
-      });
-
-      doneBtn.addEventListener('click', async () => {
-        if (selectedDrinkIds.size === 0) {
-          alert("No drinks have been selected.");
-          return;
-        }
-
-        const selectedDrinks = Array.from(selectedDrinkIds).map(id => ({ id }));
-
-        try {
-          const response = await fetch('http://localhost:3000/lists/saveFullList', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            credentials: 'include', // Important: includes session cookies
-            body: JSON.stringify({ selectedDrinks })
-          });
-
-          const data = await response.json();
-
-          if (response.ok) {
-            alert('List saved successfully!');
-          } else {
-            alert('Error saving list: ' + data.error);
-          }
-        } catch (err) {
-          console.error('Network or server error:', err);
-          alert('Something went wrong while saving the list.');
-        }
-
-        // Clear selections after saving
-        selectedDrinkIds.clear();
-        selectedDrinkNames.clear();
-        updateSelectedCountDisplay();
-
-        // Redirect or reset UI
-        window.location.href = 'lists.html';
-      });
-
-
-      btn.addEventListener('click', async () => {
-        const name = box.value.trim();
-        if (!name) return;
-        results.innerHTML = 'Searching at da mommnent...';
-
-        const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(name)}`);
-        const data = await response.json();
-
-        if (!data.drinks) {
-          results.innerHTML = 'No drinks found.';
-          return;
-        }
-
-        results.innerHTML = '';
-        data.drinks.forEach(drink => {
-          const drinkDiv = document.createElement('div');
-          drinkDiv.classList.add('drink-item');
-          drinkDiv.dataset.drinkId = drink.idDrink;
-
-          const ingredients = [];
-          for (let i = 1; i <= 15; i++) {
-            const ingredient = drink[`strIngredient${i}`];
-            const measurement = drink[`strMeasure${i}`];
-            if (ingredient) {
-              ingredients.push(`${ingredient} - ${measurement || 'to taste'}`);
-            }
-          }
-
-          drinkDiv.innerHTML = `
-            <h2>${drink.strDrink}</h2>
-            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" width="200">
-            <p><strong>Category:</strong> ${drink.strCategory}</p>
-            <p><strong>Alcohol:</strong> ${drink.strAlcoholic}</p>
-            <p><strong>Glass Type:</strong> ${drink.strGlass}</p>
-            <p><strong>Ingredients:</strong></p>
-            <ul>
-              ${ingredients.map(ing => `<li>${ing}</li>`).join('')}
-            </ul>
-            <p><strong>Instructions:</strong> ${drink.strInstructions}</p>
-            <hr>
-          `;
-
-          drinkDiv.addEventListener('click', () => {
-            const drinkId = drink.idDrink;
-            const drinkName = drink.strDrink;
-
-            if (selectedDrinkIds.has(drinkId)) {
-              selectedDrinkIds.delete(drinkId);
-              selectedDrinkNames.delete(drinkId);
-              drinkDiv.classList.remove('selected');
-            } else {
-              selectedDrinkIds.add(drinkId);
-              selectedDrinkNames.set(drinkId, drinkName);
-              drinkDiv.classList.add('selected');
-            }
-
-            updateSelectedCountDisplay();
-            console.log("Selected Drink IDs:", Array.from(selectedDrinkIds));
-          });
-
-          results.appendChild(drinkDiv);
-        });
-      });
-
-      updateSelectedCountDisplay();
-    });
-
-
-  </script>
-
+  <script src="/scripts/create_list.js" defer></script> <!-- Link to the new JS file -->
 </body>
 </html>

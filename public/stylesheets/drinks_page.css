@@ -1,70 +1,292 @@
-  .card {
-    max-width: 500px;
-    margin: auto;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
+/* public/stylesheets/drinks_page.css */
 
-  .card a {
-    color: #419677;
+/* General Card Structure */
+.card {
+  max-width: 600px;
+  margin: 30px auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  border: 1px solid var(--border-color); /* Uses theme variable */
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+  background-color: var(--box-color);    /* Uses theme variable */
+  color: var(--text-main);              /* Uses theme variable */
+}
+/* No specific .dark .card needed if --box-color, --border-color, --text-main are defined for dark mode */
+
+.card a {
+  color: var(--accent-primary); /* Uses theme variable */
+  font-weight: bold;
+  text-decoration: none;
+}
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  gap: 25px;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+.card-header img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border-color-light, #eee); /* Uses theme variable */
+}
+.dark .card-header img { /* Optional: if you want image border to change in dark mode */
+    border-color: var(--border-color-light-dark, var(--border-color-dark));
+}
+
+.drink-info h1 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 2.2em;
+  color: var(--text-emphasis); /* Uses theme variable */
+  line-height: 1.2;
+}
+.drink-info p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: var(--text-secondary); /* Uses theme variable */
+}
+.drink-info p strong {
+    color: var(--warning-color); /* Uses theme variable */
+}
+
+/* Tabs */
+.tabs {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--border-color-light); /* Uses theme variable */
+  padding-bottom: 0;
+  display: flex;
+}
+.dark .tabs {
+    border-bottom-color: var(--border-color-light-dark, var(--border-color-dark));
+}
+
+.tabs button {
+  padding: 12px 20px;
+  font-family: 'Poppins', sans-serif;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--text-secondary); /* Uses theme variable */
+  cursor: pointer;
+  margin-right: 8px;
+  font-weight: 500;
+  font-size: 1.05em;
+  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+.tabs button.active {
+  color: var(--accent-primary); /* Uses theme variable */
+  border-bottom-color: var(--accent-primary); /* Uses theme variable */
+  font-weight: 600;
+}
+.tabs button:hover:not(.active) {
+    color: var(--text-emphasis); /* Uses theme variable */
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 20px 5px;
+  font-family: 'Poppins', sans-serif;
+  min-height: 120px;
+  /* display: none; /* Vue handles display with v-if */
+}
+.tab-content ul, .tab-content ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-main); /* Ensure content text is themed */
+}
+.tab-content li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* Nutrition Specifics */
+.nutrition-details p, /* Assuming Vue might wrap nutrition in a div with this class if needed */
+.nutrition-details li {
+    margin-bottom: 6px;
+    font-size: 0.95em;
+    color: var(--text-main); /* Themed */
+}
+.nutrition-details strong {
+    color: var(--text-emphasis); /* Themed */
+}
+span.label-list { /* if Vue creates spans with this class */
+    font-style: italic;
+    color: var(--accent-secondary); /* Themed */
+}
+span.cautions-list { /* if Vue creates spans with this class */
+    color: var(--warning-color); /* Themed */
     font-weight: bold;
-    text-decoration: none; /* Optional: Removes underline */
-  }
+}
+p.error-message-nutrition {
+    color: var(--error-color, red); /* Themed */
+    font-style: italic;
+}
+p.info-message-nutrition {
+    font-style: italic;
+    color: var(--text-secondary); /* Themed */
+}
+p.loading-message { /* General loading message */
+    color: var(--text-muted);
+    text-align: center;
+    padding: 15px;
+}
 
-  .card-header {
-    display: flex;
-    gap: 50px;
-  }
 
-  .card-header img {
-    width: 170px;
-    height: 160px;
-    border-radius: 12px;
-  }
-  .tabs {
-    margin-top: 16px;
-    border-radius: 8px;
-  }
-  .tabs button {
-    padding: 10px 18px;
-    font-family: 'Poppins', sans-serif;
-    border: none;
-    border-radius: 8px;
-    background: #eee;
-    cursor: pointer;
-  }
-  .tabs .active {
-    background: #59caa0;
-    color: white;
-  }
+/* Review Button and Form */
+.review-btn {
+  background: var(--accent-primary); /* Themed */
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-on-accent);       /* Themed */
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 25px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1.05em;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+.review-btn:hover{
+  background: var(--accent-secondary-hover); /* Themed */
+}
 
-  .tab-content ul, .tab-content ol {
-    margin: 12px 0;
-    font-family: 'Poppins', sans-serif;
-  }
-  .review-btn {
-    background: #59caa0;
-    font-family: 'Poppins', sans-serif;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    margin-top: 16px;
-    cursor: pointer;
-    width: 100%;
-  }
+.review-form {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--border-color-light); /* Themed */
+  border-radius: 8px;
+  background-color: var(--bg-alt); /* Themed */
+}
+.dark .review-form {
+    background-color: var(--bg-alt-dark, var(--in-box-color)); /* More specific dark bg */
+    border-color: var(--border-color-dark, var(--border-color));
+}
 
-  .review-btn:hover{
-    background: #2a806d;
-  }
-  .reviews {
-    margin-top: 16px;
-  }
-  .review {
-    border-top: 1px solid #eee;
+.review-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
     font-family: 'Poppins', sans-serif;
-    padding: 8px 0;
-  }
+    color: var(--text-emphasis); /* Themed */
+}
+
+.review-form label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-main); /* Themed */
+}
+
+.review-form input[type="text"],
+.review-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--border-color); /* Themed */
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95em;
+  background-color: var(--input-bg);   /* Themed */
+  color: var(--input-text);            /* Themed */
+}
+.dark .review-form input[type="text"],
+.dark .review-form textarea {
+    background-color: var(--input-bg-dark);  /* Themed */
+    color: var(--input-text-dark);           /* Themed */
+    border-color: var(--border-color-dark-input, var(--border-color-dark)); /* Themed */
+}
+
+.review-form input[type="text"]:focus,
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary); /* Themed */
+    box-shadow: 0 0 0 2px var(--accent-primary-transparent); /* Themed */
+}
+
+.review-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.submit-review-btn {
+  background: var(--accent-primary);   /* Themed */
+  color: var(--text-on-accent);        /* Themed */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+  transition: background-color 0.2s ease;
+}
+.submit-review-btn:hover {
+  background: var(--accent-primary-hover); /* Themed */
+}
+
+/* Reviews Display Area */
+.reviews {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color-light); /* Themed */
+}
+.dark .reviews {
+    border-top-color: var(--border-color-light-dark, var(--border-color-dark));
+}
+
+.reviews h3 {
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 15px;
+  color: var(--text-emphasis); /* Themed */
+  font-size: 1.4em;
+}
+
+.review {
+  border-bottom: 1px solid var(--border-color-extralight); /* Themed */
+  font-family: 'Poppins', sans-serif;
+  padding: 15px 0;
+  color: var(--text-main); /* Ensure review text itself is themed */
+}
+.dark .review {
+    border-bottom-color: var(--border-color-extralight-dark, #333); /* Specific dark for very light separator */
+}
+.review:last-child {
+    border-bottom: none;
+}
+
+.review p {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+.review strong { /* Reviewer's name */
+  color: var(--text-emphasis); /* Themed */
+  font-size: 1.05em;
+}
+.review .review-score {
+    margin-left: 10px;
+    font-weight: bold;
+    color: var(--warning-color); /* Themed */
+}
+
+/* General Loading/Error messages for the whole page if needed */
+.loading-message.card, .error-message.card { /* If error is shown in a .card structure */
+    text-align: center;
+    padding: 30px;
+    color: var(--text-muted); /* Themed */
+}
+.error-message.card p a { /* Link within error message */
+    color: var(--link-color); /* Themed */
+}
+
