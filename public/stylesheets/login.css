@@ -111,7 +111,7 @@ body > .main-content {
     padding: 8px 10px;
 }
 .form-group input[type="file"]::-webkit-file-upload-button {
-    background-color: var(--accent-secondary);
+    background-color: var(--accent-primary);
     color: var(--text-on-accent);
     border: none;
     padding: 8px 12px;
@@ -121,7 +121,7 @@ body > .main-content {
     transition: background-color 0.2s ease;
 }
 .dark .form-group input[type="file"]::-webkit-file-upload-button {
-    background-color: var(--accent-secondary); /* Your dark mode accent for this */
+    background-color: var(--accent-primary); /* Your dark mode accent for this */
     /* color may also need to change if --text-on-accent doesn't work for dark */
 }
 .form-group input[type="file"]::-webkit-file-upload-button:hover {
@@ -147,7 +147,7 @@ body > .main-content {
 }
 
 .form-submit-btn:hover {
-    background-color: var(--accent-primary-hover);
+    background-color: var(--accent-secondary-hover);
 }
 
 /* Alert Message */

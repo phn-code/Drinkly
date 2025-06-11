@@ -1,5 +1,8 @@
 // public/scripts/create_list.js
 document.addEventListener('DOMContentLoaded', () => {
+let currentListName = 'My New List'; // Default or placeholder
+let currentListDescription = '';   // Default
+let currentListIconUrl = null;     // Default
 // ... (all your existing const declarations for elements) ...
 const listTitleDisplay = document.getElementById('listTitleDisplay');
 const searchBtn = document.getElementById('searchBtn');
@@ -13,14 +16,15 @@ const selectedDrinkNames = new Map();
 const selectedNamesList = document.getElementById('selectedNames');
 // ... (getListDetails, updateSelectedCountDisplay, closeBtn, doneBtn logic remains the same) ...
 (async () => {
-    try {
-        const response = await fetch('/loginUser/getListDetails', {
-            credentials: 'include'
-        });
+     try {
+        const response = await fetch('/loginUser/getListDetails', { credentials: 'include' });
         if (response.ok) {
             const data = await response.json();
             if (data.listName) {
                 listTitleDisplay.textContent = `Creating list: ${data.listName}`;
+                currentListName = data.listName; // Store it
+                currentListDescription = data.listDescription || ''; // Store it
+                currentListIconUrl = data.selectedListIcon || null; // Store it
             } else {
                 listTitleDisplay.textContent = 'Creating New List';
             }
@@ -57,14 +61,32 @@ if (doneBtn) {
             alert("No drinks have been selected to save.");
             return;
         }
+
+        if (!currentListName || currentListName.trim() === '') {
+            alert("Please ensure your list has a name.");
+            // Potentially focus on a list name input field if you have one
+            return;
+        }
+
         const selectedDrinks = Array.from(selectedDrinkIds).map(id => ({ id }));
         resultsDiv.innerHTML = '<p class="info-message">Saving list...</p>';
+
+        // --- CONSTRUCT THE FULL PAYLOAD ---
+        const payload = {
+            listName: currentListName.trim(), // Use the stored/retrieved list name
+            description: currentListDescription ? currentListDescription.trim() : null,
+            listIconUrl: currentListIconUrl || null, // Send null if not set
+            selectedDrinks: selectedDrinks
+        };
+
+        console.log("CLIENT: Sending to /lists/saveFullList:", JSON.stringify(payload)); // DEBUG
+
         try {
             const response = await fetch('/lists/saveFullList', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ selectedDrinks })
+                body: JSON.stringify(payload) // <<< SEND THE FULL PAYLOAD
             });
             const data = await response.json();
             if (response.ok) {
@@ -72,13 +94,15 @@ if (doneBtn) {
                 window.location.href = '/lists.html';
             } else {
                 alert('Error saving list: ' + (data.error || 'Unknown server error'));
+                // Re-enable search or provide other UI feedback
                 if (searchBox.value.trim()) performSearch();
-                else resultsDiv.innerHTML = '<p class="info-message">Save failed. Try searching again.</p>';
+                else resultsDiv.innerHTML = '<p class="info-message">Save failed. You can try searching again or check the selected drinks.</p>';
             }
         } catch (err) {
+            console.error("Network or server error saving list:", err);
             alert('Something went wrong while saving the list.');
             if (searchBox.value.trim()) performSearch();
-            else resultsDiv.innerHTML = '<p class="info-message">Save failed due to network error. Try searching again.</p>';
+            else resultsDiv.innerHTML = '<p class="info-message">Save failed due to a network error. You can try searching again.</p>';
         }
     });
 }
