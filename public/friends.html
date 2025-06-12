@@ -19,7 +19,7 @@
       }
     })();
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!--icon for drinkly-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/stylesheets/style.css" />
   <link rel="stylesheet" href="/stylesheets/friends.css">
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
@@ -56,15 +56,12 @@
     </nav>
   </div>
 
-
+ <main class="container text-center margin-from-top main-content">
     <div class="page-wrapper">
-
-        <main class="container text-center margin-from-top main-content">
         <h1>Friends</h1>
         <section class="friends-page-container">
             <div id="main-cont">
                 <div id="friends-cont">
-                  <!-- <h2>Your Friends</h2> -->
                   <section class="friends-grid">
                       <article class="friend-card" v-for="user in friends" :key="user.id">
                         <img
@@ -106,9 +103,9 @@
                 </aside>
             </div>
         </section>
-    </main>
 
     </div>
+    </main>
 
  <div class="footer">
     <p>&copy; 2025 Drinkly</p>

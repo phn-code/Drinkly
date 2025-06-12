@@ -28,7 +28,7 @@
    <script src="scripts/index.js" defer></script>
 
 </head>
-<body>
+<body id="body-cont">
     <!-- Top Navigation Bar -->
   <div class="header">
     <nav class="text-center margin-from-top">
@@ -81,7 +81,7 @@
         </ol>
       </div>
 
-  <!-- Temporary Reviews for now since we don't hve it sorted out -->
+  <!--  Reviews -->
   <button type="button" @click="showForm = !showForm" class="review-btn">
     {{ showForm ? "Cancel" : "Write a Review" }}
   </button>
@@ -147,31 +147,28 @@
         const urlParams = new URLSearchParams(window.location.search);
         const drinkId = urlParams.get('id');
 
-        // Send the review to the backend
         fetch('/addReview', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-    credentials: 'include', // ⬅️ ensures the session cookie is sent
+    credentials: 'include',
     body: JSON.stringify({
       drink_api_id: drinkId,
-      review_score: 5, // replace this with actual score input if you have one
+      review_score: 5,
       review_text: this.newReview.comment,
-      times_drunk: 1 // you can make this dynamic too
+      times_drunk: 1
     })
   })
   .then(response => response.json())
   .then(data => {
     console.log("✅ Saved to DB:", data);
 
-    // Optionally update local UI
     this.reviews.push({
       name: this.newReview.name,
       comment: this.newReview.comment
     });
 
-    // Reset form
     this.newReview.name = '';
     this.newReview.comment = '';
     this.showForm = false;
@@ -195,7 +192,6 @@
     const reviewResponse = await fetch(`/getReviews/${id}`);
     const reviewData = await reviewResponse.json();
 
-    // Map the backend reviews into your format
     this.reviews = reviewData.map(r => ({
       name: r.username,
       comment: r.review_text,

@@ -1,14 +1,7 @@
-/* public/stylesheets/list_page.css */
-
-/* General Page Structure (if not covered by global style.css for this page specifically) */
-.page-wrapper {
-    /* If you need specific padding for the content area of lists.html */
-    /* padding: 20px; */
-}
 
 .lists-container {
-    max-width: 900px; /* Slightly wider to accommodate grid nicely */
-    margin: 20px auto; /* Space from header and centering */
+    max-width: 900px;
+    margin: 20px auto;
     padding: 20px;
     text-align: center;
 }
@@ -16,30 +9,30 @@
 .lists-container h1 {
     font-size: 2.5em;
     font-weight: 600;
-    color: var(--text-emphasis, #2c2c2c); /* Use CSS variable */
+    color: var(--text-emphasis, #2c2c2c);
     margin-bottom: 30px;
 }
 
-/* "Create New List" Button */
+
 .create-new-list-button {
     display: block;
-    border: 2px dashed var(--accent-primary, #a0d8c0); /* Use CSS variable */
+    border: 2px dashed var(--accent-primary, #a0d8c0);
     border-radius: 15px;
-    background-color: var(--bg-alt, #f0fafa); /* Use CSS variable */
-    padding: 40px 30px; /* Adjusted padding */
+    background-color: var(--bg-alt, #f0fafa);
+    padding: 40px 30px;
     text-align: center;
     text-decoration: none;
     color: var(--text-main);
-    max-width: 380px; /* Control width */
+    max-width: 380px;
     margin: 0 auto 40px auto;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .dark .create-new-list-button {
-    background-color: var(--bg-alt-dark, #282828); /* Dark mode alternate background */
-    border-color: var(--accent-primary); /* Accent might stay same or have a dark version */
-    color: var(--text-main); /* Uses dark mode text color */
+    background-color: var(--bg-alt-dark, #282828);
+    border-color: var(--accent-primary);
+    color: var(--text-main);
 }
 
 .create-new-list-button:hover {
@@ -54,7 +47,7 @@
 
 
 .create-new-list-icon {
-    font-size: 3em; /* Slightly smaller */
+    font-size: 3em;
     line-height: 1;
     display: block;
     margin-bottom: 15px;
@@ -62,43 +55,42 @@
 }
 
 .create-new-list-text {
-    font-size: 1.2em; /* Slightly smaller */
+    font-size: 1.2em;
     font-weight: 500;
     margin: 0;
-    color: var(--text-main); /* Uses dark mode text color if .dark is on html/body */
+    color: var(--text-main);
 }
 
-/* Existing Lists Grid */
+
 .existing-lists-grid {
-    display: grid; /* Changed to grid for better alignment */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
-    gap: 25px; /* Increased gap */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
     margin-top: 20px;
-    justify-items: center; /* Center items if grid cells are wider than cards */
+    justify-items: center;
 }
 
 .list-card {
-    background-color: var(--box-color); /* Uses theme variable */
-    border: 1px solid var(--border-color); /* Uses theme variable */
-    border-radius: 10px; /* More pronounced radius */
-    width: 100%; /* Make card take full width of grid cell */
-    max-width: 220px; /* Max card width */
+    background-color: var(--box-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 220px;
     padding: 15px;
     cursor: pointer;
     transition: box-shadow 0.3s ease, transform 0.2s ease;
     text-align: center;
     display: flex;
     flex-direction: column;
-    min-height: 200px; /* Ensure some min height */
+    min-height: 200px;
 }
 .dark .list-card {
-    /* background-color already handled by var(--box-color) */
-    border-color: var(--border-color-dark, #444); /* Specific dark border if needed */
+    border-color: var(--border-color-dark, #444);
 }
 
 
 .list-card:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Enhanced hover */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     transform: translateY(-3px);
 }
 .dark .list-card:hover {
@@ -107,11 +99,11 @@
 
 .list-icon {
     width: 100%;
-    height: 120px; /* Increased height for icon/image */
+    height: 120px;
     object-fit: cover;
-    border-radius: 6px; /* Rounded corners for image */
-    margin-bottom: 10px; /* Space below image */
-    background-color: var(--bg-alt, #f0f0f0); /* Placeholder bg for image */
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: var(--bg-alt, #f0f0f0);
 }
 .dark .list-icon {
     background-color: var(--bg-alt-dark, #333);
@@ -119,69 +111,69 @@
 
 
 .list-info {
-    flex-grow: 1; /* Allows text to take space and push button down */
+    flex-grow: 1;
 }
 .list-info h3 {
-    font-size: 1.15em; /* Slightly larger */
+    font-size: 1.15em;
     margin: 10px 0 5px;
-    color: var(--text-emphasis); /* Uses theme variable */
+    color: var(--text-emphasis);
     word-break: break-word;
 }
 
 .list-info p {
-    color: var(--text-secondary); /* Uses theme variable */
+    color: var(--text-secondary);
     font-size: 0.9em;
-    margin-bottom: 10px; /* Space before delete button */
+    margin-bottom: 10px;
 }
 
 .delete-list-btn {
-    background-color: var(--error-color, #e74c3c); /* Use theme variable */
+    background-color: var(--error-color, #e74c3c);
     color: var(--text-on-accent, white);
     border: none;
-    padding: 8px 15px; /* More padding */
+    padding: 8px 15px;
     border-radius: 6px;
     font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: auto; /* Push to bottom if card has extra space */
+    margin-top: auto;
 }
 
 .delete-list-btn:hover {
-    background-color: var(--error-color-hover, #c0392b); /* Use theme variable */
+    background-color: var(--error-color-hover, #c0392b);
 }
 
-/* Modal Styles (Create List Modal & View Drinks Modal) */
+
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--modal-overlay-bg, rgba(0,0,0,0.6)); /* Theme variable */
-    display: flex; /* Already flex for centering */
+    background: var(--modal-overlay-bg, rgba(0,0,0,0.6));
+    display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0s linear 0.3s; /* Delay visibility hide */
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
 
 .modal-overlay.active {
     opacity: 1;
     visibility: visible;
-    transition-delay: 0s; /* Remove delay for showing */
+    transition-delay: 0s;
 }
 
 .modal-content {
-    background: var(--box-color); /* Use theme variable */
-    color: var(--text-main); /* Use theme variable */
-    padding: 25px 30px; /* Adjusted padding */
+    background: var(--box-color);
+    color: var(--text-main);
+    padding: 25px 30px;
     border-radius: 12px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.15); /* Softer shadow */
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
     width: 90%;
-    max-width: 500px; /* Max width for create list modal */
-    max-height: 90vh; /* Max height */
+    max-width: 500px;
+    max-height: 90vh;
     overflow-y: auto;
     position: relative;
     transform: scale(0.95);
@@ -198,14 +190,14 @@
 
 .modal-close-btn {
     position: absolute;
-    top: 12px; /* Adjusted position */
+    top: 12px;
     right: 15px;
     font-size: 1.8em;
     color: var(--text-muted);
     cursor: pointer;
     border: none;
     background: none;
-    padding: 5px; /* Make clickable area slightly larger */
+    padding: 5px;
     line-height: 1;
 }
 
@@ -221,8 +213,8 @@
     color: var(--text-emphasis);
 }
 
-/* Form Group Styling within Modal (consistent with login.css) */
-.modal-content .form-group { /* Specific to modal forms */
+
+.modal-content .form-group {
     margin-bottom: 20px;
 }
 
@@ -261,7 +253,6 @@
     border-color: var(--accent-primary);
     box-shadow: 0 0 0 3px var(--accent-primary-transparent);
 }
-/* Dark mode focus already handled by variables if border-color changes */
 
 
 .modal-content .form-group textarea {
@@ -269,14 +260,13 @@
     min-height: 80px;
 }
 
-/* Image Selector in Modal */
 .default-image-selector {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Smaller images */
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     gap: 8px;
     margin-top: 10px;
     padding: 10px;
-    background-color: var(--bg-alt, #f0f0f0); /* Slight bg for selector area */
+    background-color: var(--bg-alt, #f0f0f0);
     border-radius: 6px;
 }
 .dark .default-image-selector {
@@ -286,20 +276,20 @@
 
 .default-image-option {
     width: 100%;
-    height: 70px; /* Square images */
+    height: 70px;
     object-fit: cover;
     cursor: pointer;
-    border: 3px solid transparent; /* Thicker border for selection */
+    border: 3px solid transparent;
     border-radius: 5px;
     transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .dark .default-image-option {
-    opacity: 0.9; /* Slightly less prominent in dark mode until selected */
+    opacity: 0.9;
 }
 
 .default-image-option:hover {
     transform: scale(1.05);
-    border-color: var(--accent-secondary, #ccc); /* Different hover border */
+    border-color: var(--accent-secondary, #ccc);
 }
 .default-image-option.selected {
     border-color: var(--accent-primary);
@@ -307,14 +297,14 @@
     opacity: 1;
 }
 
-#selectedImagePreview { /* Text "No image selected" or similar */
+#selectedImagePreview {
     font-size: 0.9em;
     color: var(--text-muted);
     margin-top: 10px;
-    min-height: 20px; /* Prevent layout jump */
+    min-height: 20px;
 }
 
-/* Modal Submit Button */
+
 .modal-submit-btn {
     display: block;
     width: 100%;
@@ -327,26 +317,26 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 20px; /* Space before submit */
+    margin-top: 20px;
 }
 
 .modal-submit-btn:hover {
     background-color: var(--accent-primary-hover);
 }
 
-/* Styles for Drinks in List Modal (#listDrinksModal) */
-#listDrinksModal .modal-content { /* Specific for the drinks list modal */
-    max-width: 700px; /* Potentially wider for displaying drink cards */
+
+#listDrinksModal .modal-content {
+    max-width: 700px;
 }
 
 #drinksInList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Grid for drink cards */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     margin-top: 15px;
 }
 
-#drinksInList .drink-card { /* Re-using .drink-card, or use a more specific class */
+#drinksInList .drink-card {
     background: var(--box-color);
     border: 1px solid var(--border-color);
     padding: 10px;
@@ -356,7 +346,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 .dark #drinksInList .drink-card {
-    background: var(--in-box-color, var(--box-color)); /* Use in-box or general box color */
+    background: var(--in-box-color, var(--box-color));
     border-color: var(--border-color-dark, var(--border-color));
 }
 
@@ -376,9 +366,3 @@
     word-break: break-word;
 }
 
-/* Blurring for page wrapper (no change needed here, was correct) */
-.page-wrapper.blurred {
-    filter: blur(5px);
-    pointer-events: none;
-    user-select: none;
-}

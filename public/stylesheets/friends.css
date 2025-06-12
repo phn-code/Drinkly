@@ -1,37 +1,12 @@
-/* ==========================================================================
-   Base and General Styles (Inspired by list_page.css & common needs)
-   ========================================================================== */
 
-
-/* Assuming .header and .footer are styled in your global style.css */
-/* If not, you'd bring those styles here or ensure they are globally applied */
-
-.page-wrapper { /* New wrapper from your HTML */
-    /* Add padding here if you removed it from body to avoid affecting header/footer */
-    padding: 20px;
-}
-
-main {
-    /* Removed padding from here as .page-wrapper or .friends-page-container can handle it */
-}
-
-/* Utility */
-h1.centered { /* From friends.css */
-  text-align: center;
-}
-
-
-/* ==========================================================================
-   Friends Page Specific Container & Layout
-   ========================================================================== */
 
 .friends-page-container {
     max-width: 1100px;
     margin: 0 auto;
-    padding-top: 20px; /* Space from header */
+    padding-top: 20px;
 }
 
-.friends-page-container > h1 { /* Specific to the main H1 of this page */
+.friends-page-container > h1 {
     font-size: 2.5em;
     font-weight: 600;
     color: var(--text-emphasis, #2c2c2c); /* Use CSS var */
@@ -39,38 +14,32 @@ h1.centered { /* From friends.css */
     text-align: center;
 }
 
-#main-cont { /* Main content flex container */
+#main-cont {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  gap: 30px; /* Consistent gap */
-  align-items: flex-start; /* Align items to the top */
-  padding: 24px 0; /* Padding from friends.css */
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+  padding: 24px 0;
 }
 
-#friends-cont { /* Main friends list area */
-  flex: 2; /* Takes up more space */
+#friends-cont {
+  flex: 2;
   min-width: 300px;
   color: var(--text-main);
   border-radius: 10px;
   padding: 20px;
 }
 
-#follow-cont { /* Sidebar for finding people */
+#follow-cont {
   flex: 1;
   min-width: 280px;
-  max-width: 380px; /* Max width for sidebar */
-  background-color: var(--box-color); /* Using var for light/dark */
+  max-width: 380px;
+  background-color: var(--box-color);
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.07);
   color: var(--text-main);
-  margin: 0 auto; /* Center if it wraps to its own line */
-}
-
-/* Dark mode specific container styles from friends.css */
-.dark #friends-cont {
-  /* background-color: var(--box-color); */ /* Already set by var(--box-color) if it changes */
-  /* color: var(--text-main); */ /* Already set */
+  margin: 0 auto;
 }
 
 
@@ -82,18 +51,14 @@ h1.centered { /* From friends.css */
     font-weight: 600;
 }
 
-/* ==========================================================================
-   Search Box (Primarily for #follow-cont sidebar)
-   ========================================================================== */
-
-.search-box { /* General search box style, can be reused */
-  width: 100%; /* Make it full width of its container (e.g., #follow-cont) */
+.search-box {
+  width: 100%;
   padding: 12px 15px;
-  border: 1.5px solid var(--border-color); /* From friends.css, seems more specific */
+  border: 1.5px solid var(--border-color);
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 1em;
-  margin-bottom: 20px; /* Consistent margin */
+  margin-bottom: 20px;
   background-color: var(--bg);
   color: var(--text-main);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -102,216 +67,182 @@ h1.centered { /* From friends.css */
 .search-box:focus {
     border-color: var(--accent-primary);
     outline: none;
-    box-shadow: 0 0 0 3px var(--accent-primary-transparent, rgba(54, 162, 139, 0.15)); /* Use var */
-    background-color: var(--bg); /* Ensure focus bg is same as normal for consistency */
+    box-shadow: 0 0 0 3px var(--accent-primary-transparent, rgba(54, 162, 139, 0.15));
+    background-color: var(--bg);
     color: var(--text-main);
 }
 
-/* Dark mode for search box */
+
 .dark .search-box {
-  background-color: var(--bg2, #2d2d2d); /* Use var for dark bg */
-  border-color: var(--border-color-dark, #444); /* Use var for dark border */
-  color: var(--text-main); /* Ensure text color is correct for dark mode */
+  background-color: var(--bg2, #2d2d2d);
+  border-color: var(--border-color-dark, #444);
+  color: var(--text-main);
 }
 
 .dark .search-box:focus {
   border-color: var(--accent-primary);
-  /* box-shadow already defined in general :focus */
   background-color: var(--bg2);
   color: var(--text-main);
 }
 
-/* ==========================================================================
-   Filter Pills (for #follow-cont sidebar)
-   ========================================================================== */
 
 .filter-row {
   display: flex;
-  gap: 10px; /* Consistent gap */
-  margin-bottom: 20px; /* Consistent margin */
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .filter-pill {
-  padding: 8px 18px; /* Consistent padding */
-  border: 1px solid var(--border-color, #ccc); /* Use var */
-  border-radius: 20px; /* Pill shape */
-  background: var(--bg-alt, white); /* Use var, could be different from main bg */
+  padding: 8px 18px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 20px;
+  background: var(--bg-alt, white);
   cursor: pointer;
   font-weight: 500;
   font-size: 0.9em;
-  color: var(--text-secondary, #5a5a5a); /* Use var */
+  color: var(--text-secondary, #5a5a5a);
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .filter-pill:hover {
-  border-color: var(--accent-secondary-hover-border, #a0d8c0); /* Use var */
-  color: var(--accent-primary); /* Consistent accent color */
+  border-color: var(--accent-secondary-hover-border, #a0d8c0);
+  color: var(--accent-primary);
 }
 
 .filter-pill.active {
-  background: var(--accent-primary); /* Use var for active state */
-  color: var(--text-on-accent, white); /* Use var for text on accent */
+  background: var(--accent-primary);
+  color: var(--text-on-accent, white);
   border-color: var(--accent-primary);
 }
 
-/* ==========================================================================
-   Avatars
-   ========================================================================== */
-
-.profile-avatar { /* General class for all avatars */
+.profile-avatar {
     object-fit: cover;
-    background-color: var(--avatar-bg, #e0e0e0); /* Fallback bg */
-    border: 2px solid var(--avatar-border, #f0f0f0); /* Subtle border */
-    border-radius: 50%; /* All avatars are circular */
+    background-color: var(--avatar-bg, #e0e0e0);
+    border: 2px solid var(--avatar-border, #f0f0f0);
+    border-radius: 50%;
 }
 
-.card-avatar { /* Specific for friend cards */
+.card-avatar {
     width: 80px;
     height: 80px;
     margin-bottom: 15px;
 }
 
-.list-avatar { /* Specific for suggested user list */
+.list-avatar {
   width: 40px;
   height: 40px;
-  /* margin-right removed, using gap on parent instead */
 }
 
-
-/* ==========================================================================
-   Friends Grid & Cards (for #friends-cont)
-   ========================================================================== */
 
 .friends-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjusted minmax for card size */
-  gap: 24px; /* Consistent gap */
-  padding: 24px 0; /* Padding from friends.css */
-  /* justify-items: center; */ /* Usually not needed if cards take full grid cell width */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  padding: 24px 0;
 }
 
 .friend-card {
-  background: var(--box-color); /* Consistent with #friends-cont bg */
-  border: 1px solid var(--border-color, #e1e1e1); /* Use var */
+  background: var(--box-color);
+  border: 1px solid var(--border-color, #e1e1e1);
   border-radius: 10px;
   padding: 20px 16px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06); /* Consistent shadow */
-  transition: box-shadow 0.2s ease, transform 0.2s ease; /* Added transform transition */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 220px; /* Ensure cards have enough height for content */
-  /* max-width: 150px; */ /* This might be too restrictive with padding, let grid control width */
-  /* min-width: 120px; */
-  /* height: 150px; */ /* Remove fixed height to allow content to dictate */
+  min-height: 220px;
 }
 
 .friend-card:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Enhanced hover shadow */
-  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
 }
 
-.friend-card .username { /* Username specifically within a friend card */
-  font: 600 1.15em/1.3 "Inter", system-ui, sans-serif; /* Consistent font usage */
-  color: var(--text-emphasis, #2c2c2c); /* Use var */
+.friend-card .username {
+  font: 600 1.15em/1.3 "Inter", system-ui, sans-serif;
+  color: var(--text-emphasis, #2c2c2c);
   margin-bottom: 15px;
   word-break: break-word;
-  flex-grow: 1; /* Pushes button down if there's space */
+  flex-grow: 1;
 }
 
-/* Ensures button is at the bottom of the card */
 .friend-card button.btn-rm,
 .friend-card button.btn-unfollow {
-    margin-top: auto; /* Pushes button to the bottom */
-    width: calc(100% - 10px); /* Make button slightly less than full card width, for aesthetics */
-    max-width: 150px; /* Max width for the button */
+    margin-top: auto;
+    width: calc(100% - 10px);
+    max-width: 150px;
 }
 
 
-/* ==========================================================================
-   Suggested Users List (for #follow-cont sidebar)
-   ========================================================================== */
 
-.suggested-users { /* Class for the <ul> */
+.suggested-users {
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Space between list items */
+  gap: 12px;
 }
 
-.suggested-user { /* Class for each <li> */
+.suggested-user {
   display: flex;
   align-items: center;
-  gap: 12px; /* Space between avatar, name, button */
-  /* justify-content: space-between; /* This is handled by flex-grow on name */
-  padding: 10px 5px; /* Padding from search_style.css */
-  border-bottom: 1px solid var(--border-light, #f0f0f0); /* Use var for light border */
+  gap: 12px;
+  padding: 10px 5px;
+  border-bottom: 1px solid var(--border-light, #f0f0f0);
 }
 .suggested-user:last-child {
-    border-bottom: none; /* Remove border from last item */
+    border-bottom: none;
 }
 
-.suggested-user span { /* Username in the list */
+.suggested-user span {
     font-weight: 500;
     color: var(--text-main);
-    flex-grow: 1; /* Allows name to take up available space, pushing button to right */
-    /* margin-right: 10px; /* Replaced by gap on parent */
-    overflow: hidden; /* Prevent long names from breaking layout */
+    flex-grow: 1;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 
-/* ==========================================================================
-   Buttons (Add/Remove Friend)
-   ========================================================================== */
-/* Using .btn-rm and .btn-unfollow as primary classes for state */
-
 .btn-rm,
 .btn-unfollow {
     padding: 9px 16px;
     border: none;
-    border-radius: 6px; /* Rounded corners for buttons */
+    border-radius: 6px;
     color: var(--text-on-accent, #ffffff);
     font-weight: 500;
     font-size: 0.9em;
     cursor: pointer;
-    min-width: 110px; /* Decent minimum clickable width */
+    min-width: 110px;
     text-align: center;
     transition: background-color 0.2s ease, opacity 0.2s ease;
-    line-height: 1.4; /* Better vertical text alignment in button */
+    line-height: 1.4;
 }
 
-/* "Add Friend" state (was .btn-unfollow in friends.css, .btn-add in search_style.css) */
-/* Let's standardize on .btn-unfollow being the class when the user IS NOT a friend (i.e., "Add Friend" action) */
-/* And .btn-rm when the user IS a friend (i.e., "Remove Friend" action) */
-/* This seems to match your Vue :class binding */
 
-.btn-unfollow { /* Button state for "Add Friend" */
-  background-color: var(--accent-primary); /* Teal/Green color from your themes */
+.btn-unfollow {
+  background-color: var(--accent-primary);
 }
 .btn-unfollow:hover {
-  background-color: var(--accent-primary-hover); /* Darker on hover */
+  background-color: var(--accent-primary-hover);
 }
 
-.btn-rm { /* Button state for "Remove Friend" */
-  background-color: var(--button-remove-bg, #b0b0b0); /* Softer grey color */
+.btn-rm {
+  background-color: var(--button-remove-bg, #b0b0b0);
 }
 .btn-rm:hover {
-  background-color: var(--button-remove-hover-bg, #999999); /* Darker grey on hover */
+  background-color: var(--button-remove-hover-bg, #999999);
 }
 
-/* Disabled state for buttons */
 .btn-rm:disabled,
 .btn-unfollow:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    background-color: var(--button-disabled-bg, #cccccc); /* More distinct disabled color */
+    background-color: var(--button-disabled-bg, #cccccc);
 }
 
-/* Message for no friends */
 .no-friends-message {
   width: 100%;
   text-align: center;

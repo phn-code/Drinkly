@@ -1,35 +1,32 @@
-/* CSS THEME VARIABLES AND BASE STYLES */
+/*imported font*/
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* Light mode (default) */
 :root {
-  --bg: #FAF9F6;                     /* Main page background */
-  --bg2: #eefef6;                    /* Secondary background (e.g., overlays, distinct sections) */
-  --bg-alt: #f9f9f9;                 /* Alternate light background (e.g., forms, sidebars) */
-  --box-color: white;                /* Default box/card background */
-  --in-box-color: white;             /* Background for elements within boxes (if different) */
+  --bg: #FAF9F6;
+  --bg2: #eefef6;
+  --bg-alt: #f9f9f9;
+  --box-color: white;
+  --in-box-color: white;
   --text-main: #111111;
   --text-secondary: #5a5a5a;
   --text-muted: #707070;
   --text-emphasis: #2c2c2c;
-  --text-on-accent: white;           /* Text color on primary/secondary accent backgrounds */
+  --text-on-accent: white;
 
-  /* Borders */
   --border-color: #E1E1E1;
   --border-color-light: #eeeeee;
   --border-color-extralight: #f5f5f5;
-  --border-color-dark-input: #606060; /* Used by login.css in dark mode, should be defined light if needed */
+  --border-color-dark-input: #606060;
 
-  /* Accents & Links */
-  --accent-primary: #60B99A;          /* Main accent - Green/Teal */
-  --accent-primary-hover: #4CAF8A;    /* Darker Green/Teal */
+  --accent-primary: #60B99A;
+  --accent-primary-hover: #4CAF8A;
   --accent-primary-transparent: rgba(96, 185, 154, 0.2);
-  --accent-secondary: #FF7847;        /* Secondary accent - Orange */
-  --accent-secondary-hover: #E66A3F;  /* Darker Orange */
-  --accent-secondary-hover-bg: #60B99A; /* This was your original conflicting one, maybe rename or remove */
+  --accent-secondary: #FF7847;
+  --accent-secondary-hover: #E66A3F;
+  --accent-secondary-hover-bg: #60B99A;
   --link-color: #3A8DFF;
 
-  /* UI Elements */
   --input-bg: #FFFFFF;
   --input-text: #212529;
   --button-secondary-bg: #6c757d;
@@ -38,57 +35,48 @@
   --modal-overlay-bg: rgba(0,0,0,0.6);
   --warning-color: #ffc107;
   --error-color: #e74c3c;
-  --error-color-hover: #c0392b; /* Unused but defined */
 
   --headline: 'Gloock', serif;
   --body:     'Raleway', sans-serif;
 }
 
-/* Dark mode (when .dark class is on <body>) */
-/* In your main style.css */
-/* ... your existing :root variables ... */
-
+/* Dark mode */
 .dark {
    --bg: #1b1b1b;
   --bg2: #2A2A2A;
-  --bg-alt: #252525;                   /* Dark alternate background */
-  --bg-alt-dark: #282828;              /* For lists_page, can be same as --bg-alt if desired */
-  --box-color: #2d2d2d;               /* Darker than --bg for cards/boxes */
-  --in-box-color: #3a3a3a;             /* Even darker, for elements inside boxes like forms */
+  --bg-alt: #252525;
+  --bg-alt-dark: #282828;
+  --box-color: #2d2d2d;
+  --in-box-color: #3a3a3a;
   --text-main: #F5F5F5;
   --text-secondary: #bbbbbb;
   --text-muted: #A0A0A0;
   --text-emphasis: #f0f0f0;
-  /* --text-on-accent: white; /* Usually stays white or light grey */
 
-  /* Borders */
   --border-color: #444444;
-  --border-color-dark: #555555;        /* More prominent dark border */
-  --border-color-light: #3a3a3a;       /* Subtle border within dark components */
-  --border-color-extralight: #303030;  /* Even more subtle */
-  --border-color-dark-input: #606060;  /* Border for inputs in dark mode */
+  --border-color-dark: #555555;
+  --border-color-light: #3a3a3a;
+  --border-color-extralight: #303030;
+  --border-color-dark-input: #606060;
 
-
-  /* Accents & Links */
-  --accent-primary: #FF7847;          /* Main accent - Orange for dark */
-  --accent-primary-hover: #D9643B;    /* Darker Orange */
+  --accent-primary: #FF7847;
+  --accent-primary-hover: #D9643B;
   --accent-primary-transparent: rgba(255, 120, 71, 0.25);
-  --accent-secondary: #60B99A;        /* Secondary accent - Green/Teal for dark */
-  --accent-secondary-hover: #4CAF8A;  /* Darker Green/Teal */
+  --accent-secondary: #60B99A;
+  --accent-secondary-hover: #4CAF8A;
   --link-color: #5BA6FF;
 
-  /* UI Elements */
-  --input-bg: #404040;                 /* Renamed from --input-bg-dark for consistency */
-  --input-text: #e8e8e8;               /* Renamed from --input-text-dark */
+  --input-bg: #404040;
+  --input-text: #e8e8e8;
   --button-secondary-bg: #5a6268;
   --button-secondary-hover-bg: #495057;
-  --button-disabled-bg: #555555;       /* Renamed from --button-disabled-bg-dark */
+  --button-disabled-bg: #555555;
   --modal-overlay-bg: rgba(0,0,0,0.75);
   --warning-color: #ffd700;
   --error-color: #ff8080;
 }
 
-/* GLOBAL STYLES */
+/* Global Styles */
 
 body {
   background-color: var(--bg);
@@ -119,7 +107,7 @@ body, button, input, select{
   flex: 1;
 }
 
-/* LINK STYLING */
+/* Link style */
 
 a {
   color: var(--accent-primary);
@@ -132,7 +120,7 @@ a:hover {
    color: var(--accent-primary-hover);
 }
 
-/*  BUTTONS and LINKS */
+/*  buttons and nav link style */
 
 .button-primary {
   background-color: transparent;
@@ -178,12 +166,11 @@ a:hover {
   gap: 1.5rem;
 }
 
-/* SPACING FOR LINKS */
 nav a {
   margin-right: 1.5rem;
 }
 
-/* GRID LAYOUT */
+/* grid style used in searching */
 
 .grid {
   display: grid;
@@ -192,7 +179,7 @@ nav a {
   margin-top: 2rem;
 }
 
-/* CONTAINER WRAPPER  */
+/* container wrapper  */
 
 .container {
   width: 90%;
@@ -200,32 +187,26 @@ nav a {
   margin: auto;
 }
 
-/*  HEADER & FOOTER  */
+/*  header and footer  */
 
 .header {
   text-align: center;
   padding: 0.5rem 2rem;
-  /* border: 1px solid var(--border-color); */
   z-index: 10;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-  /* background-color: var(--bg2); */
-  /* border-radius: 10px; */
 }
 
 .footer {
-  bottom: 0;       /* Stick to the bottom of the body */
-  left: 0;         /* Align to the left edge */
-  width: 100%;     /* Span the full width */
-  height: 60px;    /* KEY: Define a fixed height for the footer */
-                   /* The body's padding-bottom should be >= this height */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
   text-align: center;
-  padding: 0.1rem;   /* Or adjust to (height - text_line_height) / 2 for vertical centering of text */
-  /* margin-top: 5rem; /* REMOVE this, it's not needed with absolute positioning */
+  padding: 0.1rem;
   border-top: 1px solid var(--border-color);
   background-color: var(--box-color);
   color: var(--text-muted);
   font-size: 1rem;
-  box-sizing: border-box; /* Include padding in height */
+  box-sizing: border-box;
 }
 
 .dark .footer {
@@ -233,7 +214,7 @@ nav a {
   color: var(--text-muted);
 }
 
-/* NAVIGATION BAR STYLES */
+/* nav bar in html style*/
 nav {
   display: flex;
   justify-content: space-between;
@@ -254,6 +235,7 @@ nav .nav-item:hover {
   color: var(--accent-primary);
 }
 
+/*For hovering over icons and links in header */
 .pulse-hover {
   transition: transform 0.2s ease-in-out, font-weight 0.2s ease-in-out;
 }
@@ -276,7 +258,7 @@ nav .nav-item:hover {
 }
 
 
-/*  UTILITY CLASSES  */
+/*  utility  */
 
 .text-center {
   text-align: center;
@@ -290,41 +272,29 @@ nav .nav-item:hover {
   border-radius: 8px;
 }
 
-/*background */
-
-
-.overlay-content {
-  background-color: var(--bg2);
-  padding: 1rem;
-  border-radius: 10px;
-  color: var();
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 /* Logo for Drinkly on top nav bar left side*/
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.4rem; /* Controls spacing between icon and text */
+  gap: 0.4rem;
   text-align: left;
 }
 
 .logo p {
   margin: 0;
-  font-size: 1.5rem; /* Adjust as needed */
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
 /*hero image in index html */
  .hero-section {
-      margin-bottom: 30px; /* Space below the hero image */
-      text-align: center; /* Center the image if it's smaller than container */
+      margin-bottom: 30px;
+      text-align: center;
     }
     .hero-image {
-      width: auto; /* Make image responsive */
-      height: 30vh; /* Maintain aspect ratio */
+      width: auto;
+      height: 30vh;
     }
 
-
+/*for font styling*/
 html{ -webkit-font-smoothing: antialiased; }

@@ -1,5 +1,5 @@
 
-/* search_style.css */
+/* search page components */
 .search-page body {
   background-color: #fdfbf8;
   color: #333;
@@ -7,9 +7,9 @@
 
 /* Container for the main content of the search page */
 .search-page-container {
-    max-width: 800px; /* Wider for search results */
+    max-width: 800px;
     margin: 0 auto;
-    text-align: center; /* Center the h1 and form controls */
+    text-align: center;
 }
 
 .search-page-container h1 {
@@ -22,7 +22,7 @@
 /* Styling for the search input and button area */
 .search-controls {
     margin-bottom: 30px;
-    display: flex; /* Align input and button nicely */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -103,7 +103,7 @@
 #results {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem; /* spacing between grid items */
+  gap: 1rem;
   margin-top: 1rem;
 }
 
@@ -116,18 +116,15 @@
   color: var(--text-main);
   border-radius: 8px;
   cursor: pointer;
-  /* Add more properties to transition if you change them on hover */
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid var(--border-color);
-  text-decoration: none; /* If the .search-result itself is an <a> tag */
+  text-decoration: none;
 }
 
 .search-result:hover {
-  color: var(--text-main-hover, var(--text-main)); /* Optional: change text color on hover */
-  transform: translateY(-2px); /* Slight lift effect */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
-  /* You could also change the border color on hover if desired */
-  /* border-color: var(--accent-primary); */
+  color: var(--text-main-hover, var(--text-main));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .search-result:hover .drink-name {

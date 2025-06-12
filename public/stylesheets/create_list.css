@@ -1,23 +1,23 @@
-/* public/stylesheets/create_list_page.css */
 
-/* Container for page-specific actions like Done/Close and List Title */
 .page-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 0; /* Adjust padding as needed, assuming .search-page-container provides horizontal padding */
+    padding: 15px 20px;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
+    border-radius: 8px 8px 0 0;
 }
+
 
 .list-title-display {
     font-size: 1.5em;
     font-weight: 600;
-    text-align: center; /* Center the title if it's in the middle */
-    flex-grow: 1; /* Allow it to take space if buttons are on either side */
+    text-align: center;
+    flex-grow: 1;
 }
 
-/* General style for action buttons on this page */
+
 .page-actions button {
     padding: 10px 20px;
     font-size: 1em;
@@ -25,10 +25,9 @@
     border: none;
     cursor: pointer;
     font-weight: 500;
-    min-width: 100px; /* Give buttons some minimum width */
+    min-width: 100px;
 }
-
-#closeBtn { /* Specific styling for Close button */
+#closeBtn {
     background-color: var(--button-secondary-bg, #6c757d);
     color: var(--text-on-accent, white);
 }
@@ -37,7 +36,7 @@
     background-color: var(--button-secondary-hover-bg, #5a6268);
 }
 
-#doneBtn { /* Specific styling for Done button */
+#doneBtn {
     background-color: var(--accent-primary);
     color: var(--text-on-accent, white);
 }
@@ -46,11 +45,9 @@
     background-color: var(--accent-primary-hover);
 }
 
-/* Styling for the selection status area */
 #selectionStatus {
-    margin-top: 30px; /* More space after results */
+    margin-top: 30px;
     padding: 20px;
-    /* background-color: var(--bg-alt, #f8f9fa); */
     border: 1px solid var(--border-color);
     border-radius: 8px;
     text-align: left;
@@ -60,17 +57,17 @@
 #selectionStatus h3 {
     margin-top: 0;
     margin-bottom: 10px;
-    font-size: 1.2em; /* Slightly larger */
+    font-size: 1.2em;
     color: var(--text-emphasis);
     border-bottom: 1px solid var(--border-color-light, #eee);
     padding-bottom: 8px;
 }
 
 #selectedNames {
-    list-style-type: none; /* Remove bullets for a cleaner look */
+    list-style-type: none;
     padding-left: 0;
     font-size: 0.95em;
-    max-height: 150px; /* Limit height and make scrollable if many items */
+    max-height: 150px;
     overflow-y: auto;
 }
 
@@ -83,40 +80,43 @@
     border-bottom: none;
 }
 
-/* Styles for .drink-item when displayed in the #results for this page */
-/* These are for how they look when you're *selecting* them for a list */
-#results .drink-item { /* Override or extend .drink-item from search.css if needed */
-    flex-direction: row; /* Keep image and text side-by-side for list selection */
+#results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+#results .drink-item {
+    flex-direction: row;
     align-items: center;
     padding: 10px;
     gap: 15px;
 }
 
-#results .drink-item img { /* Image within the selection list item */
-    width: 60px;  /* Smaller image for list selection */
+#results .drink-item img {
+    width: 60px;
     height: 60px;
     object-fit: cover;
     border-radius: 4px;
-    margin-bottom: 0; /* Remove bottom margin as it's side-by-side */
-    /* margin-right is handled by parent gap or can be added here */
+    margin-bottom: 0;
 }
 
-#results .drink-item h2 { /* Drink name in selection list */
-    font-size: 1.1em; /* Slightly smaller for list view */
+#results .drink-item h2 {
+    font-size: 1.1em;
     margin-bottom: 3px;
 }
 
-#results .drink-item p { /* Category in selection list */
+#results .drink-item p {
     font-size: 0.85em;
     margin: 0;
 }
 
-/* Adjust .info-message if it's used in #results for this page */
 #results > p.info-message {
-    padding: 15px; /* Adjust padding if needed */
+    padding: 15px;
 }
 
-/* In public/stylesheets/search.css OR create_list_page.css */
+
 .result-thumbnail-small {
     width: 60px;
     height: 60px;
@@ -137,23 +137,20 @@
 
 #results {
   display: grid;
-  /* Adjust minmax if cards are wider. Maybe 1-2 columns for detailed cards. */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Or even minmax(350px, 1fr) */
-  gap: 1.5rem; /* Increased gap for larger cards */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
   margin-top: 2rem;
 }
 
-/* Styling for the new .detailed-card class */
 .drink-item.detailed-card {
-    flex-direction: column; /* Ensure content stacks vertically */
-    align-items: stretch;   /* Make children stretch to card width */
+    flex-direction: column;
+    align-items: stretch;
     padding: 15px;
     background-color: var(--box-color);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     transition: all 0.2s ease-in-out;
-    /* border-left color for selection is handled by .selected */
 }
 
 .drink-item.detailed-card:hover {
@@ -162,14 +159,14 @@
 }
 
 .drink-item.detailed-card.selected {
-    border-left-width: 5px; /* Keep the selection indicator */
+    border-left-width: 5px;
     border-left-color: var(--accent-primary);
-    background-color: var(--accent-primary-transparent, #e6f7ff); /* Slightly different selected bg */
+    background-color: var(--accent-primary-transparent, #e6f7ff);
 }
 
 .drink-card-image {
     width: 100%;
-    height: 200px; /* Or adjust as preferred, e.g., 250px */
+    height: 200px;
     object-fit: cover;
     border-radius: 6px;
     margin-bottom: 15px;
@@ -177,11 +174,11 @@
 }
 
 .drink-card-content {
-    text-align: left; /* Align text within the card content to the left */
+    text-align: left;
 }
 
-.drink-card-content h2 { /* Drink Name */
-    font-size: 1.4em; /* Larger name */
+.drink-card-content h2 {
+    font-size: 1.4em;
     color: var(--text-emphasis);
     margin: 0 0 8px 0;
 }
@@ -200,7 +197,6 @@
 }
 
 
-/* Styling for the <details> toggle */
 .drink-card-details-toggle {
     margin-top: 15px;
     border-top: 1px solid var(--border-color-light, #eee);
@@ -212,28 +208,13 @@
     color: var(--accent-primary);
     cursor: pointer;
     padding: 5px 0;
-    list-style-position: inside; /* For better marker alignment */
+    list-style-position: inside;
 }
-.drink-card-details-toggle summary::-webkit-details-marker { /* Webkit browsers */
-  /* display: none; /* If you want to use your own icon */
-}
-.drink-card-details-toggle summary::marker { /* Standard browsers */
-  /* display: none; */
-}
-/* Optional: Add custom arrow for summary */
-/* .drink-card-details-toggle summary::before {
-    content: '▶ ';
-    margin-right: 5px;
-}
-.drink-card-details-toggle[open] summary::before {
-    content: '▼ ';
-} */
-
 
 .drink-card-ingredients,
 .drink-card-instructions {
     margin-top: 10px;
-    padding-left: 10px; /* Indent revealed content */
+    padding-left: 10px;
 }
 
 .drink-card-ingredients h3,
@@ -257,8 +238,6 @@
     line-height: 1.5;
 }
 
-
-/* Ensure existing .info-message and .error-message from search.css still work */
 #results > p.info-message,
 #results > p.error-message {
     grid-column: 1 / -1;
@@ -269,94 +248,66 @@
     padding: 20px;
 }
 
-/* public/stylesheets/create_list_page.css */
 
-/* ... (Keep your existing .page-actions, .list-title-display, button styles) ... */
-.page-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px; /* Add horizontal padding */
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    /* background-color: var(--bg-alt, #f9f9f9); Optional: slight bg for actions bar */
-    border-radius: 8px 8px 0 0; /* If part of a larger card-like structure */
-}
-
-/* NEW: Overall page wrapper for content below header */
 .create-list-page-wrapper {
-    max-width: 1200px; /* Or your preferred max width for the entire page content */
-    margin: 20px auto; /* Center the page content and add space from header */
-    padding: 0 20px; /* Add some horizontal padding */
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
 }
 
 
-/* NEW: Flexbox or Grid container for the two columns */
 .layout-container {
     display: flex;
-    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
-    gap: 30px;       /* Space between the two columns */
+    flex-wrap: wrap;
+    gap: 30px;
 }
 
-/* NEW: Common styles for columns (if any) */
-.column {
-    /* Optional: Add common padding or border if desired for both columns */
-}
 
-/* NEW: Styles for the left column (search and results) */
 .left-column {
-    flex: 2; /* Takes up 2/3 of the space, or more if right column has fixed width */
-    min-width: 320px; /* Minimum width before wrapping */
-    /* background-color: var(--box-color); */ /* Optional: if you want a distinct bg */
-    /* padding: 20px; */
-    /* border-radius: 8px; */
-    /* box-shadow: 0 2px 4px rgba(0,0,0,0.05); */
+    flex: 2;
+    min-width: 320px;
+
 }
 
-.left-column .page-title { /* Title specifically within the left column */
-    font-size: 1.8em; /* Slightly smaller if it's now a column title */
-    text-align: left; /* Align column title to the left */
+.left-column .page-title {
+    font-size: 1.8em;
+    text-align: left;
     margin-bottom: 20px;
 }
 
-/* Adjust search controls if needed within the column */
 .left-column .search-controls {
-    justify-content: flex-start; /* Align search to the start of the column */
+    justify-content: flex-start;
     margin-bottom: 20px;
 }
 .left-column .search-input-wrapper {
-    width: 100%; /* Make search input wrapper take full width of column */
-    max-width: 400px; /* But cap its max width */
+    width: 100%;
+    max-width: 400px;
 }
 .left-column #searchBox {
-    width: 100%; /* Input field takes full width of its wrapper */
+    width: 100%;
 }
 
 
-/* NEW: Styles for the right column (selected drinks) */
 .right-column {
-    flex: 1; /* Takes up 1/3 of the space */
-    min-width: 280px; /* Minimum width before wrapping */
-    max-width: 400px; /* Max width for the sidebar */
-    /* The #selectionStatus already has some styling, can be enhanced here */
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
 }
 
-/* Styles for #selectionStatus (your existing styles are good, ensure they fit the column) */
 #selectionStatus {
-    margin-top: 0; /* Remove top margin if it's now at the top of its own column */
+    margin-top: 0;
     padding: 20px;
-    /* background-color: var(--bg-alt, #f8f9fa); Or var(--box-color) */
     border: 1px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    height: fit-content; /* Allow it to size based on content */
-    position: sticky; /* Optional: Make the selected items sticky as user scrolls results */
-    top: 20px;        /* Optional: Distance from top when sticky */
+    height: fit-content;
+    position: sticky;
+    top: 20px;
 }
 
 #selectionStatus h3 {
     margin-top: 0;
-    margin-bottom: 15px; /* More space */
+    margin-bottom: 15px;
     font-size: 1.3em;
     color: var(--text-emphasis);
     border-bottom: 1px solid var(--border-color-light, #eee);
@@ -367,15 +318,15 @@
     list-style-type: none;
     padding-left: 0;
     font-size: 0.95em;
-    max-height: 400px; /* Adjust max height as needed */
+    max-height: 400px;
     overflow-y: auto;
 }
 
 #selectedNames li {
     margin-bottom: 8px;
-    padding: 6px 0; /* More padding */
+    padding: 6px 0;
     border-bottom: 1px dotted var(--border-color-light, #f0f0f0);
-    display: flex; /* For potential remove button later */
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -383,11 +334,4 @@
     border-bottom: none;
 }
 
-/* Styles for #results and .drink-item.detailed-card (keep your existing detailed card styles) */
-/* Ensure the grid layout for #results fits well within the .left-column */
-#results {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust minmax based on left column width */
-  gap: 1rem;
-  margin-top: 1rem;
-}
+
