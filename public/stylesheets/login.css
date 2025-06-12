@@ -1,4 +1,3 @@
-/* Main content alignment for login page */
 body > .main-content {
     display: flex;
     flex-direction: column;

@@ -1,11 +1,8 @@
-
-/* search page components */
 .search-page body {
   background-color: #fdfbf8;
   color: #333;
 }
 
-/* Container for the main content of the search page */
 .search-page-container {
     max-width: 800px;
     margin: 0 auto;
@@ -19,7 +16,6 @@
     margin-bottom: 30px;
 }
 
-/* Styling for the search input and button area */
 .search-controls {
     margin-bottom: 30px;
     display: flex;
@@ -77,8 +73,6 @@
   color: var(--text-main);
 }
 
-
-/*alt button to search with tweaks to align with search box*/
 .button-primary-search {
   background-color: transparent;
   color: var(--text-main);

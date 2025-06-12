@@ -1,5 +1,3 @@
-// js/list_page.js
-console.log("JS is loaded");
 document.addEventListener('DOMContentLoaded', () => {
   const openModalBtn = document.getElementById('openCreateListModalBtn');
   const modalOverlay = document.getElementById('createListModal');

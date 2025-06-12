@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const path = require('path');
-const db = require('../scripts/db'); // this uses createConnection
-const axios = require('axios'); // To fetch from TheCocktailDB if needed
+const db = require('../scripts/db'); 
+const axios = require('axios'); 
 router.post('/saveFullList', async (req, res) => {
     const userId = req.session.userId;
     const { listName, description, listIconUrl, selectedDrinks } = req.body;
@@ -12,26 +12,22 @@ router.post('/saveFullList', async (req, res) => {
         /* ... return 400 ... */
     }
 
-    // For a single connection, you use the connection directly for transactions.
-    // db.promise() should return a promise-wrapped version of your single connection.
-    const connection = db.promise(); // This is now your promise-wrapped connection
+    const connection = db.promise(); 
 
     try {
-        await connection.beginTransaction(); // START TRANSACTION on the connection
+        await connection.beginTransaction();
 
         const successfullyProcessedDrinkApiIds = new Set();
         for (const selectedDrink of selectedDrinks) {
             const drinkApiId = selectedDrink.id;
             if (!drinkApiId) { /* ... continue ... */ }
 
-            // Use connection.query for all queries within the transaction
             const [existingDrinks] = await connection.query('SELECT api_id FROM Drinks WHERE api_id = ?', [drinkApiId]);
 
             if (existingDrinks.length > 0) {
                 successfullyProcessedDrinkApiIds.add(drinkApiId);
                 console.log(`Drink ${drinkApiId} already in local DB.`);
             } else {
-                // ... (fetch from CocktailDB using axios) ...
                 const cocktailDbResponse = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${drinkApiId}`);
                 const drinkData = cocktailDbResponse.data.drinks ? cocktailDbResponse.data.drinks[0] : null;
 
@@ -55,7 +51,6 @@ router.post('/saveFullList', async (req, res) => {
                 } else { /* ... console.warn ... */ }
             }
         }
-        // ... (catch for CocktailDB API errors inside the loop if you want to be more granular) ...
 
         if (selectedDrinks.length > 0 && successfullyProcessedDrinkApiIds.size === 0) {
             await connection.rollback();
@@ -92,18 +87,14 @@ router.post('/saveFullList', async (req, res) => {
             }
         }
 
-        await connection.commit(); // COMMIT TRANSACTION on the connection
+        await connection.commit();
         req.session.listDetails = null;
         res.status(201).json({ message: 'List and drinks saved successfully!', listId: newListId });
 
     } catch (error) {
-        // If an error occurred before or during beginTransaction, or after commit
-        // and connection might not be in a transaction state for rollback.
-        // However, if beginTransaction was called, we should try to rollback.
-        // More sophisticated error handling might be needed here for the connection state.
         try {
             if (connection && typeof connection.rollback === 'function') { // Check if rollback is a function
-                 await connection.rollback(); // ROLLBACK on the connection
+                 await connection.rollback(); 
                  console.log("Transaction rolled back due to error.");
             }
         } catch (rollbackError) {
@@ -112,9 +103,6 @@ router.post('/saveFullList', async (req, res) => {
         console.error('Overall error in saveFullList:', error);
         res.status(500).json({ error: 'An unexpected error occurred while saving the list.' });
     }
-    // NO finally { connection.release() } for single connections.
-    // Single connections are typically ended with connection.end() when the app closes, or managed differently.
-    // If db.js manages connection lifecycle, you might not do anything here.
 });
 
 router.get('/getUserLists', async (req, res) => { // Changed to async

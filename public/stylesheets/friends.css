@@ -9,7 +9,7 @@
 .friends-page-container > h1 {
     font-size: 2.5em;
     font-weight: 600;
-    color: var(--text-emphasis, #2c2c2c); /* Use CSS var */
+    color: var(--text-emphasis, #2c2c2c); 
     margin-bottom: 30px;
     text-align: center;
 }
