@@ -7,9 +7,8 @@ router.post('/saveFullList', async (req, res) => {
     const userId = req.session.userId;
     const { listName, description, listIconUrl, selectedDrinks } = req.body;
 
-    if (!userId) { /* ... return 401 ... */ }
+    if (!userId) {}
     if (!listName || !selectedDrinks || !Array.isArray(selectedDrinks) || selectedDrinks.length === 0) {
-        /* ... return 400 ... */
     }
 
     const connection = db.promise(); 
@@ -20,7 +19,7 @@ router.post('/saveFullList', async (req, res) => {
         const successfullyProcessedDrinkApiIds = new Set();
         for (const selectedDrink of selectedDrinks) {
             const drinkApiId = selectedDrink.id;
-            if (!drinkApiId) { /* ... continue ... */ }
+            if (!drinkApiId) {  }
 
             const [existingDrinks] = await connection.query('SELECT api_id FROM Drinks WHERE api_id = ?', [drinkApiId]);
 
@@ -32,7 +31,7 @@ router.post('/saveFullList', async (req, res) => {
                 const drinkData = cocktailDbResponse.data.drinks ? cocktailDbResponse.data.drinks[0] : null;
 
                 if (drinkData) {
-                    const newDrink = { /* ... map your newDrink object ... */
+                    const newDrink = { 
                         api_id: drinkData.idDrink, name: drinkData.strDrink,
                         alternate_name: drinkData.strDrinkAlternate || null, tags: drinkData.strTags || null,
                         category: drinkData.strCategory || null, iba_category: drinkData.strIBA || null,
@@ -48,7 +47,7 @@ router.post('/saveFullList', async (req, res) => {
                     );
                     successfullyProcessedDrinkApiIds.add(drinkApiId);
                     console.log(`Inserted/Updated drink ${drinkApiId} into local DB.`);
-                } else { /* ... console.warn ... */ }
+                } else { }
             }
         }
 
@@ -67,7 +66,7 @@ router.post('/saveFullList', async (req, res) => {
             console.log(`New list created with ID: ${newListId} for user ${userId}`);
         } catch (listInsertError) {
             await connection.rollback();
-            if (listInsertError.code === 'ER_DUP_ENTRY') { /* ... return 409 ... */ }
+            if (listInsertError.code === 'ER_DUP_ENTRY') { }
             console.error('Error inserting new list:', listInsertError);
             return res.status(500).json({ error: 'Failed to create the new list.' });
         }
