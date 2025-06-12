@@ -1,9 +1,8 @@
-// public/scripts/create_list.js
 document.addEventListener('DOMContentLoaded', () => {
-let currentListName = 'My New List'; // Default or placeholder
-let currentListDescription = '';   // Default
-let currentListIconUrl = null;     // Default
-// ... (all your existing const declarations for elements) ...
+let currentListName = 'My New List'; 
+let currentListDescription = '';   
+let currentListIconUrl = null;   
+
 const listTitleDisplay = document.getElementById('listTitleDisplay');
 const searchBtn = document.getElementById('searchBtn');
 const searchBox = document.getElementById('searchBox');
@@ -14,7 +13,6 @@ const selectedDrinkIds = new Set();
 const selectedCountSpan = document.getElementById('selectedCount');
 const selectedDrinkNames = new Map();
 const selectedNamesList = document.getElementById('selectedNames');
-// ... (getListDetails, updateSelectedCountDisplay, closeBtn, doneBtn logic remains the same) ...
 (async () => {
      try {
         const response = await fetch('/loginUser/getListDetails', { credentials: 'include' });
@@ -64,16 +62,14 @@ if (doneBtn) {
 
         if (!currentListName || currentListName.trim() === '') {
             alert("Please ensure your list has a name.");
-            // Potentially focus on a list name input field if you have one
             return;
         }
 
         const selectedDrinks = Array.from(selectedDrinkIds).map(id => ({ id }));
         resultsDiv.innerHTML = '<p class="info-message">Saving list...</p>';
 
-        // --- CONSTRUCT THE FULL PAYLOAD ---
         const payload = {
-            listName: currentListName.trim(), // Use the stored/retrieved list name
+            listName: currentListName.trim(), 
             description: currentListDescription ? currentListDescription.trim() : null,
             listIconUrl: currentListIconUrl || null, // Send null if not set
             selectedDrinks: selectedDrinks
@@ -86,7 +82,7 @@ if (doneBtn) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify(payload) // <<< SEND THE FULL PAYLOAD
+                body: JSON.stringify(payload) 
             });
             const data = await response.json();
             if (response.ok) {
@@ -138,7 +134,6 @@ async function performSearch() {
                 drinkDiv.classList.add('selected');
             }
 
-            // --- MODIFIED HTML Structure for more details ---
             let ingredientsListHtml = '<ul>';
             for (let i = 1; i <= 15; i++) {
                 const ingredient = drink[`strIngredient${i}`];
@@ -174,12 +169,9 @@ async function performSearch() {
                     </details>
                 </div>
             `;
-            // --- END OF MODIFIED HTML ---
 
             drinkDiv.addEventListener('click', (event) => {
-                // Prevent click on details/summary from toggling selection if desired
                 if (event.target.closest('details')) {
-                     // If you want to allow selection even when clicking details, remove this block
                     return;
                 }
 
