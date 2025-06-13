@@ -60,8 +60,7 @@
         <img :src="drink.strDrinkThumb" :alt="drink.strDrink" />
         <div class="drink-info">
           <h1>{{ drink.strDrink }}</h1>
-          <p>by DRINKLY ENTERPRISE LOL</p>
-          <p>⭐ 4.5 <a href="#">Add to Favourites</a></p>
+          <p>by DRINKLY ENTERPRISE</p>
         </div>
       </div>
 
@@ -71,7 +70,7 @@
         <button type="button" @click="activeTab = 'preparation'" :class="{active: activeTab === 'preparation'}">Preparation</button>
       </div>
 
-      <!-- Tab stuff -->
+      <!-- Tab content -->
       <div class="tab-content">
         <ul v-if="activeTab === 'ingredients'">
           <li v-for="ingredient in ingredients" :key="ingredient">{{ ingredient }}</li>
@@ -81,16 +80,12 @@
         </ol>
       </div>
 
-  <!--  Reviews -->
+  <!-- Reviews -->
   <button type="button" @click="showForm = !showForm" class="review-btn">
     {{ showForm ? "Cancel" : "Write a Review" }}
   </button>
 
   <div v-if="showForm" class="review-form">
-    <label>
-      Name:
-      <input type="text" v-model="newReview.name" placeholder="Your name" />
-    </label>
     <label>
       Comment:
       <textarea v-model="newReview.comment" placeholder="Your review..."></textarea>
@@ -118,7 +113,6 @@
             { name: "Bob", comment: "Taste fantastic and wonderful and spectacular." }
           ],
           newReview: {
-            name: '',
             comment: ''
           }
         };
@@ -139,19 +133,19 @@
       },
       methods: {
         submitReview() {
-        if (!this.newReview.name || !this.newReview.comment) {
-          alert("Please fill out both name and comment.");
-          return;
-        }
+  if (!this.newReview.comment) {
+    alert("Please fill out the comment.");
+    return;
+  }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const drinkId = urlParams.get('id');
+  const urlParams = new URLSearchParams(window.location.search);
+  const drinkId = urlParams.get('id');
 
-        fetch('/addReview', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+  fetch('/addReview', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     credentials: 'include',
     body: JSON.stringify({
       drink_api_id: drinkId,
@@ -162,19 +156,23 @@
   })
   .then(response => response.json())
   .then(data => {
-    console.log("✅ Saved to DB:", data);
+    if (data.error) throw new Error(data.error);
 
-    this.reviews.push({
-      name: this.newReview.name,
-      comment: this.newReview.comment
-    });
+    return fetch(`/getReviews/${drinkId}`);
+  })
+  .then(res => res.json())
+  .then(reviewData => {
+    this.reviews = reviewData.map(r => ({
+      name: r.username,
+      comment: r.review_text,
+      score: r.review_score
+    }));
 
-    this.newReview.name = '';
     this.newReview.comment = '';
     this.showForm = false;
   })
   .catch(error => {
-    console.error('❌ Error saving review:', error);
+    console.error('Error saving review:', error);
     alert("Something went wrong while saving your review.");
   });
 }
@@ -192,13 +190,14 @@
     const reviewResponse = await fetch(`/getReviews/${id}`);
     const reviewData = await reviewResponse.json();
 
+    // Map backend revs into format
     this.reviews = reviewData.map(r => ({
       name: r.username,
       comment: r.review_text,
       score: r.review_score
     }));
   } catch (error) {
-    console.error("❌ Failed to load reviews", error);
+    console.error("Failed to load reviews", error);
   }
       }
     });

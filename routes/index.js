@@ -182,7 +182,6 @@ router.post('/addReview', (req, res) => {
 
   if (!userId) return res.status(401).json({ error: 'Not logged in' });
 
-  // Step 1: Check if drink exists
   db.query('SELECT * FROM Drinks WHERE api_id = ?', [drink_api_id], (err, result) => {
     if (err) return res.status(500).json({ error: 'DB error during drink check' });
 
