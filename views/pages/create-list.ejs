@@ -1,0 +1,33 @@
+<%- include('../partials/head', { styles: ['search', 'create_list'], scripts: ['create-list'] }) %>
+  <main class="container text-center margin-from-top main-content">
+    <div class="create-list-page-wrapper">
+      <div class="page-actions">
+        <button type="button" id="closeBtn" title="Cancel and Go Back" onclick="location.href = '/lists'">Cancel</button>
+        <div id="listTitleDisplay" class="list-title-display"></div>
+        <button type="button" id="doneBtn" title="Save This List">Save List</button>
+      </div>
+
+      <div class="layout-container">
+        <section id="search-column" class="column left-column">
+          <h1 class="page-title">Add Drinks to Your List</h1>
+          <form id="search-form" class="search-controls">
+            <div class="search-input-wrapper">
+              <input type="text" id="searchBox" class="search-box" placeholder="Search for drinks to add..." required>
+              <button type="submit" id="searchBtn" class="button-primary-search" title="Search">
+                <i class="fa-solid fa-magnifying-glass fa-2x pulse-hover"></i>
+              </button>
+            </div>
+          </form>
+          <div id="results"></div>
+        </section>
+
+        <aside id="selection-column" class="column right-column">
+          <div id="selectionStatus">
+            <h3>Selected Drinks: <span id="selectedCount">0</span></h3>
+            <ul id="selectedNames"></ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+<%- include('../partials/foot') %>

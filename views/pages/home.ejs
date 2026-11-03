@@ -1,0 +1,20 @@
+<%- include('../partials/head', { styles: ['search'], scripts: ['home'] }) %>
+  <main class="container text-center margin-from-top main-content">
+    <h1>Home</h1>
+    <p id="welcome-txt">Welcome, <%= user.username %>!</p>
+    <div class="hero-section">
+      <img src="/images/hero.png" alt="hero cocktail" class="hero-image">
+    </div>
+
+    <form id="search-form" class="search-controls">
+      <div class="search-input-wrapper">
+        <input type="text" id="searchBox" class="search-box" placeholder="Enter drink name..." required>
+        <button type="submit" id="searchBtn" class="button-primary-search" title="Search">
+          <i class="fa-solid fa-magnifying-glass fa-2x pulse-hover"></i>
+        </button>
+      </div>
+    </form>
+
+    <div id="results"></div>
+  </main>
+<%- include('../partials/foot') %>

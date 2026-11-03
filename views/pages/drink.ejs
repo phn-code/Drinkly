@@ -1,0 +1,49 @@
+<%- include('../partials/head', { styles: ['drinks_page'], scripts: ['drink'] }) %>
+  <main class="container margin-from-top main-content">
+    <div id="app" data-drink-id="<%= drinkId %>">
+      <p v-if="error">{{ error }}</p>
+      <div class="card" v-else-if="drink">
+        <div class="card-header">
+          <img :src="drink.thumbnail" :alt="drink.name">
+          <div class="drink-info">
+            <h1>{{ drink.name }}</h1>
+            <p>by DRINKLY ENTERPRISE</p>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button type="button" @click="activeTab = 'ingredients'" :class="{ active: activeTab === 'ingredients' }">Ingredients</button>
+          <button type="button" @click="activeTab = 'preparation'" :class="{ active: activeTab === 'preparation' }">Preparation</button>
+        </div>
+
+        <div class="tab-content">
+          <ul v-if="activeTab === 'ingredients'">
+            <li v-for="ingredient in drink.ingredients" :key="ingredient.name">{{ formatIngredient(ingredient) }}</li>
+          </ul>
+          <ol v-else>
+            <li>{{ drink.instructions }}</li>
+          </ol>
+        </div>
+
+        <button type="button" @click="showForm = !showForm" class="review-btn">
+          {{ showForm ? 'Cancel' : 'Write a Review' }}
+        </button>
+
+        <form v-if="showForm" class="review-form" @submit.prevent="submitReview">
+          <label>
+            Comment:
+            <textarea v-model="newReview" placeholder="Your review..." required></textarea>
+          </label>
+          <button type="submit" class="submit-review-btn" :disabled="saving">Submit Review</button>
+        </form>
+
+        <div class="reviews">
+          <div class="review" v-for="review in reviews" :key="review.id">
+            <p><strong>{{ review.username }}</strong></p>
+            <p>{{ review.body }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+<%- include('../partials/foot') %>
