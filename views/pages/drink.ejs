@@ -32,7 +32,7 @@
         <form v-if="showForm" class="review-form" @submit.prevent="submitReview">
           <label>
             Comment:
-            <textarea v-model="newReview" placeholder="Your review..." required></textarea>
+            <textarea v-model="newReview" placeholder="Your review..." maxlength="2000" required></textarea>
           </label>
           <button type="submit" class="submit-review-btn" :disabled="saving">Submit Review</button>
         </form>

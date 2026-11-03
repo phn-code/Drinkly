@@ -2,6 +2,8 @@ const express = require('express');
 const { HttpError, requireUser } = require('../http');
 const { ensureDrinksCached } = require('../drinks');
 
+const MAX_REVIEW_LENGTH = 2000;
+
 module.exports = function drinksRouter({ pool, cocktailDb }) {
   const router = express.Router();
 
@@ -30,12 +32,14 @@ module.exports = function drinksRouter({ pool, cocktailDb }) {
   });
 
   router.post('/:id/reviews', requireUser, async (req, res) => {
-    const score = Number(req.body.score);
-    const timesDrunk = req.body.timesDrunk === undefined ? 1 : Number(req.body.timesDrunk);
-    const body = typeof req.body.body === 'string' ? req.body.body.trim() : '';
+    const input = req.body ?? {};
+    const score = Number(input.score);
+    const timesDrunk = input.timesDrunk === undefined ? 1 : Number(input.timesDrunk);
+    const body = typeof input.body === 'string' ? input.body.trim() : '';
     if (!Number.isInteger(score) || score < 0 || score > 5) throw new HttpError(400, 'score must be 0 to 5');
     if (!Number.isInteger(timesDrunk) || timesDrunk < 1) throw new HttpError(400, 'timesDrunk must be at least 1');
     if (!body) throw new HttpError(400, 'body is required');
+    if (body.length > MAX_REVIEW_LENGTH) throw new HttpError(400, `body must be at most ${MAX_REVIEW_LENGTH} characters`);
 
     const [cached] = await ensureDrinksCached(pool, cocktailDb, [req.params.id]);
     if (!cached) throw new HttpError(404, 'Drink not found');

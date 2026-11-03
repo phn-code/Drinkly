@@ -25,7 +25,7 @@ function usersRouter({ pool }) {
        WHERE u.username LIKE ? AND u.id <> ?
        ORDER BY RAND()
        LIMIT 10`,
-      [me, `%${search}%`, me],
+      [me, `%${search.replace(/[\\%_]/g, '\\$&')}%`, me],
     );
     res.json(rows.map((row) => ({
       id: row.id,
@@ -39,7 +39,8 @@ function usersRouter({ pool }) {
   router.get('/:id/avatar', async (req, res) => {
     const [[row]] = await pool.query('SELECT avatar, avatar_type FROM Users WHERE id = ?', [parseId(req.params.id)]);
     if (!row?.avatar) throw new HttpError(404, 'No avatar');
-    res.type(row.avatar_type || 'application/octet-stream').send(row.avatar);
+    res.set({ 'X-Content-Type-Options': 'nosniff', 'Content-Security-Policy': "default-src 'none'" });
+    res.type(row.avatar_type).send(row.avatar);
   });
 
   return router;

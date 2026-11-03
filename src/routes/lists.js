@@ -5,13 +5,18 @@ const { inTransaction } = require('../db');
 
 const LIST_ICONS = [1, 2, 3, 4, 5, 6].map((n) => `/images/list-icons/${n}.jpeg`);
 
-function parseNewList(body) {
+const MAX_NAME_LENGTH = 100;
+const MAX_DRINKS = 50;
+
+function parseNewList(body = {}) {
   const name = typeof body.name === 'string' ? body.name.trim() : '';
   const description = typeof body.description === 'string' ? body.description.trim() : '';
   const iconUrl = body.iconUrl || null;
   const drinkIds = Array.isArray(body.drinkIds) ? body.drinkIds.map(String) : [];
 
   if (!name) throw new HttpError(400, 'name is required');
+  if (name.length > MAX_NAME_LENGTH) throw new HttpError(400, `name must be at most ${MAX_NAME_LENGTH} characters`);
+  if (drinkIds.length > MAX_DRINKS) throw new HttpError(400, `A list can hold at most ${MAX_DRINKS} drinks`);
   if (iconUrl !== null && !LIST_ICONS.includes(iconUrl)) throw new HttpError(400, 'Unknown icon');
   if (drinkIds.length === 0) throw new HttpError(400, 'Select at least one drink');
   return { name, description: description || null, iconUrl, drinkIds };
@@ -66,13 +71,19 @@ function listsRouter({ pool, cocktailDb }) {
   });
 
   router.get('/:id/drinks', async (req, res) => {
+    const listId = parseId(req.params.id);
+    const [[list]] = await pool.query('SELECT id FROM UserLists WHERE id = ? AND user_id = ?', [
+      listId,
+      req.session.user.id,
+    ]);
+    if (!list) throw new HttpError(404, 'List not found');
     const [rows] = await pool.query(
       `SELECT d.api_id AS id, d.name, d.thumbnail_url AS thumbnail
        FROM UserListDrinks ld
        JOIN Drinks d ON d.api_id = ld.drink_api_id
        WHERE ld.list_id = ?
        ORDER BY ld.added_at, d.name`,
-      [parseId(req.params.id)],
+      [listId],
     );
     res.json(rows);
   });

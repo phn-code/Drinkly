@@ -63,7 +63,8 @@ function createApp({ pool, cocktailDb, sessionSecret, isProduction = false, logR
   // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
     const status = err.name === 'MulterError' ? 400 : err.status || 500;
-    if (status === 500) console.error(err);
+    // Log the stack only: mysql2 errors carry the full SQL, which can include password hashes.
+    if (status === 500) console.error(err.stack);
     const message = status === 500 ? 'Something went wrong' : err.message;
     if (req.originalUrl.startsWith('/api/')) return res.status(status).json({ error: message });
     res.status(status).send(message);

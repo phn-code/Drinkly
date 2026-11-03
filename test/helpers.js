@@ -84,7 +84,7 @@ function createClient(baseUrl) {
     const setCookie = res.headers.get('set-cookie');
     if (setCookie) cookie = setCookie.split(';')[0];
     const type = res.headers.get('content-type') || '';
-    const data = type.includes('json') ? await res.json() : await res.text();
+    const data = type.includes('json') ? await res.json() : type.startsWith('image/') ? await res.arrayBuffer() : await res.text();
     return { status: res.status, data, headers: res.headers };
   }
   return {

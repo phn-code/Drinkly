@@ -31,28 +31,54 @@ test('duplicate signup is a conflict and missing fields are rejected', async () 
   assert.equal((await ctx.client().post('/api/auth/signup', form)).status, 400);
 });
 
-test('the old mock-login backdoor is gone', async () => {
-  const res = await ctx.client().get('/loginUser/mock-login');
-  assert.equal(res.status, 302);
-  assert.equal(res.headers.get('location'), '/login');
+test('malformed and oversized input is a 400, not a 500', async () => {
+  const user = ctx.client();
+  assert.equal((await user.post('/api/auth/login')).status, 400);
+  assert.equal((await user.signup('x'.repeat(51))).status, 400);
+  await user.signup('validator');
+  assert.equal((await user.post('/api/lists')).status, 400);
+  assert.equal((await user.post('/api/drinks/11007/reviews')).status, 400);
+  assert.equal((await user.post('/api/lists', { name: 'x'.repeat(101), drinkIds: ['11007'] })).status, 400);
+  assert.equal(
+    (await user.post('/api/lists', { name: 'Big', drinkIds: Array.from({ length: 51 }, (_, i) => String(i)) })).status,
+    400,
+  );
+  assert.equal((await user.post('/api/drinks/11007/reviews', { score: 5, body: 'x'.repeat(2001) })).status, 400);
 });
+
+test('the old mock-login backdoor is gone', async () => {
+  const user = ctx.client();
+  await user.signup('nobackdoor');
+  assert.equal((await user.get('/loginUser/mock-login')).status, 404);
+  assert.equal((await user.get('/api/auth/me')).data.username, 'nobackdoor');
+});
+
+const PAGES = {
+  '/': '<h1>Home</h1>',
+  '/lists': '<h1>Your Lists</h1>',
+  '/lists/new': 'Add Drinks to Your List',
+  '/friends': '<h1>Friends</h1>',
+  '/about': '<h1>About Drinkly</h1>',
+  '/drinks/11007': 'data-drink-id="11007"',
+};
 
 test('pages redirect to login when logged out and render when logged in', async () => {
   const anon = ctx.client();
-  for (const path of ['/', '/lists', '/lists/new', '/friends', '/about', '/drinks/11007']) {
+  for (const path of Object.keys(PAGES)) {
     const res = await anon.get(path);
     assert.equal(res.status, 302, path);
     assert.equal(res.headers.get('location'), '/login', path);
   }
-  assert.equal((await anon.get('/login')).status, 200);
+  assert.match((await anon.get('/login')).data, /<h1>Log In<\/h1>/);
 
   const user = ctx.client();
   await user.signup('pagevisitor');
-  for (const path of ['/', '/lists', '/lists/new', '/friends', '/about', '/drinks/11007']) {
+  for (const [path, marker] of Object.entries(PAGES)) {
     const res = await user.get(path);
     assert.equal(res.status, 200, path);
-    assert.match(res.data, /pagevisitor|Drinkly/, path);
+    assert.ok(res.data.includes(marker), `${path} renders ${marker}`);
   }
+  assert.match((await user.get('/')).data, /Welcome, pagevisitor!/);
   assert.equal((await user.get('/login')).headers.get('location'), '/');
 });
 
@@ -119,6 +145,7 @@ test('lists: create, read, validate, isolate per user, delete', async () => {
   const dave = ctx.client();
   await dave.signup('dave');
   assert.deepEqual((await dave.get('/api/lists')).data, []);
+  assert.equal((await dave.get(`/api/lists/${created.data.id}/drinks`)).status, 404);
   assert.equal((await dave.delete(`/api/lists/${created.data.id}`)).status, 404);
 
   assert.equal((await carol.delete(`/api/lists/${created.data.id}`)).status, 204);
@@ -162,14 +189,28 @@ test('friends: search, follow, unfollow, popularity, avatars', async () => {
     { id: frankId, username: 'frank', avatarUrl: `/api/users/${frankId}/avatar`, isFriend: true },
   ]);
 
-  const avatar = await fetch(ctx.baseUrl + friends[0].avatarUrl, { headers: { Cookie: '' } });
-  assert.equal(avatar.status, 401);
+  assert.equal((await fetch(ctx.baseUrl + friends[0].avatarUrl)).status, 401);
+  const avatar = await erin.get(friends[0].avatarUrl);
+  assert.equal(avatar.status, 200);
+  assert.equal(avatar.headers.get('content-type'), 'image/png');
+  assert.equal(avatar.headers.get('x-content-type-options'), 'nosniff');
 
-  const found = (await erin.get('/api/users?search=fra')).data;
-  assert.equal(found.length, 1);
-  assert.equal(found[0].isFriend, true);
-  assert.equal(found[0].popularityRank, 1);
-  assert.ok(!(await erin.get('/api/users?search=')).data.some((u) => u.id === erinId));
+  const svg = new Blob(['<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'], { type: 'image/png' });
+  assert.equal((await ctx.client().signup('mallory', { avatar: svg })).status, 400);
+
+  // gina has one follower, frank two, so frank ranks above gina.
+  const gina = ctx.client();
+  const ginaId = (await gina.signup('gina')).data.id;
+  await gina.put(`/api/friends/${frankId}`);
+  await erin.put(`/api/friends/${ginaId}`);
+  const [frankResult] = (await erin.get('/api/users?search=frank')).data;
+  const [ginaResult] = (await erin.get('/api/users?search=gina')).data;
+  assert.equal(frankResult.popularityRank, 1);
+  assert.equal(ginaResult.popularityRank, 2);
+  assert.equal(frankResult.isFriend, true);
+  assert.deepEqual((await erin.get('/api/users?search=erin')).data, [], 'search excludes yourself');
+  assert.deepEqual((await erin.get('/api/users?search=_')).data, []);
+  await erin.delete(`/api/friends/${ginaId}`);
 
   assert.equal((await erin.delete(`/api/friends/${frankId}`)).status, 204);
   assert.deepEqual((await erin.get('/api/friends')).data, []);

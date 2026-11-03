@@ -1,4 +1,5 @@
 const MAX_INGREDIENTS = 15;
+const REQUEST_TIMEOUT_MS = 8000;
 
 function parseDrink(raw) {
   const ingredients = [];
@@ -25,7 +26,9 @@ function parseDrink(raw) {
 
 function createCocktailDb(baseUrl) {
   async function get(endpoint, params) {
-    const response = await fetch(`${baseUrl}/${endpoint}?${new URLSearchParams(params)}`);
+    const response = await fetch(`${baseUrl}/${endpoint}?${new URLSearchParams(params)}`, {
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
     if (!response.ok) throw new Error(`TheCocktailDB ${endpoint} returned ${response.status}`);
     const { drinks } = await response.json();
     return Array.isArray(drinks) ? drinks.map(parseDrink) : [];
