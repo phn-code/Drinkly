@@ -1,0 +1,45 @@
+<%- include('../partials/head', { styles: ['login'], scripts: ['login'] }) %>
+  <main class="container text-center main-content">
+    <div class="auth-form-wrapper">
+      <div class="auth-form-container">
+        <form id="login">
+          <h1>Log In</h1>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" autocomplete="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+          </div>
+          <button type="submit" class="form-submit-btn">Log In</button>
+          <p class="alert-message" role="alert" hidden></p>
+          <p class="form-toggle-link">Don't have an account? <button type="button" class="link-button" data-show="signup">Sign Up</button></p>
+        </form>
+
+        <form id="signup" hidden>
+          <h1>Sign Up</h1>
+          <div class="form-group">
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" name="username" autocomplete="username" maxlength="50" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" name="email" autocomplete="email" maxlength="100" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" autocomplete="new-password" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-avatar">Profile Image</label>
+            <input type="file" id="signup-avatar" name="avatar" accept="image/png,image/jpeg,image/gif,image/webp">
+          </div>
+          <button type="submit" class="form-submit-btn">Sign Up</button>
+          <p class="alert-message" role="alert" hidden></p>
+          <p class="form-toggle-link">Already have an account? <button type="button" class="link-button" data-show="login">Log In</button></p>
+        </form>
+      </div>
+    </div>
+  </main>
+<%- include('../partials/foot') %>

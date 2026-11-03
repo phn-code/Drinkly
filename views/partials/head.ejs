@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> - Drinkly</title>
+  <script src="/js/theme.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<% for (const sheet of (locals.styles || [])) { %>
+  <link rel="stylesheet" href="/css/<%= sheet %>.css">
+<% } %>
+<% for (const script of (locals.scripts || [])) { %>
+  <script type="module" src="/js/<%= script %>.js"></script>
+<% } %>
+</head>
+<body id="body-cont">
+  <div class="header">
+    <nav class="text-center margin-from-top">
+      <div class="logo">
+        <i class="fa-solid fa-martini-glass pulse-hover"></i>
+        <p>Drinkly</p>
+      </div>
+<% if (user) { %>
+      <div class="nav-links">
+        <a href="/" class="nav-item pulse-hover">Home</a>
+        <a href="/lists" class="nav-item pulse-hover">Lists</a>
+        <a href="/friends" class="nav-item pulse-hover">Friends</a>
+        <a href="/about" class="nav-item pulse-hover">About</a>
+      </div>
+<% } %>
+      <div class="nav-buttons">
+<% if (user) { %>
+        <form method="post" action="/api/auth/logout" class="nav-logout">
+          <button type="submit" class="button-primary" title="Log Out">
+            <i class="fa-solid fa-door-open fa-2x pulse-hover"></i>
+          </button>
+        </form>
+<% } %>
+        <button type="button" class="button-primary" data-theme-toggle title="Toggle Dark Mode">
+          <i class="fa-solid fa-circle-half-stroke fa-2x pulse-hover"></i>
+        </button>
+      </div>
+    </nav>
+  </div>

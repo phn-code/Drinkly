@@ -1,0 +1,40 @@
+<%- include('../partials/head', { styles: ['friends'], scripts: ['friends'] }) %>
+  <main class="container text-center margin-from-top main-content">
+    <div class="page-wrapper" id="app">
+      <h1>Friends</h1>
+      <section class="friends-page-container">
+        <div id="main-cont">
+          <div id="friends-cont">
+            <section class="friends-grid">
+              <article class="friend-card" v-for="user in friends" :key="user.id">
+                <img :src="user.avatarUrl || placeholder" :alt="`${user.username} profile picture`" class="profile-avatar card-avatar">
+                <h3 class="username">{{ user.username }}</h3>
+                <button type="button" @click="toggleFriend(user)" :disabled="pending.has(user.id)" class="btn-rm">
+                  {{ pending.has(user.id) ? 'Processing...' : 'Remove Friend' }}
+                </button>
+              </article>
+            </section>
+          </div>
+
+          <aside id="follow-cont">
+            <h2>Find People</h2>
+            <input type="text" placeholder="Search users…" class="search-box" v-model="search">
+            <div class="filter-row">
+              <button type="button" class="filter-pill" :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All</button>
+              <button type="button" class="filter-pill" :class="{ active: activeTab === 'popular' }" @click="activeTab = 'popular'">Popular</button>
+            </div>
+            <ul class="suggested-users">
+              <li class="suggested-user" v-for="user in displayedPeople" :key="user.id">
+                <img :src="user.avatarUrl || placeholder" :alt="`${user.username} profile picture`" class="profile-avatar list-avatar">
+                <span>{{ user.username }}</span>
+                <button type="button" @click="toggleFriend(user)" :disabled="pending.has(user.id)" :class="user.isFriend ? 'btn-rm' : 'btn-unfollow'">
+                  {{ pending.has(user.id) ? 'Processing...' : (user.isFriend ? 'Remove Friend' : 'Add Friend') }}
+                </button>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+<%- include('../partials/foot') %>
